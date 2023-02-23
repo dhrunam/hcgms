@@ -1,0 +1,1 @@
+from hcgms_api.configuration.views.property_view import *
