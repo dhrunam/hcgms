@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 # Create your models here.
 class ReservationDetails(models.Model):
 
+    property=models.ForeignKey(conf_models.Property, null=True, on_delete=models.SET_NULL)
     reservation_no=models.CharField(max_length=128,blank=False)
     lead_guest_name=models.CharField(max_length=128, blank=True)
     reservation_for=models.CharField(max_length=128, blank=False)
