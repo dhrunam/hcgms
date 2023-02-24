@@ -11,11 +11,21 @@ class RoomRateList(generics.ListCreateAPIView):
     queryset = models.RoomRate.objects.all()
     serializer_class = serializers.RoomRateSerializer
     # pagination.PageNumberPagination.page_size = 100
-
+    def post(self, request, *args, **kwargs):
+        request.data._mutable = True
+        request.data['created_by'] = request.user.id
+        request.data._mutable = False
+        return self.create(request, *args, **kwargs)
 
 class RoomRateDetails(generics.RetrieveUpdateDestroyAPIView):
     # authentication_classes = (TokenAuthentication,)
     # permission_classes = (IsAuthenticated,)
     queryset = models.RoomRate
     serializer_class = serializers.RoomRateSerializer
+
+    def put(self, request, *args, **kwargs):
+        request.data._mutable = True
+        request.data['created_by'] = request.user.id
+        request.data._mutable = False
+        return self.update(request, *args, **kwargs)
 # ===

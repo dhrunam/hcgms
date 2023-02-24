@@ -11,6 +11,8 @@ from hcgms_api.configuration import models
 
 
 class PropertySerializer(serializers.ModelSerializer):
+    
+
     class Meta:
         model = models.Property
         fields = [
@@ -20,6 +22,7 @@ class PropertySerializer(serializers.ModelSerializer):
                     'code',
                     'address',
                     'description',
+
 
                 ]
 

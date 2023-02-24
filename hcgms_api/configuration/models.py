@@ -1,6 +1,6 @@
 from django.core.exceptions import ValidationError
 from django.db import models
-
+from django.contrib.auth.models import User
 # Create your models here.
 class Property(models.Model):
 
@@ -47,6 +47,10 @@ class RoomRate(models.Model):
     cost=models.DecimalField(max_digits=8, decimal_places=2)
     start_date=models.DateField(auto_now=False, auto_now_add=False)
     end_date=models.DateField(auto_now=False, auto_now_add=False)
+    created_by=models.ForeignKey(
+        User, on_delete=models.SET_NULL, null=True, related_name='room_rate_by_user')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now_add=True)
 
     def clean(self):
         print('I was calling..')

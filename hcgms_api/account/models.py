@@ -14,7 +14,6 @@ class UserProfile(models.Model):
         Property, on_delete=models.SET_NULL, null=True, related_name='user_of_property')
 
     contact_number = models.CharField(max_length=12, null=True)
-    created_by=models.ForeignKey(
-        User, on_delete=models.SET_NULL, null=True, related_name='created_by_user')
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
