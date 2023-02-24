@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from account import models as acc_model
+from hcgms_api.account import models as acc_model
 from django.contrib.auth.models import (User, Group)
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
@@ -7,7 +7,9 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.db import transaction, connection
 from hcgms_api.configuration import models as conf_models
-
+from hcgms_api.configuration.serializers import (
+    PropertySerializer
+)
 
 
 class UserGroupSerializer(serializers.ModelSerializer):
@@ -23,9 +25,8 @@ class UserGroupSerializer(serializers.ModelSerializer):
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
-    related_designation = DesignationSerializer(
-        source='designation', read_only=True)
-    related_office = OfficeSerializer(source='office', read_only=True)
+    
+    related_property = PropertySerializer(source='property', read_only=True)
 
     class Meta:
         model = acc_model.UserProfile
@@ -43,13 +44,12 @@ class UserProfileSerializer(serializers.ModelSerializer):
         fields = [
             'id',
             'user',
-            'designation',
-            'office',
+            'property',
             'contact_number',
             'created_at',
             'updated_at',
-            'related_designation',
-            'related_office',
+
+            'related_property',
 
         ]
 
@@ -84,8 +84,7 @@ class RegisterSerializer(serializers.ModelSerializer):
     # email=serializers.CharField(write_only=True, max_length=128)
     first_name = serializers.CharField(max_length=128)
     last_name = serializers.CharField(max_length=128)
-    designation = serializers.IntegerField(write_only=True, required=True)
-    office = serializers.IntegerField(write_only=True, required=True)
+    property = serializers.IntegerField(write_only=True, required=True)
     contact_number = serializers.CharField(write_only=True, max_length=12)
     is_staff = serializers.BooleanField(default=False)
     group = serializers.CharField(max_length=128, write_only=True)
@@ -99,8 +98,7 @@ class RegisterSerializer(serializers.ModelSerializer):
             'email',
             'first_name',
             'last_name',
-            'designation',
-            'office',
+            'property',
             'is_staff',
             'group',
             'contact_number',
@@ -110,8 +108,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'first_name': {'required': True},
             'last_name': {'required': True},
-            'designation': {'required': True},
-            'office': {'required': True},
+            'property': {'required': True},
             'contact_number': {'required': True},
             'group': {'required': True}
         }
@@ -141,8 +138,8 @@ class RegisterSerializer(serializers.ModelSerializer):
                 user_profile = acc_model.UserProfile.objects.update_or_create(
                     user=user,
                     defaults={
-                        "designation": acc_model.Designation.objects.get(pk=validated_data['designation']),
-                        "office": acc_model.Office.objects.get(pk=validated_data['office']),
+
+                        "proprty": acc_model.Office.objects.get(pk=validated_data['property']),
                         "contact_number": validated_data['contact_number']
                     }
 
@@ -180,8 +177,8 @@ class RegisterSerializer(serializers.ModelSerializer):
                 user_profile = acc_model.UserProfile.objects.update_or_create(
                     user=user,
                     defaults={
-                        "designation": acc_model.Designation.objects.get(pk=validated_data['designation']),
-                        "office": acc_model.Office.objects.get(pk=validated_data['office']),
+
+                        "property": acc_model.Office.objects.get(pk=validated_data['property']),
                         "contact_number": validated_data['contact_number']
                     }
 

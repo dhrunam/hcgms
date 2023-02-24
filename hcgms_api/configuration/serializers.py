@@ -15,6 +15,7 @@ class PropertySerializer(serializers.ModelSerializer):
         fields = [
                     'id', 
                     'name', 
+                    'short_name',
                     'code',
                     'address',
                     'description',

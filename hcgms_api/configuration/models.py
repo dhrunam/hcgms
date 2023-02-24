@@ -4,6 +4,7 @@ from django.db import models
 class Property(models.Model):
 
     name=models.CharField(max_length=128,blank=False)
+    short_name=models.CharField(max_length=4,blank=True)
     code=models.CharField(max_length=128,blank=False, unique=True)
     address=models.CharField(max_length=1024, blank=False)
     description=models.CharField(max_length=1024,blank=True, default='')
