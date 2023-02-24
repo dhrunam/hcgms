@@ -5,6 +5,7 @@ import { PropertyRoutingModule } from './property-routing.module';
 import { PropertyComponent } from './property.component';
 import { ViewComponent } from './view/view.component';
 import { EditComponent } from './edit/edit.component';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -15,7 +16,8 @@ import { EditComponent } from './edit/edit.component';
   ],
   imports: [
     CommonModule,
-    PropertyRoutingModule
+    PropertyRoutingModule,
+    FormsModule
   ]
 })
 export class PropertyModule { }

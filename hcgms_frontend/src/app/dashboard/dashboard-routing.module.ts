@@ -6,8 +6,10 @@ const routes: Routes = [
   { path: '', redirectTo: '/dashboard/home', pathMatch: 'full'},
   { path: '', component: DashboardComponent, children: [
     { path: 'home', loadComponent: () => import('./home/home.component').then(c => c.HomeComponent)},
-    { path: 'users', loadChildren: () => import('./users/users.module').then(m => m.UsersModule) },
-    { path: 'property', loadChildren: () => import('./property/property.module').then(m => m.PropertyModule) },
+    { path: 'users', loadChildren: () => import('./masters/users/users.module').then(m => m.UsersModule) },
+    { path: 'property', loadChildren: () => import('./masters/property/property.module').then(m => m.PropertyModule) },
+    { path: 'room-category', loadChildren: () => import('./masters/room-category-master/room-category-master.module').then(m => m.RoomCategoryMasterModule) },
+    { path: 'room', loadChildren: () => import('./masters/room/room.module').then(m => m.RoomModule)},
   ]
   },
 ];
