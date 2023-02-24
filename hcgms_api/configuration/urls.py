@@ -11,7 +11,13 @@ urlpatterns = [
     path('api/property/<int:pk>', views.PropertyDetails.as_view()),
 
     path('api/room/category', views.RoomCategoryList.as_view()),
-    path('api/romm/category/<int:pk>', views.RoomCategoryDetails.as_view()),
+    path('api/room/category/<int:pk>', views.RoomCategoryDetails.as_view()),
+
+    path('api/room', views.RoomList.as_view()),
+    path('api/room/<int:pk>', views.RoomDetails.as_view()),
+
+    path('api/room/rate', views.RoomRateList.as_view()),
+    path('api/room/rate/<int:pk>', views.RoomRateDetails.as_view()),
 ]
 
 
