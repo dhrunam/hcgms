@@ -36,4 +36,37 @@ export class HttpService {
   delete_room_category(id:number){
     return this.http.delete(`${URL}/api/room/category/${id}`);
   }
+  get_rooms(){
+    return this.http.get<any>(`${URL}/api/room`);
+  }
+  get_room(id:number){
+    return this.http.get<any>(`${URL}/api/room/${id}`);
+  }
+  add_room(fd:any){
+    return this.http.post(`${URL}/api/room`, fd);
+  }
+  update_room(fd:any){
+    return this.http.put(`${URL}/api/room/${fd.get('id')}`, fd);
+  }
+  delete_room(id:number){
+    return this.http.delete(`${URL}/api/room/${id}`);
+  }
+  room_is_operational(fd:any){
+    return this.http.patch(`${URL}/api/room/${fd.get('id')}`, fd);
+  }
+  get_room_rates(){
+    return this.http.get<any>(`${URL}/api/room/rate`);
+  }
+  get_room_rate(id:number){
+    return this.http.get<any>(`${URL}/api/room/rate/${id}`);
+  }
+  add_room_rate(fd:any){
+    return this.http.post(`${URL}/api/room/rate`, fd);
+  }
+  update_room_rate(fd:any){
+    return this.http.put(`${URL}/api/room/rate/${fd.get('id')}`, fd);
+  }
+  delete_room_rate(id:number){
+    return this.http.delete(`${URL}/api/room/rate/${id}`);
+  }
 }

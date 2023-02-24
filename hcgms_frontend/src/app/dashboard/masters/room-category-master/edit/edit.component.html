@@ -1,5 +1,8 @@
 <div class="form px-5 py-2">
-    <h3>Add Room Category</h3>
+    <h3 *ngIf="!editMode; else edit">Add Room Category</h3>
+    <ng-template #edit>
+        <h3>Edit Room Category</h3>
+    </ng-template>
     <hr>
     <div class="row">
         <div class="col-md-12">
@@ -8,8 +11,8 @@
         </div>
         <div class="d-flex justify-content-center align-items-center mt-3">
             <button class="btn btn-primary" (click)="onGoBack()">Go back</button>
-            <button class="btn btn-primary ms-3" *ngIf="!editMode; else edit" (click)="onAddRoomCategory()">Submit</button>
-            <ng-template #edit>
+            <button class="btn btn-primary ms-3" *ngIf="!editMode; else editData" (click)="onAddRoomCategory()">Submit</button>
+            <ng-template #editData>
                 <button class="btn btn-primary ms-3" (click)="onEditRoomCategory()">Update</button>
             </ng-template>
         </div>

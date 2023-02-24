@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { RoomRoutingModule } from './room-routing.module';
-import { RoomComponent } from './room.component';
+import { RoomRateRoutingModule } from './room-rate-routing.module';
+import { RoomRateComponent } from './room-rate.component';
 import { EditComponent } from './edit/edit.component';
 import { ViewComponent } from './view/view.component';
 import { FormsModule } from '@angular/forms';
@@ -10,14 +10,14 @@ import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
-    RoomComponent,
+    RoomRateComponent,
     EditComponent,
     ViewComponent
   ],
   imports: [
     CommonModule,
-    RoomRoutingModule,
+    RoomRateRoutingModule,
     FormsModule
   ]
 })
-export class RoomModule { }
+export class RoomRateModule { }
