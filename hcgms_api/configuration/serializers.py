@@ -15,8 +15,34 @@ class PropertySerializer(serializers.ModelSerializer):
         fields = [
                     'id', 
                     'name', 
+                    'short_name',
                     'code',
                     'address',
                     'description',
 
                 ]
+
+class RoomCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.RoomCategory
+        fields = [
+                    'id', 
+                    'name', 
+
+                ]
+
+
+class RoomSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Room
+        fields = [
+                    'id', 
+                    'property', 
+                    'room_category',
+                    'room_no',
+                    'occupancy',
+                    'description',
+                    'is_operational'
+
+                ]
+
