@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RoomRateService } from '../room-rate.service';
-
+declare var bootstrap: any;
 @Component({
   selector: 'app-view',
   templateUrl: './view.component.html',
@@ -13,6 +13,12 @@ export class ViewComponent {
 
   ngOnInit():void{
     this.getRoomRates();
+  }
+  ngAfterViewInit(): void{
+    setTimeout(() => {
+      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+    }, 200)
   }
   onRouteAddRoomTariff(){
     this.router.navigate(['../new'], { relativeTo: this.route } );

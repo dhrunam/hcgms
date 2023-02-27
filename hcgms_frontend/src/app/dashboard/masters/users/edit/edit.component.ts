@@ -23,21 +23,23 @@ export class EditComponent {
   constructor(private router: Router, private route: ActivatedRoute, private userService: UserService){}
   ngOnInit():  void{
     this.route.params.subscribe((data: Params) => {
+      this.id = +data['id'];
       this.editMode = data['id'] != null;
-      if(this.editMode){
-        this.userService.get_user(data['id']).then((d: any) => {
-          this.first_name = d.first_name;
-          this.contact = d.contact;
-          this.username = d.username;
-          this.last_name = d.last_name;
-          this.property = d.property;
-          this.role = d.role;
-          this.id = d.id;
-        })
-      }
       this.userService.get_properties().then((d:any) => this.properties = d);
       this.userService.get_roles().then((d:any) => this.roles = d);
     })
+  }
+  ngAfterViewInit(){
+    if(this.editMode){
+      this.userService.get_user(this.id).then((d: any) => {
+        this.first_name = d.first_name;
+        this.contact = d.contact;
+        this.username = d.username;
+        this.last_name = d.last_name;
+        this.property = d.property;
+        this.role = d.role;
+      })
+    }
   }
   onAddUser(){
     let fd = new FormData();
@@ -49,7 +51,6 @@ export class EditComponent {
     fd.append('group', this.role);
     fd.append('password', this.password);
     fd.append('password2', this.password2);
-    fd.append('email', 'abcd@test.com');
     this.userService.add_user(fd);
   }
   onUpdateUser(){
@@ -61,12 +62,17 @@ export class EditComponent {
     fd.append('username', this.username);
     fd.append('property', this.property);
     fd.append('group', this.role);
-    fd.append('password', this.password);
-    fd.append('password2', this.password2);
-    fd.append('email', 'abcd@test.com');
     this.userService.update_user(fd);
   }
   onGoBack(){
     this.editMode ? this.router.navigate(['../../'], {relativeTo: this.route}) : this.router.navigate(['../'], {relativeTo: this.route});
+  }
+  onChangeUserPassword(){
+    let fd = new FormData();
+    fd.append('id', this.id.toString());
+    fd.append('username', this.username);
+    fd.append('password', this.password);
+    fd.append('password2', this.password2);
+    this.userService.change_user_password(fd);
   }
 }

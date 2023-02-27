@@ -11,6 +11,7 @@ const routes: Routes = [
       { path: 'room-category', loadChildren: () => import('./masters/room-category-master/room-category-master.module').then(m => m.RoomCategoryMasterModule) },
       { path: 'room', loadChildren: () => import('./masters/room/room.module').then(m => m.RoomModule)},
       { path: 'room-rate', loadChildren: () => import('./masters/room-rate/room-rate.module').then(m => m.RoomRateModule) },
+      { path: 'reservation', loadChildren: () => import('./booking/reservation/reservation.module').then(m => m.ReservationModule) },
     ]
   },
 ];

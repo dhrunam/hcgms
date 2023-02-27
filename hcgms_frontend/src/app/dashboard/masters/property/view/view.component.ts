@@ -2,18 +2,21 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PropertyService } from '../property.service';
 declare var bootstrap: any;
+declare var $:any;
 @Component({
   selector: 'app-view',
   templateUrl: './view.component.html',
   styleUrls: ['./view.component.css']
 })
-export class ViewComponent {
+export class ViewComponent{
   properties: any = [];
   constructor(private router: Router, private route: ActivatedRoute, private propertyService: PropertyService){}
   ngOnInit():void {
-    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
     this.getProperties();
+    setTimeout(() => {
+      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+    }, 200)
   }
   onRouteAddProperty(){
     this.router.navigate(['../new'], { relativeTo: this.route});
