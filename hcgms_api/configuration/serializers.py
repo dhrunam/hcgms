@@ -9,23 +9,6 @@ from rest_framework import status
 from django.db import transaction, connection
 from hcgms_api.configuration import models
 
-
-class PropertySerializer(serializers.ModelSerializer):
-    
-
-    class Meta:
-        model = models.Property
-        fields = [
-                    'id', 
-                    'name', 
-                    'short_name',
-                    'code',
-                    'address',
-                    'description',
-
-
-                ]
-
 class RoomCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = models.RoomCategory
@@ -37,7 +20,7 @@ class RoomCategorySerializer(serializers.ModelSerializer):
 
 
 class RoomSerializer(serializers.ModelSerializer):
-    related_property = PropertySerializer(source='property', read_only=True)
+    # related_property = PropertySerializer(source='property', read_only=True)
     related_category = RoomCategorySerializer(source='room_category', read_only=True)
     class Meta:
         model = models.Room
@@ -49,10 +32,28 @@ class RoomSerializer(serializers.ModelSerializer):
                     'occupancy',
                     'description',
                     'is_operational',
-                    'related_property',
+                    # 'related_property',
                     'related_category'
 
                 ]
+
+class PropertySerializer(serializers.ModelSerializer):
+    related_rooms = RoomSerializer(source='rooms.all', many=True,read_only=True)
+  
+
+    class Meta:
+        model = models.Property
+        fields = [
+                    'id', 
+                    'name', 
+                    'short_name',
+                    'code',
+                    'address',
+                    'description',
+                    'related_rooms'
+
+                ]
+
 
 class RoomRateSerializer(serializers.ModelSerializer):
     related_property = PropertySerializer(source='property', read_only=True)

@@ -1,6 +1,8 @@
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.contrib.auth.models import User
+
+
 # Create your models here.
 class Property(models.Model):
 
@@ -24,8 +26,8 @@ class RoomCategory(models.Model):
 
 class Room(models.Model):
 
-    property=models.ForeignKey(Property, null=True, on_delete=models.SET_NULL)
-    room_category=models.ForeignKey(RoomCategory, null=True, on_delete=models.SET_NULL)
+    property=models.ForeignKey(Property, null=True, on_delete=models.SET_NULL, related_name='rooms')
+    room_category=models.ForeignKey(RoomCategory, null=True, on_delete=models.SET_NULL, related_name="rooms")
     room_no=models.CharField(max_length=128,blank=False)
     occupancy=models.IntegerField(default=2)
     description= models.CharField(max_length=1024, blank=True, null=True)
@@ -42,8 +44,8 @@ class Room(models.Model):
 
 class RoomRate(models.Model):
 
-    property=models.ForeignKey(Property, null=True, on_delete=models.SET_NULL)
-    room=models.ForeignKey(Room, null=True, on_delete=models.SET_NULL)
+    property=models.ForeignKey(Property, null=True, on_delete=models.SET_NULL, related_name='room_rates')
+    room=models.ForeignKey(Room, null=True, on_delete=models.SET_NULL, related_name='room_rates')
     cost=models.DecimalField(max_digits=8, decimal_places=2)
     start_date=models.DateField(auto_now=False, auto_now_add=False)
     end_date=models.DateField(auto_now=False, auto_now_add=False)
@@ -52,29 +54,29 @@ class RoomRate(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
 
-    def clean(self):
-        print('I was calling..')
-        super().clean()
+    # def clean(self):
+    #     print('I was calling..')
+    #     super().clean()
 
-        print('I was calling..')
+    #     print('I was calling..')
 
-        if self.start_date > self.end_date:
-            raise ValidationError(
-                'Start date cannot be greater than End date.'
-            )
+    #     if self.start_date > self.end_date:
+    #         raise ValidationError(
+    #             'Start date cannot be greater than End date.'
+    #         )
 
-        existing_rows = RoomRate.objects.filter(
-            start_date__lte=self.end_date,
-            end_date__gte=self.start_date
-        )
+    #     existing_rows = RoomRate.objects.filter(
+    #         start_date__lte=self.end_date,
+    #         end_date__gte=self.start_date
+    #     )
 
-        if self.pk:
-            existing_rows = existing_rows.exclude(pk=self.pk)
+    #     if self.pk:
+    #         existing_rows = existing_rows.exclude(pk=self.pk)
 
-        if existing_rows.exists():
-            raise ValidationError(
-                'This date range overlaps with an existing row.'
-            )
+    #     if existing_rows.exists():
+    #         raise ValidationError(
+    #             'This date range overlaps with an existing row.'
+    #         )
     
     def __str__(self) -> str:
         return super().__str__()
