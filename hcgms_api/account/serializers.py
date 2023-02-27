@@ -139,17 +139,12 @@ class RegisterSerializer(serializers.ModelSerializer):
                     user=user,
                     defaults={
 
-                        "proprty": acc_model.Office.objects.get(pk=validated_data['property']),
+                        "property": acc_model.Property.objects.get(pk=validated_data['property']),
                         "contact_number": validated_data['contact_number']
                     }
 
                 )
-                # data = {
-                #         'username':user.username,
-                #         'email':user.email,
-                #         'first_name': user.first_name,
-                #         'last_name':user.last.name
-                #         }
+
                 return user
 
                 # return Response(serializers.data(), status=status.HTTP_200_OK)
@@ -178,7 +173,7 @@ class RegisterSerializer(serializers.ModelSerializer):
                     user=user,
                     defaults={
 
-                        "property": acc_model.Office.objects.get(pk=validated_data['property']),
+                        "property": acc_model.Property.objects.get(pk=validated_data['property']),
                         "contact_number": validated_data['contact_number']
                     }
 

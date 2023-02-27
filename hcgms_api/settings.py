@@ -25,7 +25,14 @@ SECRET_KEY = 'django-insecure-wn!419b$bjet*@qnh_g%-nm1lwdv%56_2-!0i3znj_yboyt_5g
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+
+CORS_ORIGIN_ALLOW_ALL = True
+
+CORS_ORIGIN_WHITELIST = (
+    'http://localhost:4200',
+    'http://192.168.1.118:4200',
+)
 
 
 # Application definition
@@ -39,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'durin',
+    'corsheaders',
     'hcgms_api.account',
     'hcgms_api.configuration',
     'hcgms_api.operation',
@@ -49,6 +57,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -84,12 +93,11 @@ DATABASES = {
     #     'ENGINE': 'django.db.backends.sqlite3',
     #     'NAME': BASE_DIR / 'db.sqlite3',
     # }
-
-        'default': {
+    'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'hcgms',
         'USER': 'postgres',
-        'PASSWORD': 'postgres',
+        'PASSWORD': 'Darkhorse@1',
         'HOST': '127.0.0.1',
         'PORT':'5432'
     }
