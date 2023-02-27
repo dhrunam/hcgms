@@ -9,25 +9,6 @@ from rest_framework import status
 from django.db import transaction, connection
 from hcgms_api.operation import models
 
-class ReservationDetailsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.ReservationDetails
-        fields = [
-                    'id', 
-                    'property',
-                    'reservation_no', 
-                    'lead_guest_name',
-                    'reservation_for',
-                    'reservation_from',
-                    'address',
-                    'contact_no',
-                    'remarks',
-                    'checkin_date',
-                    'checkout_date',
-
-                ]
-
-
 
 class ReservationRoomDetailsSerializer(serializers.ModelSerializer):
     class Meta:
@@ -42,5 +23,44 @@ class ReservationRoomDetailsSerializer(serializers.ModelSerializer):
                     'checkout_date',
 
                 ]
+class ReservationDetailsSerializer(serializers.ModelSerializer):
+    reservation_room_details = ReservationRoomDetailsSerializer(source='reservation_room_details.all', many=True,read_only=True)
+    # model2s = Model2Serializer(source='model3s.all.model2', many=True)
+
+
+    class Meta:
+        model = models.ReservationDetails
+        fields = [
+                    'id', 
+                    'property',
+                    'reservation_no', 
+                    'lead_guest_name',
+                    'reservation_for',
+                    'reservation_from',
+                    'address',
+                    'contact_no',
+                    'remarks',
+                    'checkin_date',
+                    'checkout_date',
+                    'reservation_room_details'
+
+                ]
+        
+    def validate(self, attrs):
+
+
+        today=datetime.date.today()
+        if attrs['checkin_date'] > attrs['checkout_date']:
+            raise serializers.ValidationError(
+                {"checkin_date": "Checkin date  cannot be greater than Checkout date."})
+
+        if attrs['checkin_date'] < today:
+            raise serializers.ValidationError(
+                {"checkin_date": "Checkin date  cannot be less than today's date."})
+
+        return attrs
+
+
+
 
     

@@ -10,6 +10,9 @@ urlpatterns = [
     path('api/property', views.PropertyList.as_view()),
     path('api/property/<int:pk>', views.PropertyDetails.as_view()),
 
+    # path('api/property/rooms/<int:pk>', views.PropertyDetailWithRooms.as_view()),
+    path('api/property/rooms', views.PropertyWithAvailableRoomList.as_view()),
+
     path('api/room/category', views.RoomCategoryList.as_view()),
     path('api/room/category/<int:pk>', views.RoomCategoryDetails.as_view()),
 

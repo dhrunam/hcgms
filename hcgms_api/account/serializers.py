@@ -144,12 +144,7 @@ class RegisterSerializer(serializers.ModelSerializer):
                     }
 
                 )
-                # data = {
-                #         'username':user.username,
-                #         'email':user.email,
-                #         'first_name': user.first_name,
-                #         'last_name':user.last.name
-                #         }
+
                 return user
 
                 # return Response(serializers.data(), status=status.HTTP_200_OK)
@@ -168,8 +163,8 @@ class RegisterSerializer(serializers.ModelSerializer):
                 user.first_name = validated_data['first_name']
                 user.last_name = validated_data['last_name']
                 user.is_staff = True if validated_data['group'] == 'user' else False
-                user.set_password(validated_data['password'])
-                user.groups.clear()
+                # user.set_password(validated_data['password'])
+                user.groups.clear();
                 user.groups.add(Group.objects.get(
                     name=validated_data['group']))
                 user.save()

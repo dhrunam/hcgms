@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 class ReservationDetails(models.Model):
 
     property=models.ForeignKey(conf_models.Property, null=True, on_delete=models.SET_NULL)
-    reservation_no=models.CharField(max_length=128,blank=False)
+    reservation_no=models.CharField(max_length=15,blank=False)
     lead_guest_name=models.CharField(max_length=128, blank=True)
     reservation_for=models.CharField(max_length=128, blank=False)
     reservation_from=models.CharField(max_length=128, blank=False)
@@ -24,9 +24,9 @@ class ReservationDetails(models.Model):
 
 
 class ReservationRoomDetails(models.Model): 
-    reservation=models.ForeignKey(ReservationDetails, null=True, on_delete=models.SET_NULL)
-    property=models.ForeignKey(conf_models.Property, null=True, on_delete=models.SET_NULL)
-    room=models.ForeignKey(conf_models.Room, null=True, on_delete=models.SET_NULL)
+    reservation=models.ForeignKey(ReservationDetails, null=True, on_delete=models.SET_NULL, related_name='reservation_room_details')
+    property=models.ForeignKey(conf_models.Property, null=True, on_delete=models.SET_NULL, related_name='reservation_room_details')
+    room=models.ForeignKey(conf_models.Room, null=True, on_delete=models.SET_NULL, related_name='reservation_room_details')
     room_rate=models.DecimalField(max_digits=8, decimal_places=2)
     checkin_date=models.DateField(auto_now=False, auto_now_add=False)
     checkout_date=models.DateField(auto_now=False, auto_now_add=False)
