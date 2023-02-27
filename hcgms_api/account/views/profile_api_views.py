@@ -30,6 +30,11 @@ class UserRegisterDetails(generics.RetrieveUpdateDestroyAPIView):
     queryset = User
     serializer_class = serializers.RegisterSerializer
 
+class UserUpdatePassword(generics.RetrieveUpdateDestroyAPIView):
+    # authentication_classes = (TokenAuthentication,)
+    # permission_classes = (IsAuthenticated,)
+    queryset = User
+    serializer_class = serializers.UpdateUserPasswordSerializer
 
 class UserGroupList(generics.ListCreateAPIView):
     # authentication_classes = (TokenAuthentication,)

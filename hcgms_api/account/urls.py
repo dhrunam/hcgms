@@ -18,5 +18,7 @@ urlpatterns = [
     path('api/user/profile/<int:pk>', views.UserProfileDetails.as_view()),
     path('api/user/reg', views.UserRegisterList.as_view()),
     path('api/user/reg/<int:pk>', views.UserRegisterDetails.as_view()),
+    path('api/user/update/password/<int:pk>', views.UserUpdatePassword.as_view()),
+
     path('api/auth/', include('durin.urls'))
 ]
