@@ -29,6 +29,7 @@ export class ViewComponent {
   getRooms(){
     this.roomService.get_rooms().then((d:any) => {
       this.rooms = d;
+      console.log(d);
     })
   }
   onDeleteRoom(id:number){
