@@ -79,6 +79,12 @@ export class UserService{
             error: err => console.log(err),
         });
     }
+    change_user_password(data: any){
+        this.subscription = this.http.change_user_password(data).subscribe({
+            next: data => { return true },
+            error: err => console.log(err),
+        })
+    }
     ngOnDestroy(){
         this.subscription.unsubscribe();
     }

@@ -67,4 +67,12 @@ export class EditComponent {
   onGoBack(){
     this.editMode ? this.router.navigate(['../../'], {relativeTo: this.route}) : this.router.navigate(['../'], {relativeTo: this.route});
   }
+  onChangeUserPassword(){
+    let fd = new FormData();
+    fd.append('id', this.id.toString());
+    fd.append('username', this.username);
+    fd.append('password', this.password);
+    fd.append('password2', this.password2);
+    this.userService.change_user_password(fd);
+  }
 }

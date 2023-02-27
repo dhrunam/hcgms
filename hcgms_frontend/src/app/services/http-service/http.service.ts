@@ -87,4 +87,7 @@ export class HttpService {
   delete_user(id:number){
     return this.http.delete(`${URL}/api/user/reg/${id}`);
   }
+  change_user_password(fd:any){
+    return this.http.put(`${URL}/api/user/update/password/${fd.get('id')}`, fd);
+  }
 }
