@@ -18,8 +18,43 @@ class RoomCategorySerializer(serializers.ModelSerializer):
 
                 ]
 
+class HelperPropertySerializer(serializers.ModelSerializer):
+    # related_room = HelperRoomSerializer(source='rooms.all', many=True,read_only=True)
+  
+
+    class Meta:
+        model = models.Property
+        fields = [
+                    'id', 
+                    'name', 
+                    'short_name',
+                    'code',
+                    'address',
+                    'description',
+                    # 'related_room'
+
+                ]
+
 
 class RoomSerializer(serializers.ModelSerializer):
+    related_property = HelperPropertySerializer(source='property', read_only=True)
+    related_category = RoomCategorySerializer(source='room_category', read_only=True)
+    class Meta:
+        model = models.Room
+        fields = [
+                    'id', 
+                    'property', 
+                    'room_category',
+                    'room_no',
+                    'occupancy',
+                    'description',
+                    'is_operational',
+                    'related_property',
+                    'related_category'
+
+                ]
+
+class HelperRoomSerializer(serializers.ModelSerializer):
     # related_property = PropertySerializer(source='property', read_only=True)
     related_category = RoomCategorySerializer(source='room_category', read_only=True)
     class Meta:
@@ -36,9 +71,8 @@ class RoomSerializer(serializers.ModelSerializer):
                     'related_category'
 
                 ]
-
 class PropertySerializer(serializers.ModelSerializer):
-    related_rooms = RoomSerializer(source='rooms.all', many=True,read_only=True)
+    related_room = HelperRoomSerializer(source='rooms.all', many=True,read_only=True)
   
 
     class Meta:
@@ -50,7 +84,7 @@ class PropertySerializer(serializers.ModelSerializer):
                     'code',
                     'address',
                     'description',
-                    'related_rooms'
+                    'related_room'
 
                 ]
 
