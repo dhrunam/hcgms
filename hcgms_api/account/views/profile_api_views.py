@@ -43,3 +43,7 @@ class UserGroupDetails(generics.RetrieveUpdateDestroyAPIView):
     queryset = Group
     serializer_class = serializers.UserGroupSerializer
 
+    
+
+
+
