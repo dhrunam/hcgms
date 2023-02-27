@@ -114,9 +114,10 @@ class RegisterSerializer(serializers.ModelSerializer):
         }
 
     def validate(self, attrs):
-        if attrs['password'] != attrs['password2']:
-            raise serializers.ValidationError(
-                {"password": "Password fields didn't match."})
+        if 'password' in attrs:
+            if attrs['password'] != attrs['password2']:
+                raise serializers.ValidationError(
+                    {"password": "Password fields didn't match."})
 
         return attrs
 
@@ -126,13 +127,13 @@ class RegisterSerializer(serializers.ModelSerializer):
             with transaction.atomic():
                 user = User.objects.create(
                     username=validated_data['username'],
-                    email=validated_data['email'],
+                    email=validated_data.get('email', ''),
                     first_name=validated_data['first_name'],
                     last_name=validated_data['last_name'],
                     is_staff=True if validated_data['group'] == 'user' else False,
                 )
                 user.groups.add(Group.objects.get(
-                    name=validated_data['group']))
+                    id=validated_data['group']))
                 user.set_password(validated_data['password'])
                 user.save()
                 user_profile = acc_model.UserProfile.objects.update_or_create(
@@ -159,14 +160,14 @@ class RegisterSerializer(serializers.ModelSerializer):
                 user = instance
 
                 user.username = validated_data['username']
-                user.email = validated_data['email']
+                # user.email = validated_data['email']
                 user.first_name = validated_data['first_name']
                 user.last_name = validated_data['last_name']
                 user.is_staff = True if validated_data['group'] == 'user' else False
                 # user.set_password(validated_data['password'])
                 user.groups.clear();
                 user.groups.add(Group.objects.get(
-                    name=validated_data['group']))
+                    id=validated_data['group']))
                 user.save()
 
                 user_profile = acc_model.UserProfile.objects.update_or_create(
