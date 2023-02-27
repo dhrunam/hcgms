@@ -50,7 +50,7 @@ export class UserService{
     }
     get_user(id: number){
         this.subscription = this.http.get_user(id).subscribe({
-            next: data => { this.user = { id: data.id, first_name: data.first_name, last_name: data.last_name, username: data.username, contact: data.related_profile[0].contact_number, property: data.related_profile[0].related_property.id, role: data.related_groups[0].name} },
+            next: data => { this.user = { id: data.id, first_name: data.first_name, last_name: data.last_name, username: data.username, contact: data.related_profile[0].contact_number, property: data.related_profile[0].related_property.id, role: data.related_groups[0].id} },
             error: err => console.log(err)
         });
         return new Promise(

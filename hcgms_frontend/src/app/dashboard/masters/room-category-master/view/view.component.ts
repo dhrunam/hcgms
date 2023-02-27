@@ -11,9 +11,13 @@ export class ViewComponent {
   categories: any = [];
   constructor(private router: Router, private route: ActivatedRoute, private roomCategoryService: RoomCategoryService){}
   ngOnInit(): void{
-    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
     this.getCategories();
+  }
+  ngAfterViewInit(): void{
+    setTimeout(() => {
+      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+    }, 200)
   }
   onRouteAddRoomCategory(){
     this.router.navigate(['../new'], { relativeTo: this.route } );

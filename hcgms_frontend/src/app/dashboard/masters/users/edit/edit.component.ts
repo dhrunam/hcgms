@@ -51,7 +51,6 @@ export class EditComponent {
     fd.append('group', this.role);
     fd.append('password', this.password);
     fd.append('password2', this.password2);
-    fd.append('email', '');
     this.userService.add_user(fd);
   }
   onUpdateUser(){
@@ -63,9 +62,6 @@ export class EditComponent {
     fd.append('username', this.username);
     fd.append('property', this.property);
     fd.append('group', this.role);
-    fd.append('password', this.password);
-    fd.append('password2', this.password2);
-    fd.append('email', '');
     this.userService.update_user(fd);
   }
   onGoBack(){

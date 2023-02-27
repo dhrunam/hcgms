@@ -34,7 +34,7 @@
             <label class="form-label">Role</label>
             <select class="form-select" [(ngModel)]="role">
                 <option [ngValue]="'N/A'">---Select Role---</option>
-                <option *ngFor="let r of roles" [ngValue]="r.name">{{r.name}}</option>
+                <option *ngFor="let r of roles" [ngValue]="r.id">{{r.name}}</option>
             </select>
         </div>
         <div class="col-md-3">

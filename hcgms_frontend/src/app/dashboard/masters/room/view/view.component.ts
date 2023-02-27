@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RoomService } from '../room.service';
-
+declare var bootstrap: any;
 @Component({
   selector: 'app-view',
   templateUrl: './view.component.html',
@@ -12,6 +12,12 @@ export class ViewComponent {
   constructor(private roomService: RoomService, private router: Router, private route: ActivatedRoute){}
   ngOnInit():void{
     this.getRooms();
+  }
+  ngAfterViewInit(): void{
+    setTimeout(() => {
+      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+    }, 200)
   }
   onRouteAddRoom(){
     this.router.navigate(['../new'], { relativeTo: this.route } );
@@ -29,7 +35,6 @@ export class ViewComponent {
   getRooms(){
     this.roomService.get_rooms().then((d:any) => {
       this.rooms = d;
-      console.log(d);
     })
   }
   onDeleteRoom(id:number){
