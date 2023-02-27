@@ -6,6 +6,9 @@ import { URL } from 'src/environment/environment.prod';
 })
 export class HttpService {
   constructor(private http: HttpClient) { }
+  get_roles(){
+    return this.http.get<any>(`${URL}/api/user/group`);
+  }
   get_properties(){
     return this.http.get<any>(`${URL}/api/property`);
   }
@@ -68,5 +71,20 @@ export class HttpService {
   }
   delete_room_rate(id:number){
     return this.http.delete(`${URL}/api/room/rate/${id}`);
+  }
+  get_users(){
+    return this.http.get<any>(`${URL}/api/user/reg`);
+  }
+  get_user(id:number){
+    return this.http.get<any>(`${URL}/api/user/reg/${id}`);
+  }
+  add_user(fd:any){
+    return this.http.post(`${URL}/api/user/reg`, fd);
+  }
+  update_user(fd:any){
+    return this.http.put(`${URL}/api/user/reg/${fd.get('id')}`, fd);
+  }
+  delete_user(id:number){
+    return this.http.delete(`${URL}/api/user/reg/${id}`);
   }
 }

@@ -139,7 +139,7 @@ class RegisterSerializer(serializers.ModelSerializer):
                     user=user,
                     defaults={
 
-                        "proprty": acc_model.Office.objects.get(pk=validated_data['property']),
+                        "property": acc_model.Property.objects.get(pk=validated_data['property']),
                         "contact_number": validated_data['contact_number']
                     }
 
@@ -169,7 +169,7 @@ class RegisterSerializer(serializers.ModelSerializer):
                 user.last_name = validated_data['last_name']
                 user.is_staff = True if validated_data['group'] == 'user' else False
                 user.set_password(validated_data['password'])
-                user.groups.clear();
+                user.groups.clear()
                 user.groups.add(Group.objects.get(
                     name=validated_data['group']))
                 user.save()
@@ -178,7 +178,7 @@ class RegisterSerializer(serializers.ModelSerializer):
                     user=user,
                     defaults={
 
-                        "property": acc_model.Office.objects.get(pk=validated_data['property']),
+                        "property": acc_model.Property.objects.get(pk=validated_data['property']),
                         "contact_number": validated_data['contact_number']
                     }
 

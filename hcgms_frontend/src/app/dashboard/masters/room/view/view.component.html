@@ -23,7 +23,7 @@
                 <td>{{r.room_no}}</td>
                 <td>{{r.related_category.name}}</td>
                 <td>{{r.related_property.name}}</td>
-                <td class="text-center" width="10%">
+                <td class="text-center" width="13%">
                     <input type="checkbox" (click)="isOperational(r.id,'false')" checked *ngIf="r.is_operational; else unchecked">
                     <ng-template #unchecked>
                         <input type="checkbox" (click)="isOperational(r.id,'true')">
