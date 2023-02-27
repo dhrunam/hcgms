@@ -82,7 +82,7 @@ export class HttpService {
     return this.http.post(`${URL}/api/user/reg`, fd);
   }
   update_user(fd:any){
-    return this.http.put(`${URL}/api/user/reg/${fd.get('id')}`, fd);
+    return this.http.patch(`${URL}/api/user/reg/${fd.get('id')}`, fd);
   }
   delete_user(id:number){
     return this.http.delete(`${URL}/api/user/reg/${id}`);

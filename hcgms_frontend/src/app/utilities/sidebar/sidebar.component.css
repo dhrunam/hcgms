@@ -67,12 +67,12 @@
     transition: all 0.3s ease;
     cursor: pointer;
 }
-.sidebar .nav_list li.showMenu i.arrow{
+/* .sidebar .nav_list li.showMenu i.arrow{
     transform: rotate(-180deg);
 }
 .sidebar.closed .nav_list i.arrow{
     display: none;
-}
+} */
 .sidebar .nav_list li label{
     display:flex;
     text-decoration: none;
