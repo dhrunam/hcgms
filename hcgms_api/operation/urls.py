@@ -10,6 +10,7 @@ urlpatterns = [
     path('api/reservation', views.ReservationDetailsList.as_view()),
     path('api/reservation/<int:pk>', views.ReservationDetailsDetails.as_view()),
 
+    path('api/room/search', views.RoomSearchList.as_view())
     # path('api/room/category', views.RoomCategoryList.as_view()),
     # path('api/room/category/<int:pk>', views.RoomCategoryDetails.as_view()),
 

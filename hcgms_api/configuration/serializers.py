@@ -121,19 +121,30 @@ class RoomRateSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 {"end_date": "End date  cannot be less than today's date."})
 
-        room_rates=models.RoomRate.objects.filter(property=attrs['property'],room=attrs['room'], end_date__gte=attrs['start_date'])
+        room_rates=models.RoomRate.objects.filter(property=attrs['property'],room=attrs['room'],start_date__lte=attrs['start_date'], end_date__gte=attrs['start_date'])
         
         if room_rates and room_rates.count()>0:
 
             raise serializers.ValidationError(
-                {"start_date": "Start date already configured in this date range."})
+                {"start_date": "Rate already configured in this date range."})
 
-        room_rates=models.RoomRate.objects.filter(property=attrs['property'],room=attrs['room'], end_date__gte=attrs['end_date'])
+        room_rates=models.RoomRate.objects.filter(property=attrs['property'],room=attrs['room'], start_date__lte=attrs['end_date'], end_date__gte=attrs['end_date'])
         
         if room_rates and room_rates.count()>0:
 
             raise serializers.ValidationError(
-                {"end_date": "Start date already configured in this date range."})
+                {"end_date": "Rate already configured in this date range."})
+
+        room_rates=models.RoomRate.objects.filter(property=attrs['property'],room=attrs['room'], start_date__gte=attrs['start_date'], end_date__lte=attrs['end_date'])
+        
+        if room_rates and room_rates.count()>0:
+
+            raise serializers.ValidationError(
+                {
+                    "start_date": "Rate already configured in this date range.",
+                    "end_date": "Rate already configured in this date range."
+                    
+                })
 
         
 
