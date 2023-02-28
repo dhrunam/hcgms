@@ -90,4 +90,7 @@ export class HttpService {
   change_user_password(fd:any){
     return this.http.put(`${URL}/api/user/update/password/${fd.get('id')}`, fd);
   }
+  search_rooms(checkin_date: Date, checkout_date: Date){
+    return this.http.get<any>(`${URL}/api/room/search?checkin_date=${checkin_date}&${checkout_date}`)
+  }
 }

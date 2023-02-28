@@ -1,6 +1,6 @@
 <section>
-    <div class="list-houses">
-        <h4>House Name</h4>
+    <div class="list-houses" *ngFor="let r of results">
+        <h4>{{ r.property_name }}</h4>
         <hr>
         <table class="table table-bordered">
             <thead>
@@ -13,19 +13,12 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
+                <tr *ngFor="let room of r.meta_rooms; let i=index">
                     <td scope="col" class="text-center"><input type="checkbox"></td>
-                    <td scope="col" class="text-center">1</td>
-                    <td scope="col">GH1234</td>
-                    <td scope="col">VIP</td>
-                    <td scope="col">₹ 2000</td>
-                </tr>
-                <tr>
-                    <td scope="col" class="text-center"><input type="checkbox"></td>
-                    <td scope="col" class="text-center">2</td>
-                    <td scope="col">GH4321</td>
-                    <td scope="col">Normal</td>
-                    <td scope="col">₹ 1000</td>
+                    <td scope="col" class="text-center">{{i+1}}</td>
+                    <td scope="col">{{ room.room_no }}</td>
+                    <td scope="col">{{ room.room_category }}</td>
+                    <td scope="col">₹ {{room.room_rate }}</td>
                 </tr>
             </tbody>
         </table>
