@@ -14,6 +14,7 @@ export class HousesComponent {
   listRooms: boolean = false;
   checkin_date!: Date;
   checkout_date!: Date;
+  property: number = 0;
   roomDetails !: {property: number, checkin_date: Date, checkout_date: Date, rooms: Array<any>};
   private subscription!: Subscription;
   constructor(private router: Router, private route: ActivatedRoute, private reservationService: ReservationService){}
@@ -24,6 +25,7 @@ export class HousesComponent {
         this.results = data.data;
         this.checkin_date = data.checkin_date;
         this.checkout_date = data.checkout_date;
+        this.property = data.property
       },
       error: err => console.log(err), 
     })
@@ -42,6 +44,8 @@ export class HousesComponent {
     }
   }
   onEnterBookingDetails(){
+    this.roomDetails = { property: this.property, checkin_date: this.checkin_date, checkout_date: this.checkout_date, rooms: this.rooms};
+    this.reservationService.roomDetails.next(this.roomDetails);
     this.router.navigate(['../details'], { relativeTo: this.route } );
   }
   ngOnDestroy(): void{

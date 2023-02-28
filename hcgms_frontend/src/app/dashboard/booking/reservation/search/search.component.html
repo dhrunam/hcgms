@@ -3,7 +3,7 @@
         <div class="row d-flex justify-content-center">
             <div class="col-md-3">
                 <label class="form-label">Guest House</label>
-                <select class="form-select" ngModel name="property" #property="ngModel">
+                <select class="form-select" [ngModel]="property" name="property_id" #property_id="ngModel">
                     <option [ngValue]="'N/A'">---Select Guest House---</option>
                     <option *ngFor="let p of properties" [ngValue]="p.id">{{ p.name }}</option>
                 </select>

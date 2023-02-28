@@ -18,8 +18,8 @@ export class SearchComponent {
       alert('Invalid Date Range');
     }
     else{
-      this.reservationService.search_rooms(data.value.start_date, data.value.end_date, data.value.property).then((d:any) => { 
-        this.reservationService.results.next({data: d, checkin_date: data.value.start_date, checkout_date: data.value.end_date, property: data.value.property});
+      this.reservationService.search_rooms(data.value.start_date, data.value.end_date, data.value.property_id).then((d:any) => { 
+        this.reservationService.results.next({data: d, checkin_date: data.value.start_date, checkout_date: data.value.end_date, property: data.value.property_id});
       });
     } 
   }
