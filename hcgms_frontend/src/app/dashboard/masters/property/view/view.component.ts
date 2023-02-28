@@ -13,10 +13,10 @@ export class ViewComponent{
   constructor(private router: Router, private route: ActivatedRoute, private propertyService: PropertyService){}
   ngOnInit():void {
     this.getProperties();
-    setTimeout(() => {
-      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
-    }, 200)
+    // setTimeout(() => {
+    //   const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    //   const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+    // }, 200)
   }
   onRouteAddProperty(){
     this.router.navigate(['../new'], { relativeTo: this.route});

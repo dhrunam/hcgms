@@ -37,7 +37,7 @@ export class EditComponent {
     fd.append('description', this.prop_description);
     fd.append('address', this.prop_address);
     fd.append('short_name', this.prop_short_name);
-    fd.append('code', 'SHC01');
+    fd.append('code', 'SHC03');
     this.propertyService.add_property(fd);
   }
   onUpdateProperty(){
@@ -47,7 +47,7 @@ export class EditComponent {
     fd.append('description', this.prop_description);
     fd.append('address', this.prop_address);
     fd.append('short_name', this.prop_short_name);
-    fd.append('code', 'SHC01');
+    fd.append('code', 'SHC03');
     this.propertyService.update_property(fd);
   }
   onGoBack(){
