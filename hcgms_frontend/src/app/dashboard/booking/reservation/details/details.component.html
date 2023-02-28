@@ -2,40 +2,42 @@
     <main class="mt-5" *ngIf="!acknowledgement">
         <h4>Add Details</h4>
         <hr>
-        <div class="row">
-            <div class="col-md-3">
-                <label class="form-label">Guest Name</label>
-                <input type="text" class="form-control">
+        <form (ngSubmit)="onConfirmReservation(resv_from)" #resvForm="ngForm">
+            <div class="row">
+                <div class="col-md-3">
+                    <label class="form-label">Guest Name</label>
+                    <input type="text" class="form-control" ngModel name="guest_name" #guest_name="ngModel">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Reservation For</label>
+                    <input type="text" class="form-control" ngModel name="resv_for" #resv_for="ngModel">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Reservation From</label>
+                    <input type="text" class="form-control" ngModel name="resv_from" #resv_from="ngModel">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Contact Number</label>
+                    <input type="text" class="form-control" ngModel name="contact" #contact="ngModel">
+                </div>
             </div>
-            <div class="col-md-3">
-                <label class="form-label">Reservation For</label>
-                <input type="text" class="form-control">
+            <div class="row mt-3">
+                <div class="col-md-12">
+                    <label class="form-label">Address</label>
+                    <textarea class="form-control" rows="5" cols="10" ngModel name="address" #address="ngModel"></textarea>
+                </div>
             </div>
-            <div class="col-md-3">
-                <label class="form-label">Reservation From</label>
-                <input type="text" class="form-control">
+            <div class="row mt-3">
+                <div class="col-md-12">
+                    <label class="form-label">Remarks</label>
+                    <textarea class="form-control" rows="3" cols="10" ngModel name="remarks" #remarks="ngModel"></textarea>
+                </div>
             </div>
-            <div class="col-md-3">
-                <label class="form-label">Contact Number</label>
-                <input type="text" class="form-control">
+            <div class="text-center mt-4">
+                <button class="btn btn-primary" type="button">Preview</button>
+                <button class="btn btn-primary ms-3" type="submit">Submit</button>
             </div>
-        </div>
-        <div class="row mt-3">
-            <div class="col-md-12">
-                <label class="form-label">Address</label>
-                <textarea class="form-control" rows="5" cols="10"></textarea>
-            </div>
-        </div>
-        <div class="row mt-3">
-            <div class="col-md-12">
-                <label class="form-label">Remarks</label>
-                <textarea class="form-control" rows="3" cols="10"></textarea>
-            </div>
-        </div>
-        <div class="text-center mt-4">
-            <button class="btn btn-primary">Preview</button>
-            <button class="btn btn-primary ms-3" (click)="onToggle()">Submit</button>
-        </div>
+        </form>
     </main>
     <section *ngIf="acknowledgement">
         <app-acknowledgment></app-acknowledgment>

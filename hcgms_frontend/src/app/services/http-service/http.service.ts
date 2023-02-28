@@ -93,4 +93,7 @@ export class HttpService {
   search_rooms(checkin_date: Date, checkout_date: Date, property: number){
     return this.http.get<any>(`${URL}/api/room/search/v2?checkin_date=${checkin_date}&checkout_date=${checkout_date}&property=${property}`);
   }
+  confirm_reservation(fd:any){
+    return this.http.post(`${URL}/api/reservation`, fd);
+  }
 }
