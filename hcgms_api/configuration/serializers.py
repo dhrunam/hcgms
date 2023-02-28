@@ -31,6 +31,7 @@ class HelperPropertySerializer(serializers.ModelSerializer):
                     'code',
                     'address',
                     'description',
+                    'is_operational'
                     # 'related_room'
 
                 ]
@@ -84,6 +85,7 @@ class PropertySerializer(serializers.ModelSerializer):
                     'code',
                     'address',
                     'description',
+                    'is_operational',
                     'related_room'
 
                 ]
@@ -149,3 +151,5 @@ class RoomRateSerializer(serializers.ModelSerializer):
         
 
         return attrs
+
+    

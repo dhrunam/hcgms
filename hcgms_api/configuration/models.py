@@ -11,7 +11,7 @@ class Property(models.Model):
     code=models.CharField(max_length=128,blank=False, unique=True)
     address=models.CharField(max_length=1024, blank=False)
     description=models.CharField(max_length=1024,blank=True, default='')
-
+    is_operational=models.BooleanField(default=True)
 
     def __str__(self) -> str:
         return super().__str__()
