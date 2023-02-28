@@ -6,6 +6,7 @@ from django.db import transaction, connection
 from hcgms_api.operation import serializers
 from durin.auth import TokenAuthentication
 import datetime
+import json
 
 
 def generate_reservation_no(self, data):
@@ -53,7 +54,7 @@ class ReservationDetailsList(generics.ListCreateAPIView):
             self, request.data)
         request.data._mutable = False
         reservation_details = self.create(request, *args, **kwargs)
-        rooms = [{'room':1, 'room_rate':400},{'room':3, 'room_rate':400}]
+        rooms = json.loads(request.data['rooms'])
 
         if(rooms):
             for element in rooms:

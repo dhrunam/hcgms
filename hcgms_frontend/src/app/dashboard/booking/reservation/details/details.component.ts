@@ -26,7 +26,7 @@ export class DetailsComponent {
     fd.append('remarks', data.value.remarks);
     fd.append('checkin_date', this.roomDetails.checkin_date);
     fd.append('checkout_date', this.roomDetails.checkout_date);
-    fd.append('rooms', this.roomDetails.rooms);
+    fd.append('rooms', JSON.stringify(this.roomDetails.rooms));
     this.reservationService.confirm_reservation(fd);
   }
   onToggle(){

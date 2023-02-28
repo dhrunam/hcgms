@@ -34,7 +34,7 @@ export class HousesComponent {
   onStatusCheck(event: any, id:number, rate: number){
     if(event.target.checked){
       const data = {
-        'room_id': id,
+        'room': id,
         'room_rate': rate,
       }
       this.rooms.push(data);
