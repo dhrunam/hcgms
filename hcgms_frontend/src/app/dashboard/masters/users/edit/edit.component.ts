@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { UserService } from '../users.service';
-
 @Component({
   selector: 'app-edit',
   templateUrl: './edit.component.html',

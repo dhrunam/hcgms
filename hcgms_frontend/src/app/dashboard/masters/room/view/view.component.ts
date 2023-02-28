@@ -14,10 +14,10 @@ export class ViewComponent {
     this.getRooms();
   }
   ngAfterViewInit(): void{
-    setTimeout(() => {
-      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
-    }, 200)
+    // setTimeout(() => {
+    //   const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    //   const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+    // }, 200)
   }
   onRouteAddRoom(){
     this.router.navigate(['../new'], { relativeTo: this.route } );
