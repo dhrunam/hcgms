@@ -47,6 +47,7 @@ class ReservationDetailsSerializer(serializers.ModelSerializer):
                     'total_room_cost',
                     'discount',
                     'refund',
+                    'is_bill_generated',
                     'reservation_room_details'
 
                 ]
@@ -88,3 +89,24 @@ class RoomSearchSerializer(serializers.ModelSerializer):
 
                 ]
 
+class CheckInCheckOutSerializer(serializers.ModelSerializer):
+    # related_property = conf_serializers.HelperPropertySerializer(source='property', read_only=True)
+    # related_category = conf_serializers.RoomCategorySerializer(source='room_category', read_only=True)
+    # cost = serializers.DecimalField(max_digits=8, decimal_places=2,  read_only=True)
+    class Meta:
+        model = models.GuestCheckInCheckOutDetails
+        fields = [
+                    'id', 
+                    'reservation',
+                    'property',
+                    'room',
+                    'lead_guest',
+                    'no_adult',
+                    'no_child',
+                    'address',
+                    'checkin_date',
+                    'checkout_date',
+                    'remarks',
+
+
+                ]
