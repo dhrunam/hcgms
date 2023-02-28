@@ -78,6 +78,7 @@ class RoomSearchGroupByProperty(APIView):
     def get(self, request, format=None):
         checkin_date = request.query_params.get('checkin_date')
         checkout_date = request.query_params.get('checkout_date')
+        property = request.query_params.get('property')
         with connection.cursor() as cursor:
             cursor.execute('''
                 select * from (
@@ -88,7 +89,7 @@ class RoomSearchGroupByProperty(APIView):
                 rate.cost
             from public.configuration_room as cr
                 join public.configuration_property as pr
-	            on cr.property_id=pr.id and pr.is_operational=true
+	            on cr.property_id=pr.id and pr.is_operational=true and pr.id=%s
                 join (SELECT id, cost,property_id, room_id
                 FROM public.configuration_roomrate
                 where start_date<=%s --checkin_date
@@ -126,7 +127,7 @@ class RoomSearchGroupByProperty(APIView):
              order by f.property_id asc
                     
                     ;
-            ''',[checkin_date,checkin_date,checkin_date, checkin_date, checkout_date,checkout_date, checkin_date, checkout_date])
+            ''',[property,checkin_date,checkin_date,checkin_date, checkin_date, checkout_date,checkout_date, checkin_date, checkout_date])
             raw_query_results = cursor.fetchall()
 
         property=models.Property.objects.filter(is_operational=True)
