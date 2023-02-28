@@ -44,6 +44,9 @@ class ReservationDetailsSerializer(serializers.ModelSerializer):
                     'remarks',
                     'checkin_date',
                     'checkout_date',
+                    'total_room_cost',
+                    'discount',
+                    'refund',
                     'reservation_room_details'
 
                 ]

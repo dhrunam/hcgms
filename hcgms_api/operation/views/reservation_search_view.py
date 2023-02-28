@@ -130,7 +130,7 @@ class RoomSearchGroupByProperty(APIView):
             ''',[property,checkin_date,checkin_date,checkin_date, checkin_date, checkout_date,checkout_date, checkin_date, checkout_date])
             raw_query_results = cursor.fetchall()
 
-        property=models.Property.objects.filter(is_operational=True)
+        property=models.Property.objects.filter(is_operational=True, id=property)
         
         results = []
         rooms=[]
