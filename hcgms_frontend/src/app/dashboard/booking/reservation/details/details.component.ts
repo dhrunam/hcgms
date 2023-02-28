@@ -12,9 +12,9 @@ export class DetailsComponent {
   private subscription!: Subscription;
   constructor(private reservationService: ReservationService){}
   ngOnInit(): void {
-    this.subscription = this.reservationService.selectedRooms.subscribe({
-      next: data => console.log(data)
-    })
+    // this.subscription = this.reservationService.selectedRooms.subscribe({
+    //   next: data => console.log(data)
+    // })
   }
   onToggle(){
     this.acknowledgement = !this.acknowledgement;
