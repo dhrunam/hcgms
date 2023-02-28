@@ -14,6 +14,9 @@ class ReservationDetails(models.Model):
     remarks=models.CharField(max_length=1024,blank=True, null=True)
     checkin_date=models.DateField(auto_now=False, auto_now_add=False)
     checkout_date=models.DateField(auto_now=False, auto_now_add=False)
+    total_room_cost= models.DecimalField(max_digits=8, decimal_places=2, default=0)
+    discount= models.DecimalField(max_digits=8, decimal_places=2, default=0)
+    refund= models.DecimalField(max_digits=8, decimal_places=2, default=0)
     created_by=models.ForeignKey(
         User, on_delete=models.SET_NULL, null=True, related_name='reservation_by_user')
     created_at = models.DateTimeField(auto_now_add=True)
@@ -34,5 +37,15 @@ class ReservationRoomDetails(models.Model):
 
     def __str__(self) -> str:
         return super().__str__()
+
+class GuestCheckInCheckOutDetails(models.Model): 
+    reservation=models.ForeignKey(ReservationDetails, null=True, on_delete=models.SET_NULL, related_name='guest_checkin_check_out')
+    checkin_date=models.DateField(auto_now=False, auto_now_add=False)
+    checkout_date=models.DateField(auto_now=False, auto_now_add=False)
+    remarks=models.CharField(max_length=2048, null=True, blank=True)
+
+    def __str__(self) -> str:
+        return super().__str__()
+
 
         

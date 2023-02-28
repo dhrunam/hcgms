@@ -78,22 +78,24 @@ class RoomSearchGroupByProperty(APIView):
     def get(self, request, format=None):
         checkin_date = request.query_params.get('checkin_date')
         checkout_date = request.query_params.get('checkout_date')
+        property = request.query_params.get('property')
         with connection.cursor() as cursor:
             cursor.execute('''
                 select * from (
-            select cr.id, cr.room_no, cr.occupancy, cr.description, cr.is_operational, cr.property_id, cr.room_category_id,
+            select cr.id, cr.room_no, cr.occupancy, cr.description, cr.is_operational, cr.property_id, cr.room_category_id, rc.name as room_category_name,
                 case when rr.room_id is null then 0
                 else 1
                 end status,
                 rate.cost
             from public.configuration_room as cr
                 join public.configuration_property as pr
-	            on cr.property_id=pr.id and pr.is_operational=true
+	            on cr.property_id=pr.id and pr.is_operational=true and pr.id=%s
                 join (SELECT id, cost,property_id, room_id
                 FROM public.configuration_roomrate
                 where start_date<=%s --checkin_date
                     and end_date>=%s --checkin_date
                 ) as rate on rate.property_id=cr.property_id and rate.room_id=cr.id
+                join public.configuration_roomcategory as rc on rc.id=cr.room_category_id
             left join (
             SELECT 
                 property_id, room_id
@@ -125,7 +127,7 @@ class RoomSearchGroupByProperty(APIView):
              order by f.property_id asc
                     
                     ;
-            ''',[checkin_date,checkin_date,checkin_date, checkin_date, checkout_date,checkout_date, checkin_date, checkout_date])
+            ''',[property,checkin_date,checkin_date,checkin_date, checkin_date, checkout_date,checkout_date, checkin_date, checkout_date])
             raw_query_results = cursor.fetchall()
 
         property=models.Property.objects.filter(is_operational=True)
@@ -147,8 +149,9 @@ class RoomSearchGroupByProperty(APIView):
                                 'is_operational':room_row[4],
                                 'property_id':room_row[5],
                                 'room_category_id':room_row[6],
-                                'status':room_row[7],
-                                'cost':room_row[8],
+                                'room_category_name':room_row[7],
+                                'status':room_row[8],
+                                'cost':room_row[9],
                             })
                             
                     
