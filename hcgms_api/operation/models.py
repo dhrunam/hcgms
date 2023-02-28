@@ -17,6 +17,7 @@ class ReservationDetails(models.Model):
     total_room_cost= models.DecimalField(max_digits=8, decimal_places=2, default=0)
     discount= models.DecimalField(max_digits=8, decimal_places=2, default=0)
     refund= models.DecimalField(max_digits=8, decimal_places=2, default=0)
+    is_bill_generated=models.BooleanField(default=False, null=False)
     created_by=models.ForeignKey(
         User, on_delete=models.SET_NULL, null=True, related_name='reservation_by_user')
     created_at = models.DateTimeField(auto_now_add=True)
@@ -40,6 +41,13 @@ class ReservationRoomDetails(models.Model):
 
 class GuestCheckInCheckOutDetails(models.Model): 
     reservation=models.ForeignKey(ReservationDetails, null=True, on_delete=models.SET_NULL, related_name='guest_checkin_check_out')
+    property=models.ForeignKey(conf_models.Property, null=True, on_delete=models.SET_NULL, related_name='guest_checkin_check_out')
+    room=models.ForeignKey(conf_models.Room, null=True, on_delete=models.SET_NULL, related_name='guest_checkin_check_out')
+    lead_guest=models.CharField(max_length=1024, blank=True, null=True)
+    no_adult=models.IntegerField(max_length=2, default=0)
+    no_child=models.IntegerField(max_length=2, default=0)
+    address=models.CharField(max_length=1024, blank=True, null=True)
+    contact_no=models.CharField(max_length=12, blank=True, null=True)
     checkin_date=models.DateField(auto_now=False, auto_now_add=False)
     checkout_date=models.DateField(auto_now=False, auto_now_add=False)
     remarks=models.CharField(max_length=2048, null=True, blank=True)
@@ -48,4 +56,11 @@ class GuestCheckInCheckOutDetails(models.Model):
         return super().__str__()
 
 
-        
+class MiscellaneousServiceChargeDetails(models.Model): 
+    reservation=models.ForeignKey(ReservationDetails, null=True, on_delete=models.SET_NULL)
+    particular=models.CharField(max_length=1024, null=False, blank=False)
+    cost=models.DecimalField(max_digits=8, decimal_places=2)
+    remarks=models.CharField(max_length=2048, null=True, blank=True)
+
+    def __str__(self) -> str:
+        return super().__str__()
