@@ -53,7 +53,7 @@ class ReservationDetailsList(generics.ListCreateAPIView):
             self, request.data)
         request.data._mutable = False
         reservation_details = self.create(request, *args, **kwargs)
-        rooms = [{'room':1, 'room_rate':400},{'room':3, 'room_rate':400}]
+        rooms = [{'room':1, 'room_rate':400},{'room':2, 'room_rate':400}]
 
         if(rooms):
             for element in rooms:

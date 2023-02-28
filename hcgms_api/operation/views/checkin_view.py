@@ -21,9 +21,12 @@ class GuestCheckInCheckOutDetailsList(generics.ListCreateAPIView):
 
         request.data['created_by'] = request.user.id
 
-        request.data._mutable = False
+        
         reservation_details = self.create(request, *args, **kwargs)
+       
+        # request.data['created_by'] = reservation_details.data['id']
 
+        request.data._mutable = False
         return self.get(request, *args, **kwargs)
     
     def get_queryset(self):
@@ -47,7 +50,7 @@ class GuestCheckInCheckOutDetailsList(generics.ListCreateAPIView):
 
 
 
-class ReservationDetailsDetails(generics.RetrieveUpdateDestroyAPIView):
+class GuestCheckInCheckOutDetailsDetails(generics.RetrieveUpdateDestroyAPIView):
     # authentication_classes = (TokenAuthentication,)
     # permission_classes = (IsAuthenticated,)
     queryset = op_models.ReservationDetails.objects.all()
