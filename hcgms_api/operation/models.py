@@ -48,16 +48,19 @@ class GuestCheckInCheckOutDetails(models.Model):
     no_child=models.IntegerField(max_length=2, default=0)
     address=models.CharField(max_length=1024, blank=True, null=True)
     contact_no=models.CharField(max_length=12, blank=True, null=True)
-    checkin_date=models.DateField(auto_now=False, auto_now_add=False)
-    checkout_date=models.DateField(auto_now=False, auto_now_add=False)
+    checkin_date=models.DateField(auto_now=False, auto_now_add=False, null=False)
+    checkout_date=models.DateField(auto_now=False, auto_now_add=False, null=True)
     remarks=models.CharField(max_length=2048, null=True, blank=True)
-
+    created_by=models.ForeignKey(
+        User, on_delete=models.SET_NULL, null=True, related_name='guest_checkin_check_out')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now_add=True)
     def __str__(self) -> str:
         return super().__str__()
 
 
 class MiscellaneousServiceChargeDetails(models.Model): 
-    reservation=models.ForeignKey(ReservationDetails, null=True, on_delete=models.SET_NULL)
+    reservation=models.ForeignKey(ReservationDetails, null=True, on_delete=models.SET_NULL, related_name='miscellaneous_service_charge')
     particular=models.CharField(max_length=1024, null=False, blank=False)
     cost=models.DecimalField(max_digits=8, decimal_places=2)
     remarks=models.CharField(max_length=2048, null=True, blank=True)
