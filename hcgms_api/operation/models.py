@@ -44,8 +44,8 @@ class GuestCheckInCheckOutDetails(models.Model):
     property=models.ForeignKey(conf_models.Property, null=True, on_delete=models.SET_NULL, related_name='guest_checkin_check_out')
     room=models.ForeignKey(conf_models.Room, null=True, on_delete=models.SET_NULL, related_name='guest_checkin_check_out')
     lead_guest=models.CharField(max_length=1024, blank=True, null=True)
-    no_adult=models.IntegerField(max_length=2, default=0)
-    no_child=models.IntegerField(max_length=2, default=0)
+    no_adult=models.IntegerField( default=0)
+    no_child=models.IntegerField( default=0)
     address=models.CharField(max_length=1024, blank=True, null=True)
     contact_no=models.CharField(max_length=12, blank=True, null=True)
     checkin_date=models.DateField(auto_now=False, auto_now_add=False, null=False)
@@ -67,6 +67,19 @@ class MiscellaneousServiceChargeDetails(models.Model):
     remarks=models.CharField(max_length=2048, null=True, blank=True)
     created_by=models.ForeignKey(
         User, on_delete=models.SET_NULL, null=True, related_name='miscellaneous_service_charge')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now_add=True)
+    def __str__(self) -> str:
+        return super().__str__()
+
+class ReservationBillDetails(models.Model): 
+    bill_no=models.CharField(max_length=12, null=False)
+    reservation=models.ForeignKey(ReservationDetails, null=True, on_delete=models.SET_NULL, related_name='reservation_bill_details')
+    cost=models.DecimalField(max_digits=8, decimal_places=2)
+    service_date = models.DateField(auto_now_add=False, null=False, blank=False)
+    remarks=models.CharField(max_length=2048, null=True, blank=True)
+    created_by=models.ForeignKey(
+        User, on_delete=models.SET_NULL, null=True, related_name='reservation_bill_details')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
     def __str__(self) -> str:
