@@ -104,9 +104,23 @@ class CheckInCheckOutSerializer(serializers.ModelSerializer):
                     'no_adult',
                     'no_child',
                     'address',
+                    'contact_no',
                     'checkin_date',
                     'checkout_date',
                     'remarks',
 
 
                 ]
+
+class MiscellaneousServiceChargeDetailsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model= models.MiscellaneousServiceChargeDetails
+        fields=[
+            'reservation',
+            'particular',
+            'cost',
+            'service_date',
+            'remarks'
+
+        ]

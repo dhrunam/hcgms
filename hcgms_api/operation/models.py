@@ -63,7 +63,11 @@ class MiscellaneousServiceChargeDetails(models.Model):
     reservation=models.ForeignKey(ReservationDetails, null=True, on_delete=models.SET_NULL, related_name='miscellaneous_service_charge')
     particular=models.CharField(max_length=1024, null=False, blank=False)
     cost=models.DecimalField(max_digits=8, decimal_places=2)
+    service_date = models.DateField(auto_now_add=False, null=False, blank=False)
     remarks=models.CharField(max_length=2048, null=True, blank=True)
-
+    created_by=models.ForeignKey(
+        User, on_delete=models.SET_NULL, null=True, related_name='miscellaneous_service_charge')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now_add=True)
     def __str__(self) -> str:
         return super().__str__()

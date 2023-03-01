@@ -9,11 +9,11 @@ import datetime
 
 
 
-class GuestCheckInCheckOutDetailsList(generics.ListCreateAPIView):
+class MiscellaneousServiceChargeList(generics.ListCreateAPIView):
     # authentication_classes = (TokenAuthentication,)
     # permission_classes = (IsAuthenticated,)
-    queryset = op_models.GuestCheckInCheckOutDetails.objects.all()
-    serializer_class = serializers.CheckInCheckOutSerializer
+    queryset = op_models.MiscellaneousServiceChargeDetails.objects.all()
+    serializer_class = serializers.MiscellaneousServiceChargeDetailsSerializer
     # pagination.PageNumberPagination.page_size = 100
     @transaction.atomic
     def post(self, request, *args, **kwargs):
@@ -37,24 +37,24 @@ class GuestCheckInCheckOutDetailsList(generics.ListCreateAPIView):
         if self.request.method == "POST":
             reservation_id=self.request.data['reservation']
             if(reservation_id):
-                return op_models.GuestCheckInCheckOutDetails.objects.filter(reservation=reservation_id)
+                return op_models.MiscellaneousServiceChargeDetails.objects.filter(reservation=reservation_id)
         # order_number = self.request.data['order_no']
-        # reservation_no = self.request.query_params.get('reservation_no')
+        reservation_id= self.request.query_params.get('reservation')
         # reservation_for= self.request.query_params.get('reservation_for')
-        # if(reservation_no):
-        #     return op_models.ReservationDetails.objects.filter(reservation_no=reservation_no)
+        if(reservation_id):
+            return op_models.MiscellaneousServiceChargeDetails.objects.filter(reservation=reservation_id)
         # if(reservation_for):
         #     return op_models.ReservationDetails.objects.filter(reservation_for=reservation_for)
         # else:
-        return op_models.GuestCheckInCheckOutDetails.objects.all()
+        return []
 
 
 
-class GuestCheckInCheckOutDetailsDetails(generics.RetrieveUpdateDestroyAPIView):
+class MiscellaneousServiceChargeDetails(generics.RetrieveUpdateDestroyAPIView):
     # authentication_classes = (TokenAuthentication,)
     # permission_classes = (IsAuthenticated,)
-    queryset = op_models.GuestCheckInCheckOutDetails.objects.all()
-    serializer_class = serializers.CheckInCheckOutSerializer
+    queryset = op_models.MiscellaneousServiceChargeDetails.objects.all()
+    serializer_class = serializers.MiscellaneousServiceChargeDetailsSerializer
     # pagination.PageNumberPagination.page_size = 100
     @transaction.atomic
     def put(self, request, *args, **kwargs):
