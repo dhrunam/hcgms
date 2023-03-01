@@ -54,7 +54,23 @@ class RoomSerializer(serializers.ModelSerializer):
                     'related_category'
 
                 ]
+class LeanRoomSerializer(serializers.ModelSerializer):
+    
+    related_category = RoomCategorySerializer(source='room_category', read_only=True)
+    class Meta:
+        model = models.Room
+        fields = [
+                    'id', 
+                    'property', 
+                    'room_category',
+                    'room_no',
+                    'occupancy',
+                    'description',
+                    'is_operational',
 
+                    'related_category'
+
+                ]
 class HelperRoomSerializer(serializers.ModelSerializer):
     # related_property = PropertySerializer(source='property', read_only=True)
     related_category = RoomCategorySerializer(source='room_category', read_only=True)
@@ -87,6 +103,23 @@ class PropertySerializer(serializers.ModelSerializer):
                     'description',
                     'is_operational',
                     'related_room'
+
+                ]
+
+class LeanPropertySerializer(serializers.ModelSerializer):
+    
+
+    class Meta:
+        model = models.Property
+        fields = [
+                    'id', 
+                    'name', 
+                    'short_name',
+                    'code',
+                    'address',
+                    'description',
+                    'is_operational',
+
 
                 ]
 
