@@ -40,6 +40,14 @@ def generate_reservation_no(self, data):
 
     return property.short_name+str(reservation_year)+f"{sl_no:05d}"
 
+def calculate_total_room_cost(self, rooms):
+    total_room_cost=0
+    if(rooms):
+            for element in rooms:
+                total_room_cost+=element['room_rate']
+                       
+    return total_room_cost
+
 class ReservationDetailsList(generics.ListCreateAPIView):
     # authentication_classes = (TokenAuthentication,)
     # permission_classes = (IsAuthenticated,)
@@ -48,15 +56,19 @@ class ReservationDetailsList(generics.ListCreateAPIView):
     # pagination.PageNumberPagination.page_size = 100
     @transaction.atomic
     def post(self, request, *args, **kwargs):
+        rooms = json.loads(request.data['rooms'])
         request.data._mutable = True
 
         request.data['created_by'] = request.user.id
 
         request.data['reservation_no'] = generate_reservation_no(
             self, request.data)
+        if rooms:
+            request.data['total_room_cost']=calculate_total_room_cost(self,rooms)
+
         request.data._mutable = False
         reservation_details = self.create(request, *args, **kwargs)
-        rooms = json.loads(request.data['rooms'])
+
 
         if(rooms):
             for element in rooms:
@@ -105,12 +117,13 @@ class ReservationDetailsDetails(generics.RetrieveUpdateDestroyAPIView):
         request.data._mutable = True
 
         request.data['created_by'] = request.user.id
-
+        rooms = json.loads(request.data['rooms'])
+        if rooms:
+            request.data['total_room_cost']=calculate_total_room_cost(self,rooms)
 
         request.data._mutable = False
         reservation_details = self.update(request, *args, **kwargs)
-        rooms = [{'room':1, 'room_rate':400}]
-        print(reservation_details.data)
+
         if(rooms):
             op_models.ReservationRoomDetails.objects.filter(reservation=reservation_details.data['id']).delete()
             for element in rooms:
