@@ -4,14 +4,15 @@ import { HttpService } from "src/app/services/http-service/http.service";
 
 @Injectable({providedIn: 'root'})
 export class ReservationService{
-    roomDetails = new Subject<any>();
+    acknowledgement = new Subject<any>();
+    roomDetails = new Subject<{property: number, checkin_date: Date, checkout_date: Date, rooms: any}>();
     results = new Subject<{data: any, checkin_date: Date, checkout_date: Date, property: number}>();
     properties: any = [];
     searchRooms: any;
     room_detail:any = [];
+    ack_details: any = [];
     private subscription!: Subscription;
     constructor(private http: HttpService){}
-
     getProperties(){
         this.subscription = this.http.get_properties().subscribe({
             next: data => this.properties = data,
@@ -39,24 +40,18 @@ export class ReservationService{
             }
         )
     }
-    room_details(){
-        this.subscription = this.roomDetails.subscribe({
-            next: data => { this.room_detail = data},
-            error: err =>  console.log(err),
-        })
-        return new Promise(
-            (resolve, reject) => {
-                setTimeout(() => {
-                    resolve(this.room_detail);
-                }, 200);
-            }
-        )
-    }
     confirm_reservation(fd:any){
         this.subscription = this.http.confirm_reservation(fd).subscribe({
-            next: data => { return true },
+            next: data => { this.ack_details = data },
             error: err => console.log(err)
         })
+        return new Promise(
+            (resolve,reject) => {
+                setTimeout(() => {
+                    resolve(this.ack_details);
+                },200)
+            }
+        );
     }
     ngOnDestroy(): void{
         this.subscription.unsubscribe();

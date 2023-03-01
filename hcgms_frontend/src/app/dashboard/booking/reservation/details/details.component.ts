@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { ReservationService } from '../reservation.service';
 
 @Component({
@@ -7,13 +7,11 @@ import { ReservationService } from '../reservation.service';
   styleUrls: ['./details.component.css']
 })
 export class DetailsComponent {
+  @Output('switchAck') ack = new EventEmitter<{status: boolean}>()
   roomDetails: any = [];
-  acknowledgement: boolean = false;
   constructor(private reservationService: ReservationService){}
   ngOnInit(): void {
-    this.reservationService.room_details().then((d:any) => {
-      this.roomDetails = d;
-    })
+    this.reservationService.roomDetails.subscribe((d:any) => this.roomDetails = d);
   }
   onConfirmReservation(data: any){
     let fd = new FormData();
@@ -27,9 +25,21 @@ export class DetailsComponent {
     fd.append('checkin_date', this.roomDetails.checkin_date);
     fd.append('checkout_date', this.roomDetails.checkout_date);
     fd.append('rooms', JSON.stringify(this.roomDetails.rooms));
-    this.reservationService.confirm_reservation(fd);
-  }
-  onToggle(){
-    this.acknowledgement = !this.acknowledgement;
+    this.ack.emit({status: true});
+    
+    this.reservationService.confirm_reservation(fd).then((d:any) => {
+      this.reservationService.acknowledgement.next(
+        {
+          reservation_no: d[0].reservation_no,
+          checkin_date: d[0].checkin_date,
+          checkout_date: d[0].checkout_date,
+          contact_no: d[0].contact_no,
+          guest_name: d[0].lead_guest_name,
+          created_at: d[0].created_at,
+          address: d[0].address,
+          reservation_room_details: d[0].reservation_room_details
+        }
+      );
+    });
   }
 }

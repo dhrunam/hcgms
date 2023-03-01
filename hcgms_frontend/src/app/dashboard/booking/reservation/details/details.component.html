@@ -1,5 +1,5 @@
 <div class="container">
-    <main class="mt-5" *ngIf="!acknowledgement">
+    <main class="mt-5">
         <h4>Add Details</h4>
         <hr>
         <form (ngSubmit)="onConfirmReservation(resvForm)" #resvForm="ngForm">
@@ -39,9 +39,6 @@
             </div>
         </form>
     </main>
-    <section *ngIf="acknowledgement">
-        <app-acknowledgment></app-acknowledgment>
-    </section>
 </div>
 
 

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { ReservationService } from '../reservation.service';
 
 @Component({
@@ -7,6 +7,7 @@ import { ReservationService } from '../reservation.service';
   styleUrls: ['./search.component.css']
 })
 export class SearchComponent {
+  @Output('switchHouses') houses = new EventEmitter<{status: boolean}>();
   property: string = 'N/A';
   properties: any = [];
   constructor(private reservationService: ReservationService){}
@@ -18,9 +19,10 @@ export class SearchComponent {
       alert('Invalid Date Range');
     }
     else{
-      this.reservationService.search_rooms(data.value.start_date, data.value.end_date, data.value.property_id).then((d:any) => { 
+      this.reservationService.search_rooms(data.value.start_date, data.value.end_date, data.value.property_id).then((d:any) => {
         this.reservationService.results.next({data: d, checkin_date: data.value.start_date, checkout_date: data.value.end_date, property: data.value.property_id});
       });
+      this.houses.emit({status: true});
     } 
   }
 }
