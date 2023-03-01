@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Output } from '@angular/core';
 import { ReservationService } from '../reservation.service';
 
 @Component({
@@ -12,10 +12,12 @@ export class HousesComponent {
   rooms: any = [];
   checkin_date!: Date;
   checkout_date!: Date;
+  buffer: number = 0;
+  totalCost: number = 0;
   property: number = 0;
   listRooms: boolean = false;
   roomDetails !: {property: number, checkin_date: Date, checkout_date: Date, rooms: Array<any>};
-  constructor(private reservationService: ReservationService){}
+  constructor(private reservationService: ReservationService, private cdr: ChangeDetectorRef){}
   ngOnInit(): void{
     this.reservationService.results.subscribe({
       next: data => {
@@ -29,6 +31,10 @@ export class HousesComponent {
       },
       error: err => console.log(err), 
     })
+  }
+  ngAfterViewChecked(){
+    this.totalCost += this.buffer;
+    this.cdr.detectChanges();
   }
   onStatusCheck(event: any, id:number, rate: number){
     if(event.target.checked){
@@ -44,7 +50,6 @@ export class HousesComponent {
   }
   onEnterBookingDetails(){
     this.roomDetails = { property: this.property, checkin_date: this.checkin_date, checkout_date: this.checkout_date, rooms: this.rooms};
-    // console.log(this.roomDetails);
     this.reservationService.roomDetails.next(this.roomDetails);
     this.details.emit({status: true});
   }

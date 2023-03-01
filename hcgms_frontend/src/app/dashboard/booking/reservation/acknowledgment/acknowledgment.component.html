@@ -30,7 +30,7 @@
                 <label class="form-label">:</label>
             </div>
             <div class="col-md-8">
-                <label class="form-label">{{ details.booking_date }}</label>
+                <label class="form-label">{{ details.booking_date | date: 'dd-MM-YYYY' }}</label>
             </div>
         </div>
     </div>
@@ -75,7 +75,7 @@
                 <label class="form-label">:</label>
             </div>
             <div class="col-md-8">
-                <label class="form-label">{{ details.checkin_date }}</label>
+                <label class="form-label">{{ details.checkin_date | date: 'dd-MM-YYYY' }}</label>
             </div>
         </div>
     </div>
@@ -88,13 +88,13 @@
                 <label class="form-label">:</label>
             </div>
             <div class="col-md-8">
-                <label class="form-label">{{ details.checkout_date }}</label>
+                <label class="form-label">{{ details.checkout_date | date: 'dd-MM-YYYY' }}</label>
             </div>
         </div>
     </div>
 </div>
 <hr>
-<div class="row \">
+<div class="row">
     <div class="col-md-6">
         <div class="row">
             <div class="col-md-3">
@@ -108,6 +108,19 @@
             </div>
         </div>
     </div>
+    <div class="col-md-6">
+        <div class="row">
+            <div class="col-md-3">
+                <label class="form-label"><b>Guest House</b></label>
+            </div>
+            <div class="col-md-1">
+                <label class="form-label">:</label>
+            </div>
+            <div class="col-md-8">
+                <label class="form-label">{{ details.property }}</label>
+            </div>
+        </div>
+    </div>
 </div>
 <hr>
 <div class="room-list mt-4 mb-5">
@@ -117,7 +130,6 @@
         <thead>
             <tr>
                 <th scope="col" width="5%">S.No.</th>
-                <th scope="col">Guest House</th>
                 <th scope="col">Room No</th>
                 <th scope="col">Room Type</th>
                 <th scope="col">Room Cost</th>
@@ -126,15 +138,14 @@
         <tbody>
             <tr *ngFor="let r of rooms; let i=index">
                 <td scope="col" class="text-center">{{i+1}}</td>
-                <td scope="col">Guest House 1</td>
-                <td scope="col">GH1234</td>
-                <td scope="col">VIP</td>
-                <td scope="col">₹ {{ calculateTotal(r.room_rate) }}</td>
+                <td scope="col">{{ r.related_room.room_no }}</td>
+                <td scope="col">{{ r.related_room.related_category.name }}</td>
+                <td scope="col">₹ {{ r.room_rate }}</td>
             </tr>
         </tbody>
         <tfoot>
             <tr>
-                <th id="total" colspan="4">Total:</th>
+                <th id="total" colspan="3">Total:</th>
                 <td>₹ {{ totalCost }}</td>
             </tr>
         </tfoot>

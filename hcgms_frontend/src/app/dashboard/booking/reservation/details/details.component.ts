@@ -37,7 +37,9 @@ export class DetailsComponent {
           guest_name: d[0].lead_guest_name,
           created_at: d[0].created_at,
           address: d[0].address,
-          reservation_room_details: d[0].reservation_room_details
+          property: d[0].related_property.name,
+          reservation_room_details: d[0].reservation_room_details,
+          totalCost: d[0].total_room_cost,
         }
       );
     });

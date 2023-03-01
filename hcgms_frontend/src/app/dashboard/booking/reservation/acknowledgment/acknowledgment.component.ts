@@ -17,10 +17,10 @@ export class AcknowledgmentComponent {
     guest_name: '',
     booking_date: '',
     address: '',
+    property: '',
   }
   totalCost: number = 0;
   rooms: any = [];
-  buffer: number = 0;
   private subscription!: Subscription;
   constructor(private reservationService: ReservationService, private cdr: ChangeDetectorRef){}
   ngOnInit(): void{
@@ -32,15 +32,9 @@ export class AcknowledgmentComponent {
       this.details.guest_name = d.guest_name;
       this.details.booking_date = d.created_at;
       this.details.address = d.address;
+      this.details.property = d.property;
       this.rooms = d.reservation_room_details;
+      this.totalCost = d.totalCost;
     });
-  }
-  ngAfterViewChecked(){
-    this.totalCost += this.buffer;
-    this.cdr.detectChanges();
-  }
-  calculateTotal(amount: any){
-    this.buffer += parseInt(amount);
-    return parseInt(amount);
   }
 }
