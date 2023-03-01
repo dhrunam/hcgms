@@ -48,6 +48,7 @@ class ReservationDetailsSerializer(serializers.ModelSerializer):
                     'discount',
                     'refund',
                     'is_bill_generated',
+                    'is_payment_received',
                     'reservation_room_details'
 
                 ]

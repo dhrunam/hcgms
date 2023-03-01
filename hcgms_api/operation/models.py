@@ -18,6 +18,7 @@ class ReservationDetails(models.Model):
     discount= models.DecimalField(max_digits=8, decimal_places=2, default=0)
     refund= models.DecimalField(max_digits=8, decimal_places=2, default=0)
     is_bill_generated=models.BooleanField(default=False, null=False)
+    is_payment_received=models.BooleanField(default=False, null=False)
     created_by=models.ForeignKey(
         User, on_delete=models.SET_NULL, null=True, related_name='reservation_by_user')
     created_at = models.DateTimeField(auto_now_add=True)
@@ -38,6 +39,7 @@ class ReservationRoomDetails(models.Model):
 
     def __str__(self) -> str:
         return super().__str__()
+        
 
 class GuestCheckInCheckOutDetails(models.Model): 
     reservation=models.ForeignKey(ReservationDetails, null=True, on_delete=models.SET_NULL, related_name='guest_checkin_check_out')
@@ -75,6 +77,7 @@ class MiscellaneousServiceChargeDetails(models.Model):
 class ReservationBillDetails(models.Model): 
     bill_no=models.CharField(max_length=12, null=False)
     reservation=models.ForeignKey(ReservationDetails, null=True, on_delete=models.SET_NULL, related_name='reservation_bill_details')
+    total_room_cost=models.DecimalField(max_digits=8, decimal_places=2, default=0)
     cost=models.DecimalField(max_digits=8, decimal_places=2)
     service_date = models.DateField(auto_now_add=False, null=False, blank=False)
     remarks=models.CharField(max_length=2048, null=True, blank=True)
