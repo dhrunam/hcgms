@@ -33,6 +33,11 @@ class ReservationRoomDetails(models.Model):
     property=models.ForeignKey(conf_models.Property, null=True, on_delete=models.SET_NULL, related_name='reservation_room_details')
     room=models.ForeignKey(conf_models.Room, null=True, on_delete=models.SET_NULL, related_name='reservation_room_details')
     room_rate=models.DecimalField(max_digits=8, decimal_places=2)
+    
+    cgst_rate=models.DecimalField(max_digits=8, decimal_places=2, default=0)
+    sgst_rate=models.DecimalField(max_digits=8, decimal_places=2, default=0)
+    other_cess_rate=models.DecimalField(max_digits=8, decimal_places=2, default=0)
+    
     checkin_date=models.DateField(auto_now=False, auto_now_add=False)
     checkout_date=models.DateField(auto_now=False, auto_now_add=False)
     
@@ -67,6 +72,11 @@ class MiscellaneousServiceChargeDetails(models.Model):
     cost=models.DecimalField(max_digits=8, decimal_places=2)
     start_date = models.DateField(auto_now_add=False, null=False, blank=False)
     end_date = models.DateField(auto_now_add=False, null=False, blank=False)
+    
+    cgst_rate=models.DecimalField(max_digits=8, decimal_places=2, default=0)
+    sgst_rate=models.DecimalField(max_digits=8, decimal_places=2, default=0)
+    other_cess_rate=models.DecimalField(max_digits=8, decimal_places=2, default=0)
+    
     remarks=models.CharField(max_length=2048, null=True, blank=True)
     created_by=models.ForeignKey(
         User, on_delete=models.SET_NULL, null=True, related_name='miscellaneous_service_charge')

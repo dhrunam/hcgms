@@ -21,6 +21,9 @@ class MiscellaneousServiceChargeDetailsSerializer(serializers.ModelSerializer):
             'cost',
             'start_date',
             'end_date',
+            'cgst_rate',
+            'sgst_rate',
+            'other_cess_rate',
             'remarks'
 
         ]
@@ -36,6 +39,9 @@ class ReservationRoomDetailsSerializer(serializers.ModelSerializer):
                     'room_rate',
                     'checkin_date',
                     'checkout_date',
+                    'cgst_rate',
+                    'sgst_rate',
+                    'other_cess_rate',
                     'related_room',
 
                 ]

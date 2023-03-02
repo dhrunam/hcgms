@@ -63,6 +63,9 @@ class ReservationBillList(generics.ListCreateAPIView):
         if(service_details):
             request.data['total_service_cost'] = CostCalculator.calculate_total_service_cost(self, service_details)
             
+        
+
+        
         request.data['bill_no'] = generate_bill_no(self,request.data)
         
         request.data['created_by'] = request.user.id

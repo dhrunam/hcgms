@@ -67,23 +67,28 @@ class ReservationDetailsList(generics.ListCreateAPIView):
         if rooms:
             request.data['total_room_cost']=CostCalculator.calculate_total_room_cost(self,rooms)
 
-        request.data._mutable = False
+
         reservation_details = self.create(request, *args, **kwargs)
 
 
         if(rooms):
             for element in rooms:
-                
+
+                tax_details=CostCalculator.get_applicable_tax_details(self, element['room_rate'])
+
                 reservation_room=op_models.ReservationRoomDetails.objects.create(
                         reservation = op_models.ReservationDetails.objects.get(id=reservation_details.data['id']),
                         property = conf_models.Property.objects.get(id = request.data['property']),
                         room = conf_models.Room.objects.get(id=element['room']),
                         room_rate = element['room_rate'],
+                        cgst_rate=tax_details['cgst_rate'],
+                        sgst_rate=tax_details['sgst_rate'],
+                        other_cess_rate=tax_details['other_cess_rate'],
                         checkin_date = request.data['checkin_date'],
                         checkout_date = request.data['checkout_date']
                     )
                 
-
+        request.data._mutable = False
         return self.get(request, *args, **kwargs)
     
     def get_queryset(self):
