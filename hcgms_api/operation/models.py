@@ -35,7 +35,7 @@ class ReservationRoomDetails(models.Model):
     room_rate=models.DecimalField(max_digits=8, decimal_places=2)
     checkin_date=models.DateField(auto_now=False, auto_now_add=False)
     checkout_date=models.DateField(auto_now=False, auto_now_add=False)
-
+    
 
     def __str__(self) -> str:
         return super().__str__()

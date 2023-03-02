@@ -6,6 +6,7 @@ from rest_framework.response import Response
 
 from hcgms_api.operation import models as op_models
 from hcgms_api.configuration import models as conf_models
+from hcgms_api.operation.utility.cost_calculator import CostCalculator
 from hcgms_api.operation import serializers
 from durin.auth import TokenAuthentication
 import datetime
@@ -40,13 +41,13 @@ def generate_reservation_no(self, data):
 
     return property.short_name+str(reservation_year)+f"{sl_no:05d}"
 
-def calculate_total_room_cost(self, rooms):
-    total_room_cost=0
-    if(rooms):
-            for element in rooms:
-                total_room_cost+=element['room_rate']
+# def calculate_total_room_cost(self, rooms):
+#     total_room_cost=0
+#     if(rooms):
+#             for element in rooms:
+#                 total_room_cost+=element['room_rate']
                        
-    return total_room_cost
+#     return total_room_cost
 
 class ReservationDetailsList(generics.ListCreateAPIView):
     # authentication_classes = (TokenAuthentication,)
@@ -64,7 +65,7 @@ class ReservationDetailsList(generics.ListCreateAPIView):
         request.data['reservation_no'] = generate_reservation_no(
             self, request.data)
         if rooms:
-            request.data['total_room_cost']=calculate_total_room_cost(self,rooms)
+            request.data['total_room_cost']=CostCalculator.calculate_total_room_cost(self,rooms)
 
         request.data._mutable = False
         reservation_details = self.create(request, *args, **kwargs)
