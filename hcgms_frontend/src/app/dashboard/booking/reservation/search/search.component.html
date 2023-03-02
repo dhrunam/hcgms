@@ -1,27 +1,22 @@
-<div class="container mt-4">
-    <form (ngSubmit)="onSearchRooms(search)" #search="ngForm">
-        <div class="row d-flex justify-content-center">
-            <div class="col-md-3">
-                <label class="form-label">Guest House</label>
-                <select class="form-select" [ngModel]="property" name="property_id" #property_id="ngModel">
-                    <option [ngValue]="'N/A'">---Select Guest House---</option>
-                    <option *ngFor="let p of properties" [ngValue]="p.id">{{ p.name }}</option>
-                </select>
-            </div>
-            <div class="col-md-2">
-                <label class="form-label">Start Date</label>
-                <input type="date" class="form-control" ngModel name="start_date" #start_date="ngModel">
-            </div>
-            <div class="col-md-2">
-                <label class="form-label">End Date</label>
-                <input type="date" class="form-control" ngModel name="end_date" #end_date="ngModel">
-            </div>
-            <div class="col-md-1">
-                <button class="btn btn-primary" style="margin-top: 31px;">Search</button>
-            </div>
+<form (ngSubmit)="onSearchRooms(search)" #search="ngForm">
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-3">
+            <label class="form-label">Guest House</label>
+            <select class="form-select" [ngModel]="property" name="property_id" #property_id="ngModel">
+                <option [ngValue]="'N/A'">---Select Guest House---</option>
+                <option *ngFor="let p of properties" [ngValue]="p.id">{{ p.name }}</option>
+            </select>
         </div>
-    </form>
-    <div class="houses mt-3">
-        <app-houses></app-houses>
-    </div>    
-</div>
+        <div class="col-md-2">
+            <label class="form-label">Start Date</label>
+            <input type="date" class="form-control" ngModel name="start_date" #start_date="ngModel">
+        </div>
+        <div class="col-md-2">
+            <label class="form-label">End Date</label>
+            <input type="date" class="form-control" ngModel name="end_date" #end_date="ngModel">
+        </div>
+        <div class="col-md-1">
+             <button class="btn btn-primary" style="margin-top: 31px;">Search</button>
+         </div>
+    </div>
+</form>

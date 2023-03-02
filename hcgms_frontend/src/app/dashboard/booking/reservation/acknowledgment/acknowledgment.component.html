@@ -17,7 +17,7 @@
                 <label class="form-label">:</label>
             </div>
             <div class="col-md-8">
-                <label class="form-label">GHVC20230001</label>
+                <label class="form-label">{{ details.booking_id }}</label>
             </div>
         </div>
     </div>
@@ -30,7 +30,7 @@
                 <label class="form-label">:</label>
             </div>
             <div class="col-md-8">
-                <label class="form-label">27-02-2023</label>
+                <label class="form-label">{{ details.booking_date | date: 'dd-MM-YYYY' }}</label>
             </div>
         </div>
     </div>
@@ -46,7 +46,7 @@
                 <label class="form-label">:</label>
             </div>
             <div class="col-md-8">
-                <label class="form-label">Mr. Justice Dayanand Chandrachud</label>
+                <label class="form-label">{{ details.guest_name }}</label>
             </div>
         </div>
     </div>
@@ -59,7 +59,7 @@
                 <label class="form-label">:</label>
             </div>
             <div class="col-md-8">
-                <label class="form-label">1234567890</label>
+                <label class="form-label">{{ details.contact_no }}</label>
             </div>
         </div>
     </div>
@@ -75,7 +75,7 @@
                 <label class="form-label">:</label>
             </div>
             <div class="col-md-8">
-                <label class="form-label">01-03-2023</label>
+                <label class="form-label">{{ details.checkin_date | date: 'dd-MM-YYYY' }}</label>
             </div>
         </div>
     </div>
@@ -88,13 +88,13 @@
                 <label class="form-label">:</label>
             </div>
             <div class="col-md-8">
-                <label class="form-label">20-03-2023</label>
+                <label class="form-label">{{ details.checkout_date | date: 'dd-MM-YYYY' }}</label>
             </div>
         </div>
     </div>
 </div>
 <hr>
-<div class="row \">
+<div class="row">
     <div class="col-md-6">
         <div class="row">
             <div class="col-md-3">
@@ -104,7 +104,20 @@
                 <label class="form-label">:</label>
             </div>
             <div class="col-md-8">
-                <label class="form-label">Kenner Group Inc.,85 Bradford Lane,Vincentown, NJ 08120</label>
+                <label class="form-label">{{ details.address }}</label>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="row">
+            <div class="col-md-3">
+                <label class="form-label"><b>Guest House</b></label>
+            </div>
+            <div class="col-md-1">
+                <label class="form-label">:</label>
+            </div>
+            <div class="col-md-8">
+                <label class="form-label">{{ details.property }}</label>
             </div>
         </div>
     </div>
@@ -117,32 +130,23 @@
         <thead>
             <tr>
                 <th scope="col" width="5%">S.No.</th>
-                <th scope="col">Guest House</th>
                 <th scope="col">Room No</th>
                 <th scope="col">Room Type</th>
                 <th scope="col">Room Cost</th>
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td scope="col" class="text-center">1</td>
-                <td scope="col">Guest House 1</td>
-                <td scope="col">GH1234</td>
-                <td scope="col">VIP</td>
-                <td scope="col">₹ 2000</td>
-            </tr>
-            <tr>
-                <td scope="col" class="text-center">2</td>
-                <td scope="col">Guest House 1</td>
-                <td scope="col">GH4321</td>
-                <td scope="col">Normal</td>
-                <td scope="col">₹ 1000</td>
+            <tr *ngFor="let r of rooms; let i=index">
+                <td scope="col" class="text-center">{{i+1}}</td>
+                <td scope="col">{{ r.related_room.room_no }}</td>
+                <td scope="col">{{ r.related_room.related_category.name }}</td>
+                <td scope="col">₹ {{ r.room_rate }}</td>
             </tr>
         </tbody>
         <tfoot>
             <tr>
-                <th id="total" colspan="4">Total:</th>
-                <td>₹ 1000</td>
+                <th id="total" colspan="3">Total:</th>
+                <td>₹ {{ totalCost }}</td>
             </tr>
         </tfoot>
     </table>

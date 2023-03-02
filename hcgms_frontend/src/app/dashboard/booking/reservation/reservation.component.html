@@ -1,4 +1,9 @@
 <div class="mt-5 text-center">
     <h2>Reservation</h2>
 </div>
-<router-outlet></router-outlet>
+<div class="container mt-4">
+    <app-search (switchHouses)="onShowHouses($event)" [hidden]="!showSearch"></app-search>
+    <app-houses (switchDetails)="onShowDetails($event)" [hidden]="!showHouses"></app-houses>
+    <app-details (switchAck)="onShowAck($event)" [hidden]="!showDetails"></app-details>
+    <app-acknowledgment *ngIf="showAck"></app-acknowledgment>
+</div>
