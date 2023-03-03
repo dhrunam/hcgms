@@ -11,12 +11,11 @@ export class AdminCheckGuard implements CanActivateChild {
   canActivateChild(
     childRoute: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    if(this.localStorageService.getRoleId() !== '2'){
-      return true
+    if(this.localStorageService.getRoleId() === 1 || this.localStorageService.getRoleId() === 2 || this.localStorageService.getRoleId() === 4){
+      return true;
     }
-    alert('Restricted access to this page');
+    alert('Restricted Access to this page');
     this.router.navigate(['/dashboard'], { relativeTo: this.route});
-    return false;
+    return false;  
   }
-  
 }

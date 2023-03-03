@@ -10,10 +10,16 @@ export class LoginComponent {
   constructor(private authService: AuthService){}
 
   onLogin(data: any){
-    let fd = new FormData();
-    fd.append('username', data.value.username);
-    fd.append('password', data.value.password);
-    fd.append('client', 'web');
-    this.authService.login(fd);
+    if(!data.valid){
+      data.control.markAllAsTouched();
+    }
+    else{
+      let fd = new FormData();
+      fd.append('username', data.value.username);
+      fd.append('password', data.value.password);
+      fd.append('client', 'web');
+      this.authService.login(fd);
+      data.reset();
+    }
   }
 }
