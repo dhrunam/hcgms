@@ -22,11 +22,15 @@ export class RoomRateService{
             }
         )
     }
-    get_rooms(){
-        this.subscription = this.http.get_rooms().subscribe({
-            next: data => { this.rooms = data },
-            error: err => console.log(err)
+    get_rooms(property_id: number){
+        this.subscription = this.http.get_property_room(property_id).subscribe({
+            next: data => { this.rooms = data},
+            error: err => console.log()
         })
+        // this.subscription = this.http.get_rooms().subscribe({
+        //     next: data => { this.rooms = data },
+        //     error: err => console.log(err)
+        // })
         return new Promise(
             (resolve, reject) => {
                 setTimeout(() => {

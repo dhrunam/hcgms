@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { tokenInterceptor } from './interceptors/token-interceptor/token.interceptor';
 import { ServicesModule } from './services/services.module';
 
 @NgModule({
@@ -13,7 +14,7 @@ import { ServicesModule } from './services/services.module';
     AppRoutingModule,
     ServicesModule
   ],
-  providers: [],
+  providers: [tokenInterceptor],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

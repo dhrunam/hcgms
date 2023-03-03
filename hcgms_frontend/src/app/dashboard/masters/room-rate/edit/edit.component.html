@@ -7,9 +7,9 @@
     <div class="row">
         <div class="col-md-3">
             <label class="form-label">Property</label>
-            <select class="form-select" [(ngModel)]="property">
+            <select class="form-select" [(ngModel)]="property" (change)="onGetRooms($event)">
                 <option [ngValue]="'N/A'">---Select Property---</option>
-                <option *ngFor="let p of properties" [ngValue]="p.id">{{p.name}}</option>
+                <option *ngFor="let p of properties" [value]="p.id">{{p.name}}</option>
             </select>
         </div>
         <div class="col-md-3">

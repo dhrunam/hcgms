@@ -37,7 +37,11 @@ export class EditComponent {
     this.roomRateService.get_properties().then((d:any) => {
       this.properties = d;
     })
-    this.roomRateService.get_rooms().then((d:any) => {
+    
+  }
+  onGetRooms(event:any){
+    let property_id:number = parseInt(event.target.value);
+    this.roomRateService.get_rooms(property_id).then((d:any) => {
       this.rooms = d;
     })
   }
