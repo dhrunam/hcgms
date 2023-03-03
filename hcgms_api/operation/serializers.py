@@ -39,6 +39,8 @@ class ReservationRoomDetailsSerializer(serializers.ModelSerializer):
                     'room_rate',
                     'checkin_date',
                     'checkout_date',
+                    'no_adult',
+                    'no_child',
                     'cgst_rate',
                     'sgst_rate',
                     'other_cess_rate',

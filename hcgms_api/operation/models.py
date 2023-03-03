@@ -34,6 +34,8 @@ class ReservationRoomDetails(models.Model):
     room=models.ForeignKey(conf_models.Room, null=True, on_delete=models.SET_NULL, related_name='reservation_room_details')
     room_rate=models.DecimalField(max_digits=8, decimal_places=2)
     
+    no_adult=models.IntegerField( default=0)
+    no_child=models.IntegerField( default=0)
     cgst_rate=models.DecimalField(max_digits=8, decimal_places=2, default=0)
     sgst_rate=models.DecimalField(max_digits=8, decimal_places=2, default=0)
     other_cess_rate=models.DecimalField(max_digits=8, decimal_places=2, default=0)

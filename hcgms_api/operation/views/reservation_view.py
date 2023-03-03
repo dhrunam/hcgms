@@ -99,16 +99,21 @@ class ReservationDetailsList(generics.ListCreateAPIView):
         for the specified order .
         """
         queryset = op_models.ReservationDetails.objects.all()
+        property=acc_models.UserProfile.objects.filter(user=self.request.user.id).last()
+        if property:
+            queryset = queryset.filter(property=property.id)
+
         if self.request.method == "POST":
             reservation_no=self.request.data['reservation_no']
             if(reservation_no):
-                return op_models.ReservationDetails.objects.filter(reservation_no=reservation_no)
+                queryset= queryset.filter(reservation_no=reservation_no)
         # order_number = self.request.data['order_no']
         reservation_no = self.request.query_params.get('reservation_no')
         reservation_for= self.request.query_params.get('reservation_for')
         checkin_date= self.request.query_params.get('checkin_date')
         room_number = self.request.query_params.get('room_no')
         search_text = self.request.query_params.get('search_text')
+        operation = self.request.query_params.get('operation')
         if(reservation_no):
             queryset= queryset.filter(reservation_no=reservation_no)
         if(reservation_for):
@@ -135,6 +140,16 @@ class ReservationDetailsList(generics.ListCreateAPIView):
             | Q(contact_no__icontains=search_text)
             | Q(reservation_from__icontains=search_text))
         
+        
+        if(operation):
+            today=datetime.datetime.today().date()
+            if operation=='checkin' or operation=='checkout':
+                print('Date of the day:' ,str(today))
+                queryset=queryset.filter(checkin_date__lte=today,
+                         checkout_date__gte=today)
+            else:
+                queryset= queryset.filter(id=0)
+
         else:
             return queryset.order_by('-id')
 
