@@ -48,7 +48,7 @@
     </div>
     <div class="d-flex justify-content-center align-items-center mt-4">
         <button class="btn btn-primary" type="button" (click)="onGoBack()">Go Back</button>
-        <button class="btn btn-primary ms-3" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">Change Password</button>
+        <button class="btn btn-primary ms-3" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" *ngIf="editMode">Change Password</button>
         <button class="btn btn-primary ms-3" type="submit" *ngIf="!editMode; else edit" (click)="onAddUser()">Submit</button>
         <ng-template #edit>
             <button class="btn btn-primary ms-3" type="submit" (click)="onUpdateUser()">Update</button>

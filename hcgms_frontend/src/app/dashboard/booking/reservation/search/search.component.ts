@@ -20,9 +20,14 @@ export class SearchComponent {
     }
     else{
       this.reservationService.search_rooms(data.value.start_date, data.value.end_date, data.value.property_id).then((d:any) => {
-        this.reservationService.results.next({data: d, checkin_date: data.value.start_date, checkout_date: data.value.end_date, property: data.value.property_id});
+        if(!d[0]){
+          this.houses.emit({status: false});
+        }
+        else{
+          this.reservationService.results.next({data: d, checkin_date: data.value.start_date, checkout_date: data.value.end_date, property: data.value.property_id});
+          this.houses.emit({status: true});
+        }
       });
-      this.houses.emit({status: true});
     } 
   }
 }

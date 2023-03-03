@@ -6,6 +6,12 @@ import { URL } from 'src/environment/environment.prod';
 })
 export class HttpService {
   constructor(private http: HttpClient) { }
+  login(fd:any){
+    return this.http.post<any>(`${URL}/api/auth/login/`, fd);
+  }
+  logout(){
+    return this.http.post(`${URL}/api/auth/logout/`,{});
+  }
   get_roles(){
     return this.http.get<any>(`${URL}/api/user/group`);
   }
@@ -44,6 +50,9 @@ export class HttpService {
   }
   get_room(id:number){
     return this.http.get<any>(`${URL}/api/room/${id}`);
+  }
+  get_property_room(property_id:number){
+    return this.http.get<any>(`${URL}/api/room?property=${property_id}`);
   }
   add_room(fd:any){
     return this.http.post(`${URL}/api/room`, fd);
@@ -95,5 +104,11 @@ export class HttpService {
   }
   confirm_reservation(fd:any){
     return this.http.post(`${URL}/api/reservation`, fd);
+  }
+  get_reservations(checkin_date:string){
+    return this.http.get<any>(`${URL}/api/reservation?checkin_date=${checkin_date}`);
+  }
+  on_checkin(fd:any){
+    return this.http.post(`${URL}/api/room/checkin`, fd);
   }
 }
