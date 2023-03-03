@@ -140,7 +140,7 @@ class RegisterSerializer(serializers.ModelSerializer):
                     user=user,
                     defaults={
 
-                        "property": acc_model.Property.objects.get(pk=validated_data['property']),
+                        "property": acc_model.Property.objects.get(pk=validated_data.get('property', '')),
                         "contact_number": validated_data['contact_number']
                     }
 
@@ -174,7 +174,7 @@ class RegisterSerializer(serializers.ModelSerializer):
                     user=user,
                     defaults={
 
-                        "property": acc_model.Property.objects.get(pk=validated_data['property']),
+                        "property": acc_model.Property.objects.get(pk=validated_data.get('property', '')),
                         "contact_number": validated_data['contact_number']
                     }
 

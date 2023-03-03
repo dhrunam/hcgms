@@ -11,7 +11,7 @@ class UserProfile(models.Model):
         User, on_delete=models.SET_NULL, null=True, related_name='related_profile')
 
     property = models.ForeignKey(
-        Property, on_delete=models.SET_NULL, null=True, related_name='user_of_property')
+        Property, on_delete=models.SET_NULL, null=True, related_name='user_of_property', blank=True)
 
     contact_number = models.CharField(max_length=12, null=True)
 
