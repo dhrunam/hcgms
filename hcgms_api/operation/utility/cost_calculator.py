@@ -14,6 +14,14 @@ class CostCalculator():
                         
                 print('Total Room Cost:', total_cost)
         
+        if( isinstance(rooms, list)):
+
+            for element in rooms:
+                print(element)
+                total_cost+=element['room_rate']
+                    
+            print('Total Room Cost:', total_cost)
+
         if(isinstance(rooms, dict) ):
                 for element in rooms:
                     print(element)

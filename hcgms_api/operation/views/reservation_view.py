@@ -101,7 +101,7 @@ class ReservationDetailsList(generics.ListCreateAPIView):
         queryset = op_models.ReservationDetails.objects.all()
         property=acc_models.UserProfile.objects.filter(user=self.request.user.id).last()
         if property:
-            queryset = queryset.filter(property=property.id)
+            queryset = queryset.filter(property=property.property)
 
         if self.request.method == "POST":
             reservation_no=self.request.data['reservation_no']
@@ -119,6 +119,7 @@ class ReservationDetailsList(generics.ListCreateAPIView):
         if(reservation_for):
             queryset= queryset.filter(reservation_for__icontains=reservation_for)
         if(checkin_date):
+
             queryset= queryset.filter(checkin_date=checkin_date)
         
         if(room_number):

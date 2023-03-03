@@ -29,6 +29,7 @@ class GuestCheckInCheckOutDetailsList(generics.ListCreateAPIView):
         reservation=request.data['reservation'], property=request.data['property'], room=request.data['room'])
         if(reservation_room):
             reservation_room[0].checkin_date = request.data['checkin_date']
+            reservation_room[0].is_checkin = True
             reservation_room[0].save()
 
         request.data._mutable = False
