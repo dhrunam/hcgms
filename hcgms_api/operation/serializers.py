@@ -48,12 +48,39 @@ class ReservationRoomDetailsSerializer(serializers.ModelSerializer):
 
                 ]
 
+
+class HelperCheckInCheckOutSerializer(serializers.ModelSerializer):
+    # related_property = conf_serializers.HelperPropertySerializer(source='property', read_only=True)
+    # related_category = conf_serializers.RoomCategorySerializer(source='room_category', read_only=True)
+    # cost = serializers.DecimalField(max_digits=8, decimal_places=2,  read_only=True)
+    class Meta:
+        model = models.GuestCheckInCheckOutDetails
+        fields = [
+                    'id', 
+                    'reservation',
+                    'property',
+                    'room',
+                    'lead_guest',
+                    'no_adult',
+                    'no_child',
+                    'address',
+                    'contact_no',
+                    'checkin_date',
+                    'checkout_date',
+                    'remarks',
+
+
+                ]
+
+
+
+
 class ReservationDetailsSerializer(serializers.ModelSerializer):
     reservation_room_details = ReservationRoomDetailsSerializer(source='reservation_room_details.all', many=True,read_only=True)
     related_property= conf_serializers.LeanPropertySerializer(source='property', read_only=True)
     # model2s = Model2Serializer(source='model3s.all.model2', many=True)
     related_services = MiscellaneousServiceChargeDetailsSerializer(source='miscellaneous_service_charge.all', many=True,read_only=True)
-   
+    related_checkin_rooms=HelperCheckInCheckOutSerializer(source='miscellaneous_service_charge.all', many=True,read_only=True)
 
     class Meta:
         model = models.ReservationDetails
