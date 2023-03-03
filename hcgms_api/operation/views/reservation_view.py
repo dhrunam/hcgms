@@ -3,9 +3,12 @@ from rest_framework.permissions import IsAuthenticated
 from django.db import transaction, connection
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from django.db.models import Q
 
 from hcgms_api.operation import models as op_models
+from hcgms_api.account import models as acc_models
 from hcgms_api.configuration import models as conf_models
+from hcgms_api.operation.utility.cost_calculator import CostCalculator
 from hcgms_api.operation import serializers
 from durin.auth import TokenAuthentication
 import datetime
@@ -40,13 +43,13 @@ def generate_reservation_no(self, data):
 
     return property.short_name+str(reservation_year)+f"{sl_no:05d}"
 
-def calculate_total_room_cost(self, rooms):
-    total_room_cost=0
-    if(rooms):
-            for element in rooms:
-                total_room_cost+=element['room_rate']
+# def calculate_total_room_cost(self, rooms):
+#     total_room_cost=0
+#     if(rooms):
+#             for element in rooms:
+#                 total_room_cost+=element['room_rate']
                        
-    return total_room_cost
+#     return total_room_cost
 
 class ReservationDetailsList(generics.ListCreateAPIView):
     # authentication_classes = (TokenAuthentication,)
@@ -64,25 +67,30 @@ class ReservationDetailsList(generics.ListCreateAPIView):
         request.data['reservation_no'] = generate_reservation_no(
             self, request.data)
         if rooms:
-            request.data['total_room_cost']=calculate_total_room_cost(self,rooms)
+            request.data['total_room_cost']=CostCalculator.calculate_total_room_cost(self,rooms)
 
-        request.data._mutable = False
+
         reservation_details = self.create(request, *args, **kwargs)
 
 
         if(rooms):
             for element in rooms:
-                
+
+                tax_details=CostCalculator.get_applicable_tax_details(self, element['room_rate'])
+
                 reservation_room=op_models.ReservationRoomDetails.objects.create(
                         reservation = op_models.ReservationDetails.objects.get(id=reservation_details.data['id']),
                         property = conf_models.Property.objects.get(id = request.data['property']),
                         room = conf_models.Room.objects.get(id=element['room']),
                         room_rate = element['room_rate'],
+                        cgst_rate=tax_details['cgst_rate'],
+                        sgst_rate=tax_details['sgst_rate'],
+                        other_cess_rate=tax_details['other_cess_rate'],
                         checkin_date = request.data['checkin_date'],
                         checkout_date = request.data['checkout_date']
                     )
                 
-
+        request.data._mutable = False
         return self.get(request, *args, **kwargs)
     
     def get_queryset(self):
@@ -90,21 +98,63 @@ class ReservationDetailsList(generics.ListCreateAPIView):
         This view should return a list of all the purchases item  received
         for the specified order .
         """
+        queryset = op_models.ReservationDetails.objects.all()
+        property=acc_models.UserProfile.objects.filter(user=self.request.user.id).last()
+        if property:
+            queryset = queryset.filter(property=property.property)
+
         if self.request.method == "POST":
             reservation_no=self.request.data['reservation_no']
             if(reservation_no):
-                return op_models.ReservationDetails.objects.filter(reservation_no=reservation_no)
+                queryset= queryset.filter(reservation_no=reservation_no)
         # order_number = self.request.data['order_no']
         reservation_no = self.request.query_params.get('reservation_no')
         reservation_for= self.request.query_params.get('reservation_for')
+        checkin_date= self.request.query_params.get('checkin_date')
+        room_number = self.request.query_params.get('room_no')
+        search_text = self.request.query_params.get('search_text')
+        operation = self.request.query_params.get('operation')
         if(reservation_no):
-            return op_models.ReservationDetails.objects.filter(reservation_no=reservation_no)
+            queryset= queryset.filter(reservation_no=reservation_no)
         if(reservation_for):
-            return op_models.ReservationDetails.objects.filter(reservation_for=reservation_for)
+            queryset= queryset.filter(reservation_for__icontains=reservation_for)
+        if(checkin_date):
+
+            queryset= queryset.filter(checkin_date=checkin_date)
+        
+        if(room_number):
+
+            today=datetime.datetime.today().date()
+            reservation=op_models.ReservationRoomDetails.objects.filter(checkin_date__lte=today,
+                         checkout_date__gte=today, room__room_no=room_number).last()
+            # reservation=op_models.ReservationRoomDetails.objects.filter(room__room_no=room_number).last()
+            
+            if(reservation):
+                queryset= queryset.filter(id=reservation.reservation.id)
+            else:
+                queryset= queryset.filter(id=0)
+        
+        if(search_text):
+            queryset= queryset.filter(Q(reservation_for__icontains=search_text) 
+            | Q(reservation_no__icontains=search_text)
+            | Q(lead_guest_name__icontains=search_text)
+            | Q(contact_no__icontains=search_text)
+            | Q(reservation_from__icontains=search_text))
+        
+        
+        if(operation):
+            today=datetime.datetime.today().date()
+            if operation=='checkin' or operation=='checkout':
+                print('Date of the day:' ,str(today))
+                queryset=queryset.filter(checkin_date__lte=today,
+                         checkout_date__gte=today)
+            else:
+                queryset= queryset.filter(id=0)
+
         else:
-            return op_models.ReservationDetails.objects.all()
+            return queryset.order_by('-id')
 
-
+        return queryset.order_by('-id')
 
 class ReservationDetailsDetails(generics.RetrieveUpdateDestroyAPIView):
     # authentication_classes = (TokenAuthentication,)
@@ -119,7 +169,7 @@ class ReservationDetailsDetails(generics.RetrieveUpdateDestroyAPIView):
         request.data['created_by'] = request.user.id
         rooms = json.loads(request.data['rooms'])
         if rooms:
-            request.data['total_room_cost']=calculate_total_room_cost(self,rooms)
+            request.data['total_room_cost']=CostCalculator.calculate_total_room_cost(self,rooms)
 
         request.data._mutable = False
         reservation_details = self.update(request, *args, **kwargs)

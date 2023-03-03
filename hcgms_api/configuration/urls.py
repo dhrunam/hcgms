@@ -21,6 +21,9 @@ urlpatterns = [
 
     path('api/room/rate', views.RoomRateList.as_view()),
     path('api/room/rate/<int:pk>', views.RoomRateDetails.as_view()),
+
+    path('api/applicable_tax', views.ApplicableTaxDetailsList.as_view()),
+    path('api/applicable_tax/<int:pk>', views.ApplicableTaxDetailsDetails.as_view()),
 ]
 
 

@@ -7,13 +7,14 @@ from rest_framework.response import Response
 from hcgms_api.operation import models as op_models
 from hcgms_api.configuration import models as conf_models
 from hcgms_api.operation import serializers
+from hcgms_api.operation.utility.cost_calculator import CostCalculator
 from durin.auth import TokenAuthentication
 import datetime
 import json
 
 def generate_bill_no(self, data):
 
-    latest_record = op_models.ReservationBillDetails.objects.filter(reservation=data['reservation'], property=data['property']).last()
+    latest_record = op_models.ReservationBillDetails.objects.filter(property=data['property']).last()
     property = conf_models.Property.objects.get(pk=data['property'])
     # date_object = datetime.datetime.strptime(data['checkin_date'], '%Y-%m-%d')
     date_object = datetime.datetime.today()
@@ -30,17 +31,19 @@ def generate_bill_no(self, data):
             year =int( bill_no[-7:-5])
             month= int(bill_no[-5:-3])
             sl_no = int(bill_no[-3:])
-
+            print(bill_year,bill_month,sl_no, year, month)
             if bill_year == year and bill_month == month  :
-
+                print('I am in..')
                 sl_no = sl_no+1
+                return  'B-' + property.short_name + str(bill_year) + f"{bill_month:02d}" + f"{sl_no:03d}"
             else:
                 sl_no = 1
 
-            return  'B-' + property.short_name + str(bill_year) + f"{bill_month:02d}" + f"{sl_no:03d}"
+                return  'B-' + property.short_name + str(bill_year) + f"{bill_month:02d}" + f"{sl_no:03d}"
 
         return  'B-' + property.short_name + str(bill_year) + f"{bill_month:02d}" + f"{sl_no:03d}"
     return  'B-' + property.short_name + str(bill_year) + f"{bill_month:02d}" + f"{sl_no:03d}"
+
 
 class ReservationBillList(generics.ListCreateAPIView):
     # authentication_classes = (TokenAuthentication,)
@@ -52,15 +55,24 @@ class ReservationBillList(generics.ListCreateAPIView):
     def post(self, request, *args, **kwargs):
         request.data._mutable = True
 
+        reservation_rooms=op_models.ReservationRoomDetails.objects.filter(reservation=request.data['reservation'])
+        if(reservation_rooms):
+            request.data['total_room_cost'] = CostCalculator.calculate_total_room_cost(self,reservation_rooms )
+        
+        service_details=op_models.MiscellaneousServiceChargeDetails.objects.filter(reservation=request.data['reservation'])
+        if(service_details):
+            request.data['total_service_cost'] = CostCalculator.calculate_total_service_cost(self, service_details)
+            
+        
+
+        
+        request.data['bill_no'] = generate_bill_no(self,request.data)
+        
         request.data['created_by'] = request.user.id
 
-        request.data['bill_no'] = generate_bill_no(self,request.data)
-
-        print(request.data['bill_no'])
 
         reservation_bill = self.create(request, *args, **kwargs)
-        reservation= op_models.ReservationDetails.objects.get(
-        pk=request.data['reservation'])
+        reservation= op_models.ReservationDetails.objects.get(pk=request.data['reservation'])
 
         if(reservation):
             reservation.is_bill_generated = True
@@ -78,14 +90,18 @@ class ReservationBillList(generics.ListCreateAPIView):
             reservation_id=self.request.data['reservation']
             if(reservation_id):
                 return op_models.ReservationBillDetails.objects.filter(reservation=reservation_id)
-        # order_number = self.request.data['order_no']
-        # reservation_no = self.request.query_params.get('reservation_no')
-        # reservation_for= self.request.query_params.get('reservation_for')
-        # if(reservation_no):
-        #     return op_models.ReservationDetails.objects.filter(reservation_no=reservation_no)
-        # if(reservation_for):
-        #     return op_models.ReservationDetails.objects.filter(reservation_for=reservation_for)
-        # else:
+        
+        reservation= self.request.query_params.get('reservation')
+
+        if(reservation):
+            return op_models.ReservationBillDetails.objects.filter(reservation=reservation)
+        
+        
+        reservation_no= self.request.query_params.get('reservation_no')
+        if(reservation_no):
+            reservation= op_models.ReservationDetails.objects.filter(reservation_no=reservation_no).last()
+            if(reservation):
+                return op_models.ReservationBillDetails.objects.filter(reservation=reservation.id)
         return op_models.ReservationBillDetails.objects.all()
 
 

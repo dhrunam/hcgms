@@ -11,7 +11,22 @@ from hcgms_api.operation import models
 from hcgms_api.configuration import models as conf_model
 from hcgms_api.configuration import serializers as conf_serializers
 
+class MiscellaneousServiceChargeDetailsSerializer(serializers.ModelSerializer):
 
+    class Meta:
+        model= models.MiscellaneousServiceChargeDetails
+        fields=[
+            'reservation',
+            'particular',
+            'cost',
+            'start_date',
+            'end_date',
+            'cgst_rate',
+            'sgst_rate',
+            'other_cess_rate',
+            'remarks'
+
+        ]
 class ReservationRoomDetailsSerializer(serializers.ModelSerializer):
     related_room=conf_serializers.LeanRoomSerializer(source='room',read_only=True)
     class Meta:
@@ -24,6 +39,11 @@ class ReservationRoomDetailsSerializer(serializers.ModelSerializer):
                     'room_rate',
                     'checkin_date',
                     'checkout_date',
+                    'no_adult',
+                    'no_child',
+                    'cgst_rate',
+                    'sgst_rate',
+                    'other_cess_rate',
                     'related_room',
 
                 ]
@@ -32,7 +52,8 @@ class ReservationDetailsSerializer(serializers.ModelSerializer):
     reservation_room_details = ReservationRoomDetailsSerializer(source='reservation_room_details.all', many=True,read_only=True)
     related_property= conf_serializers.LeanPropertySerializer(source='property', read_only=True)
     # model2s = Model2Serializer(source='model3s.all.model2', many=True)
-
+    related_services = MiscellaneousServiceChargeDetailsSerializer(source='miscellaneous_service_charge.all', many=True,read_only=True)
+   
 
     class Meta:
         model = models.ReservationDetails
@@ -54,7 +75,8 @@ class ReservationDetailsSerializer(serializers.ModelSerializer):
                     'is_payment_received',
                     'created_at',
                     'reservation_room_details',
-                    'related_property'
+                    'related_property',
+                    'related_services'
 
                 ]
         
@@ -118,22 +140,10 @@ class CheckInCheckOutSerializer(serializers.ModelSerializer):
 
                 ]
 
-class MiscellaneousServiceChargeDetailsSerializer(serializers.ModelSerializer):
 
-    class Meta:
-        model= models.MiscellaneousServiceChargeDetails
-        fields=[
-            'reservation',
-            'particular',
-            'cost',
-            'start_date',
-            'end_date',
-            'remarks'
-
-        ]
 
 class ReservationBillSerializer(serializers.ModelSerializer):
-
+    related_reservarion=ReservationDetailsSerializer(source='reservation', read_only=True)
     class Meta:
         model= models.ReservationBillDetails
         fields=[
@@ -147,15 +157,16 @@ class ReservationBillSerializer(serializers.ModelSerializer):
             'cgst_rate',
             'sgst_rate',
             'other_cess_rate',
-            'remarks'
+            'remarks',
+            'related_reservarion'
 
         ]
     
     def validate(self, attrs):
-        print('reservation Id', attrs['reservation'].id)
-        reservation = models.ReservationDetails.objects.get(pk=attrs['reservation'])
-        
-        if reservation.is_payment_received:
+
+        reservation = models.ReservationDetails.objects.get(pk=attrs['reservation'].id)
+
+        if reservation.is_bill_generated:
             raise serializers.ValidationError(
                 {"reservation": "Bill already generated for this reservation."})
 
