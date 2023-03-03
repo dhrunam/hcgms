@@ -1,3 +1,4 @@
+from django.conf import settings
 from rest_framework import generics, pagination
 from rest_framework.permissions import IsAuthenticated
 from django.db import transaction, connection
@@ -69,6 +70,7 @@ class ReservationDetailsList(generics.ListCreateAPIView):
         if rooms:
             request.data['total_room_cost']=CostCalculator.calculate_total_room_cost(self,rooms)
 
+        request.data['status']=settings.BOOKING_STATUS['booked']
 
         reservation_details = self.create(request, *args, **kwargs)
 
@@ -87,7 +89,8 @@ class ReservationDetailsList(generics.ListCreateAPIView):
                         sgst_rate=tax_details['sgst_rate'],
                         other_cess_rate=tax_details['other_cess_rate'],
                         checkin_date = request.data['checkin_date'],
-                        checkout_date = request.data['checkout_date']
+                        checkout_date = request.data['checkout_date'],
+                        status=settings.BOOKING_STATUS['booked']
                     )
                 
         request.data._mutable = False
@@ -98,6 +101,7 @@ class ReservationDetailsList(generics.ListCreateAPIView):
         This view should return a list of all the purchases item  received
         for the specified order .
         """
+
         queryset = op_models.ReservationDetails.objects.all()
         property=acc_models.UserProfile.objects.filter(user=self.request.user.id).last()
         if property:
@@ -120,7 +124,7 @@ class ReservationDetailsList(generics.ListCreateAPIView):
             queryset= queryset.filter(reservation_for__icontains=reservation_for)
         if(checkin_date):
 
-            queryset= queryset.filter(checkin_date=checkin_date)
+            queryset= queryset.filter(checkin_date=checkin_date,status = settings.BOOKING_STATUS['booked'] )
         
         if(room_number):
 
@@ -184,7 +188,8 @@ class ReservationDetailsDetails(generics.RetrieveUpdateDestroyAPIView):
                         room = conf_models.Room.objects.get(id=element['room']),
                         room_rate = element['room_rate'],
                         checkin_date = request.data['checkin_date'],
-                        checkout_date = request.data['checkout_date']
+                        checkout_date = request.data['checkout_date'],
+                        status=settings.BOOKING_STATUS['booked']
                     )
                 
 

@@ -44,6 +44,7 @@ class ReservationRoomDetailsSerializer(serializers.ModelSerializer):
                     'cgst_rate',
                     'sgst_rate',
                     'other_cess_rate',
+                    'status',
                     'related_room',
 
                 ]
@@ -80,7 +81,7 @@ class ReservationDetailsSerializer(serializers.ModelSerializer):
     related_property= conf_serializers.LeanPropertySerializer(source='property', read_only=True)
     # model2s = Model2Serializer(source='model3s.all.model2', many=True)
     related_services = MiscellaneousServiceChargeDetailsSerializer(source='miscellaneous_service_charge.all', many=True,read_only=True)
-    related_checkin_rooms=HelperCheckInCheckOutSerializer(source='miscellaneous_service_charge.all', many=True,read_only=True)
+    related_checkin_rooms=HelperCheckInCheckOutSerializer(source='guest_checkin_check_out.all', many=True,read_only=True)
 
     class Meta:
         model = models.ReservationDetails
@@ -100,10 +101,12 @@ class ReservationDetailsSerializer(serializers.ModelSerializer):
                     'discount',
                     'is_bill_generated',
                     'is_payment_received',
+                    'status',
                     'created_at',
                     'reservation_room_details',
                     'related_property',
-                    'related_services'
+                    'related_services',
+                    'related_checkin_rooms'
 
                 ]
         
