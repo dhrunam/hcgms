@@ -7,7 +7,7 @@ import { LocalStorageService } from 'src/app/services/local-storage-service/loca
   styleUrls: ['./sidebar.component.css']
 })
 export class SidebarComponent {
-  role: string = '';
+  role: number = 0;
   constructor(private _renderer2: Renderer2, @Inject(DOCUMENT) private _document: Document, private localStorageService: LocalStorageService) {
   }
   ngOnInit():void{

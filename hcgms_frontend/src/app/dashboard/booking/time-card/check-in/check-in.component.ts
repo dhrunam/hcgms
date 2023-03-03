@@ -22,7 +22,7 @@ export class CheckInComponent {
     this.property = localStorageService.getPropertyId();
   }
   ngOnInit():void{
-    this.todayDate = `${this.date.getFullYear()}-${this.date.getMonth()< 10 ? '0':''}${this.date.getMonth()+1}-17`;
+    this.todayDate = `${this.date.getFullYear()}-${this.date.getMonth()< 10 ? '0':''}${this.date.getMonth()+1}-${this.date.getDate()< 10 ? '0':''}${this.date.getDate()}`;
     this.timeCardService.get_checkin_reservations(this.todayDate).then((d:any) => {
       this.checkin_data = d;
     });
@@ -34,10 +34,12 @@ export class CheckInComponent {
   }
   onCheckin(room_id: number){
     let fd = new FormData();
+    let status: boolean = true;
     fd.append('reservation', this.resv_id);
     fd.append('property', this.property);
     fd.append('room', room_id.toString());
     fd.append('checkin_date', this.todayDate);
+    fd.append('is_checkin', status.toString());
     this.timeCardService.on_checkin(fd);
   }
 }

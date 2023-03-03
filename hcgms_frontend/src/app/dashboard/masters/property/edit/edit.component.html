@@ -7,23 +7,23 @@
     <div class="row">
         <div class="col-md-6">
             <label class="form-label">Property Name</label>
-            <input type="text" class="form-control" [(ngModel)]="prop_name" name="prop_name">
+            <input type="text" class="form-control" [(ngModel)]="prop_name" name="name" #name="ngModel" required>
         </div>
         <div class="col-md-6">
             <label class="form-label">Short Name</label>
-            <input type="text" class="form-control" [(ngModel)]="prop_short_name" name="prop_short_name">
+            <input type="text" class="form-control" [(ngModel)]="prop_short_name" name="short_name" #short_name="ngModel" required>
         </div>
     </div>
     <div class="row mt-3">
         <div class="col-md-12">
             <label class="form-label">Address</label>
-            <textarea rows="5" cols="10" class="form-control" [(ngModel)]="prop_address" name="prop_address"></textarea>
+            <textarea rows="5" cols="10" class="form-control" [(ngModel)]="prop_address" name="address" #address="ngModel" required></textarea>
         </div>
     </div>
     <div class="row mt-3">
         <div class="col-md-12">
             <label class="form-label">Description</label>
-            <textarea rows="5" cols="10" class="form-control" [(ngModel)]="prop_description" name="prop_description"></textarea>
+            <textarea rows="5" cols="10" class="form-control" [(ngModel)]="prop_description" name="description" #description="ngModel" required></textarea>
         </div>
     </div>
     <div class="d-flex justify-content-center align-items-center mt-4">

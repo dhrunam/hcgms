@@ -15,7 +15,7 @@
                 </label>
             </div>
         </li>
-        <li [hidden]="role == '3' || role == '4'">
+        <li *ngIf="role === 2">
             <div class="icon-link" routerLink="/dashboard/property" routerLinkActive="active">
                 <label>
                     <i class="bi bi-pc-display-horizontal"></i>
@@ -23,7 +23,7 @@
                 </label>
             </div>
         </li>
-        <li [hidden]="role == '3' || role == '4'">
+        <li *ngIf="role === 2">
             <div class="icon-link" routerLink="/dashboard/room-category" routerLinkActive="active">
                 <label>
                     <i class="bi bi-pc-display-horizontal"></i>
@@ -31,7 +31,7 @@
                 </label>
             </div>
         </li>
-        <li [hidden]="role == '3' || role == '4'">
+        <li *ngIf="role === 2">
             <div class="icon-link" routerLink="/dashboard/room" routerLinkActive="active">
                 <label>
                     <i class="bi bi-pc-display-horizontal"></i>
@@ -39,7 +39,7 @@
                 </label>
             </div>
         </li>
-        <li [hidden]="role == '3' || role == '4'">
+        <li *ngIf="role === 2">
             <div class="icon-link" routerLink="/dashboard/users" routerLinkActive="active"> 
                 <label>
                     <i class="bi bi-pc-display-horizontal"></i>
@@ -47,11 +47,35 @@
                 </label>
             </div>
         </li>
-        <li [hidden]="role == '3' || role == '4'">
+        <li *ngIf="role === 2">
             <div class="icon-link" routerLink="/dashboard/room-rate" routerLinkActive="active">
                 <label>
                     <i class="bi bi-pc-display-horizontal"></i>
                     <span class="links_name">Room Rate</span>
+                </label>
+            </div>
+        </li>
+        <li *ngIf="role === 2">
+            <div class="icon-link" routerLink="/dashboard/reservation" routerLinkActive="active">
+                <label>
+                    <i class="bi bi-pc-display-horizontal"></i>
+                    <span class="links_name">Reservation</span>
+                </label>
+            </div>
+        </li>
+        <li *ngIf="role === 3">
+            <div class="icon-link" routerLink="/dashboard/check-in" routerLinkActive="active">
+                <label>
+                    <i class="bi bi-pc-display-horizontal"></i>
+                    <span class="links_name">Check-In</span>
+                </label>
+            </div>
+        </li>
+        <li *ngIf="role === 3">
+            <div class="icon-link" routerLink="/dashboard/check-out" routerLinkActive="active">
+                <label>
+                    <i class="bi bi-pc-display-horizontal"></i>
+                    <span class="links_name">Check-Out</span>
                 </label>
             </div>
         </li>
