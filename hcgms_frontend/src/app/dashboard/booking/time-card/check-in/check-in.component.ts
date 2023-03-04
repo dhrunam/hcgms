@@ -37,9 +37,8 @@ export class CheckInComponent {
     this.rooms = data;
   }
   onCheckin(){
-    console.log(this.send_data);
     let fd = new FormData();
-    fd.append('reservation', this.resv_id);
+    fd.append('rooms', JSON.stringify(this.send_data));
     this.timeCardService.on_checkin(fd);
   }
   selectAll(event: any){

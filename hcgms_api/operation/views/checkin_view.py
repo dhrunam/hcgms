@@ -20,18 +20,16 @@ class GuestCheckInCheckOutDetailsList(generics.ListCreateAPIView):
     # pagination.PageNumberPagination.page_size = 100
     # @transaction.atomic
     def post(self, request, *args, **kwargs):
-
         rooms = json.loads(request.data['rooms'])
-
         if(rooms):
 
             reservation= op_models.ReservationDetails.objects.get(pk=rooms[0]['reservation'])
             with transaction.atomic():
-
                 request.data._mutable = True
+               
                 for element in rooms:
                     
-
+                    
                     
                     if(reservation):
                         
@@ -46,11 +44,12 @@ class GuestCheckInCheckOutDetailsList(generics.ListCreateAPIView):
                             request.data['contact_no']=reservation.contact_no
                     
                     request.data['created_by'] = request.user.id
-
-                    
+                    print(element['checkin_date'])
+                    request.data['checkin_date'] = element['checkin_date']
+                    request.data['reservation'] = element['reservation']
+                    request.data['property'] = element['property']
+                    request.data['room'] = element['room']
                     reservation_details = self.create(request, *args, **kwargs)
-                
-                    # request.data['created_by'] = reservation_details.data['id']
                     reservation_room = op_models.ReservationRoomDetails.objects.filter(
                     reservation=element['reservation'], property=element['property'], room=element['room'])
                     if(reservation_room):
@@ -58,7 +57,7 @@ class GuestCheckInCheckOutDetailsList(generics.ListCreateAPIView):
                         reservation_room[0].status= status=settings.BOOKING_STATUS['checkin']
                         reservation_room[0].save()
 
-                    request.data._mutable = False
+                request.data._mutable = False
             transaction.commit()
 
             with transaction.atomic():
