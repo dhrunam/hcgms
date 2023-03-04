@@ -123,29 +123,51 @@ class GuestCheckInCheckOutDetailsDetails(generics.RetrieveUpdateDestroyAPIView):
 
         return self.get(request, *args, **kwargs)
     
-    
+    @transaction.atomic
     def patch(self, request, *args, **kwargs):
-        request.data._mutable = True
+        with transaction.atomic():
+            request.data._mutable = True
 
-        request.data['created_by'] = request.user.id
-
-
-        request.data._mutable = False
-        reservation_details = self.partial_update(request, *args, **kwargs)
+            request.data['created_by'] = request.user.id
+            request.data._mutable = False
+            reservation_details = self.partial_update(request, *args, **kwargs)
+                    
+            reservation_room = op_models.ReservationRoomDetails.objects.filter(
+            reservation=request.data['reservation'], property=request.data['property'], room=request.data['room'])
+            if(reservation_room):
                 
-        reservation_room = op_models.ReservationRoomDetails.objects.filter(
-        reservation=request.data['reservation'], property=request.data['property'], room=request.data['room'])
-        if(reservation_room):
-            
-            if 'checkin_date' in request.data:
+                if 'checkin_date' in request.data:
 
-                reservation_room[0].checkin_date = request.data['checkin_date']
+                    reservation_room[0].checkin_date = request.data['checkin_date']
+                    reservation_room[0].status = settings.BOOKING_STATUS['checkin']
 
+                if 'checkout_date' in request.data:
+
+                    reservation_room[0].checkout_date = request.data['checkout_date']
+                    reservation_room[0].status = settings.BOOKING_STATUS['checkout']
+                    
+                reservation_room[0].save()
+
+        transaction.commit()
+        with transaction.atomic():
             if 'checkout_date' in request.data:
+                reservation_rooms = op_models.ReservationRoomDetails.objects.filter(
+                reservation=request.data['reservation'], status=settings.BOOKING_STATUS['checkin'])
 
-                reservation_room[0].checkout_date = request.data['checkout_date']
+                reservation = op_models.ReservationDetails.objects.get(
+                        pk=request.data['reservation'])
+                    
+                if(reservation_rooms):
+
+                    pass
+
+                else:
+                    if reservation:
+                        reservation.status=settings.BOOKING_STATUS['checkout']
+                        reservation.save()
                 
-            reservation_room[0].save()
+        
+        transaction.commit()
 
         return self.get(request, *args, **kwargs)
 
