@@ -17,7 +17,8 @@ export class CheckInComponent {
   date = new Date();
   checkin_data: any = [];
   rooms:any = [];
-  property: string = ''
+  property: string = '';
+  showCheckIn: boolean = false;
   constructor(private localStorageService: LocalStorageService, private timeCardService: TimeCardService){
     this.property = localStorageService.getPropertyId();
   }

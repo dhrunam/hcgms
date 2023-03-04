@@ -13,7 +13,7 @@
                 <th scope="col">Room No</th>
                 <th scope="col">Property</th>
                 <th scope="col">Cost</th>
-                <th scope="col" class="text-center">Operations</th>
+                <th scope="col" class="text-center">Edit</th>
             </tr>
         </thead>
         <tbody>
@@ -22,7 +22,7 @@
                 <td>{{r.related_room.room_no}}</td>
                 <td>{{r.related_property.name}}</td>
                 <td>{{r.cost}}</td>
-                <td width="10%" class="text-center"><i class="bi bi-pencil-square" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit" (click)="onRouteEditRoomTariff(r.id)"></i> / <i class="bi bi-trash3"  data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Delete" (click)="onDeleteRoomTariff(r.id)"></i></td>
+                <td width="10%" class="text-center"><i class="bi bi-pencil-square" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit" (click)="onRouteEditRoomTariff(r.id)"></i></td>
             </tr>
         </tbody>
     </table>

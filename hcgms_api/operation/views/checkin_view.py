@@ -23,14 +23,14 @@ class GuestCheckInCheckOutDetailsList(generics.ListCreateAPIView):
         reservation= op_models.ReservationDetails.objects.get(pk=request.data['reservation'])
         if(reservation):
             
-            if request.data.get('lead_guest','') !='':
+            if request.data.get('lead_guest','') =='':
                 request.data['lead_guest']=reservation.lead_guest_name
 
            
-            if  request.data.get('address','') !='' :
+            if  request.data.get('address','') =='' :
                 request.data['address']=reservation.address
             
-            if request.data.get('contact_no','') !='' :
+            if request.data.get('contact_no','') =='' :
                 request.data['contact_no']=reservation.contact_no
         
         request.data['created_by'] = request.user.id

@@ -14,7 +14,7 @@
                 <th scope="col">Room Category</th>
                 <th scope="col">Guest House</th>
                 <th scope="col">Is Operational ?</th>
-                <th scope="col" class="text-center">Operations</th>
+                <th scope="col" class="text-center">Edit</th>
             </tr>
         </thead>
         <tbody>
@@ -29,7 +29,7 @@
                         <input type="checkbox" (click)="isOperational(r.id,'true')">
                     </ng-template>
                 </td>
-                <td width="10%" class="text-center"><i class="bi bi-pencil-square" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit" (click)="onRouteEditRoom(r.id)"></i> / <i class="bi bi-trash3"  data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Delete" (click)="onDeleteRoom(r.id)"></i></td>
+                <td width="10%" class="text-center"><i class="bi bi-pencil-square" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit" (click)="onRouteEditRoom(r.id)"></i></td>
             </tr>
         </tbody>
     </table>

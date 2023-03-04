@@ -25,16 +25,26 @@ export class EditComponent {
       }
     })
   }
-  onAddRoomCategory(){
-    let fd = new FormData();
-    fd.append('name', this.room_category);
-    this.roomCategoryService.add_room_category(fd);
+  onAddRoomCategory(data: any){
+    if(!data.valid){
+      data.control.markAllAsTouched();
+    }
+    else{
+      let fd = new FormData();
+      fd.append('name', this.room_category);
+      this.roomCategoryService.add_room_category(fd);
+    }
   }
-  onEditRoomCategory(){
-    let fd = new FormData();
-    fd.append('id', this.id.toString());
-    fd.append('name', this.room_category);
-    this.roomCategoryService.update_room_category(fd);
+  onEditRoomCategory(data:any){
+    if(!data.valid){
+      data.control.markAllAsTouched();
+    }
+    else{
+      let fd = new FormData();
+      fd.append('id', this.id.toString());
+      fd.append('name', this.room_category);
+      this.roomCategoryService.update_room_category(fd);
+    }
   }
   onGoBack(){
     this.editMode ? this.router.navigate(['../../'], {relativeTo: this.route}) : this.router.navigate(['../'], {relativeTo: this.route});
