@@ -3,6 +3,7 @@ import { Subscription } from "rxjs";
 import { HttpService } from "src/app/services/http-service/http.service";
 @Injectable({providedIn: 'root'})
 export class UserService{
+    status: any;
     properties: any = [];
     roles: any = [];
     users: any = [];
@@ -63,15 +64,29 @@ export class UserService{
     }
     add_user(data: any){
         this.subscription = this.http.add_user(data).subscribe({
-            next: data => { return true },
-            error: err => console.log(err),
+            next: data => { this.status = data },
+            error: err => { this.status = err },
         });
+        return new Promise(
+            (resolve,reject) => {
+                setTimeout(() => {
+                    resolve(this.status);
+                }, 200)
+            }
+        )
     }
     update_user(data: any){
         this.subscription = this.http.update_user(data).subscribe({
-            next: data => { return true },
-            error: err => console.log(err),
+            next: data => { this.status = data },
+            error: err => { this.status = err },
         });
+        return new Promise(
+            (resolve,reject) => {
+                setTimeout(() => {
+                    resolve(this.status);
+                }, 200)
+            }
+        )
     }
     delete_user(id:number){
         this.subscription = this.http.delete_user(id).subscribe({
@@ -81,9 +96,16 @@ export class UserService{
     }
     change_user_password(data: any){
         this.subscription = this.http.change_user_password(data).subscribe({
-            next: data => { return true },
-            error: err => console.log(err),
-        })
+            next: data => { this.status = data },
+            error: err => { this.status = err },
+        });
+        return new Promise(
+            (resolve,reject) => {
+                setTimeout(() => {
+                    resolve(this.status);
+                }, 200)
+            }
+        )
     }
     ngOnDestroy(){
         this.subscription.unsubscribe();

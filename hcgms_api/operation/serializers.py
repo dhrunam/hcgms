@@ -12,6 +12,7 @@ from hcgms_api.configuration import models as conf_model
 from hcgms_api.configuration import serializers as conf_serializers
 
 class HelperRoomSearchSerializer(serializers.ModelSerializer):
+    related_category = conf_serializers.RoomCategorySerializer(source='room_category', read_only=True)
     class Meta:
         model = conf_model.Room
         fields = [
@@ -22,7 +23,7 @@ class HelperRoomSearchSerializer(serializers.ModelSerializer):
                     'occupancy',
                     'description',
                     'is_operational',
-
+                    'related_category',
 
                 ]
 

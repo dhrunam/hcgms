@@ -43,7 +43,7 @@
                     <tr class="text-center" *ngFor="let r of rooms; let i=index">
                         <td>{{i+1}}</td>
                         <td>{{r.related_room.room_no}}</td>
-                        <!-- <td>{{r.related_room.related_category.name}}</td> -->
+                        <td>{{r.related_room.related_category.name}}</td>
                         <td><button class="btn btn-primary" (click)="onCheckout(r.related_room.id, r.id)">Check-Out</button></td>
                     </tr>
                 </tbody>

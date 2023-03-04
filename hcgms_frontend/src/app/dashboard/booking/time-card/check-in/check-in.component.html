@@ -7,7 +7,10 @@
         <h5>Date: {{ todayDate | date: 'dd-MM-YYYY' }}</h5>
     </div>
     <hr>
-    <div class="row">
+    <div class="message" *ngIf="!showData">
+        <h4>No Bookings Available</h4>
+    </div>
+    <div class="row" *ngIf="showData">
         <div class="col-md-3" *ngFor="let c of checkin_data">
             <div class="card" data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="onGetRooms(c.id,c.reservation_no,c.reservation_room_details)">
                 <div class="card-body">
@@ -33,24 +36,28 @@
             <table class="table table-bordered">
                 <thead>
                     <tr>
+                        <th width="5%" scope="col">Select</th>
                         <th width="5%" scope="col">S.No.</th>
                         <th scope="col">Room No</th>
                         <th scope="col">Room Category</th>
-                        <th scope="col">Check-In</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr class="text-center" *ngFor="let r of rooms; let i=index">
+                        <td><input type="checkbox" name="chk" (change)="onChangeEvent($event, r.related_room.id, i)"></td>
                         <td>{{i+1}}</td>
                         <td>{{r.related_room.room_no}}</td>
                         <td>{{r.related_room.related_category.name}}</td>
-                        <td><button class="btn btn-primary" (click)="onCheckin(r.related_room.id)">Check-In</button></td>
                     </tr>
                 </tbody>
             </table>
+            <div class="text-end">
+                <input type="checkbox" (click)="selectAll($event)" id="selectAll">&nbsp;&nbsp;Select All
+            </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" (click)="onCheckin()">Check-In</button>
         </div>
       </div>
     </div>

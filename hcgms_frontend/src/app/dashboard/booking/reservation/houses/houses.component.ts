@@ -36,16 +36,16 @@ export class HousesComponent {
     this.totalCost += this.buffer;
     this.cdr.detectChanges();
   }
-  onStatusCheck(event: any, id:number, rate: number){
+  onStatusCheck(event: any, room_id:number, id:number, rate: number){
     if(event.target.checked){
       const data = {
-        'room': id,
+        'room': room_id,
         'room_rate': rate,
       }
       this.rooms.push(data);
     }
     else{
-      this.rooms.splice(this.rooms.indexOf(id));
+      this.rooms.splice(this.rooms.indexOf(id),1);
     }
   }
   onEnterBookingDetails(){

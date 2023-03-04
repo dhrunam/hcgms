@@ -56,6 +56,15 @@
                 </div>
             </div>
         </div>
+        <div class="alert alert-success mt-3" *ngIf="showSuccess === 'true'">
+            <span *ngIf="!editMode; else addErr">User Added Successfully</span>
+            <ng-template #addErr>
+                <span>User Updated Successfully</span>
+            </ng-template>
+        </div>
+        <div class="alert alert-danger mt-3" *ngIf="showSuccess === 'false'">
+            Error !!
+        </div>
         <div class="d-flex justify-content-center align-items-center mt-4">
             <button class="btn btn-primary" type="button" (click)="onGoBack()">Go Back</button>
             <button class="btn btn-primary ms-3" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" *ngIf="editMode">Change Password</button>
@@ -96,6 +105,11 @@
                                 <small class="text-danger" *ngIf="pswd.value !== pswd2.value">Password Mismatch</small>
                             </div>
                         </div>
+                    </div>
+                </div>
+                <div class="px-3">
+                    <div class="alert alert-success mt-3" *ngIf="showPswdSuccess">
+                        <span>Password Updated Successfully</span>
                     </div>
                 </div>
                 <div class="modal-footer">

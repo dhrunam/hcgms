@@ -7,6 +7,8 @@ import { UserService } from '../users.service';
   styleUrls: ['./edit.component.css']
 })
 export class EditComponent {
+  showSuccess: string = '';
+  showPswdSuccess: boolean = false;
   editMode: boolean = false;
   id: number = 0;
   properties: any = [];
@@ -41,6 +43,7 @@ export class EditComponent {
     }
   }
   onAddUser(data:any){
+    this.showSuccess = '';
     if(!data.valid){
       data.control.markAllAsTouched();
     }
@@ -66,12 +69,15 @@ export class EditComponent {
         fd.append('group', this.role);
         fd.append('password', this.password);
         fd.append('password2', this.password2);
-        this.userService.add_user(fd);
+        this.userService.add_user(fd).then((d:any) => {
+          this.showSuccess = d.error ? 'false' : 'true';
+        });
       }
       
     }
   }
   onUpdateUser(data:any){
+    this.showSuccess = '';
     if(!data.valid){
       data.control.markAllAsTouched();
     }
@@ -96,7 +102,9 @@ export class EditComponent {
         fd.append('username', this.username);
         fd.append('property', this.property);
         fd.append('group', this.role);
-        this.userService.update_user(fd);
+        this.userService.update_user(fd).then((d:any) => {
+          this.showSuccess = d.error ? 'false' : 'true';
+        });;
       }
     }
   }
@@ -104,6 +112,7 @@ export class EditComponent {
     this.editMode ? this.router.navigate(['../../'], {relativeTo: this.route}) : this.router.navigate(['../'], {relativeTo: this.route});
   }
   onChangeUserPassword(data: any){
+    this.showSuccess = '';
     if(!data.valid){
       data.control.markAllAsTouched();
     }
@@ -113,7 +122,9 @@ export class EditComponent {
       fd.append('username', this.username);
       fd.append('password', this.password);
       fd.append('password2', this.password2);
-      this.userService.change_user_password(fd);
+      this.userService.change_user_password(fd).then((d:any) => {
+        this.showPswdSuccess = true;
+      });;
     }
   }
 }
