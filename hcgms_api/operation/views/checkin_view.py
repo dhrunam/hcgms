@@ -22,15 +22,15 @@ class GuestCheckInCheckOutDetailsList(generics.ListCreateAPIView):
 
         reservation= op_models.ReservationDetails.objects.get(pk=request.data['reservation'])
         if(reservation):
-
-            if request.data['lead_guest'] is None:
+            
+            if request.data.get('lead_guest','') !='':
                 request.data['lead_guest']=reservation.lead_guest_name
 
-
-            if request.data['address'] is None:
+           
+            if  request.data.get('address','') !='' :
                 request.data['address']=reservation.address
             
-            if request.data['contact_no'] is None:
+            if request.data.get('contact_no','') !='' :
                 request.data['contact_no']=reservation.contact_no
         
         request.data['created_by'] = request.user.id
