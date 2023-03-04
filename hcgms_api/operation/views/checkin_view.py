@@ -1,3 +1,4 @@
+from django.conf import settings
 from hcgms_api.operation import models as op_models
 from hcgms_api.configuration import models as conf_models
 from rest_framework import generics, pagination
@@ -29,9 +30,24 @@ class GuestCheckInCheckOutDetailsList(generics.ListCreateAPIView):
         reservation=request.data['reservation'], property=request.data['property'], room=request.data['room'])
         if(reservation_room):
             reservation_room[0].checkin_date = request.data['checkin_date']
-            reservation_room[0].is_checkin = True
+            reservation_room[0].status= request.data['status']
             reservation_room[0].save()
 
+
+        reservation_rooms = op_models.ReservationRoomDetails.objects.filter(
+        reservation=request.data['reservation'], status=settings.BOOKING_STATUS['booked'])
+
+        reservation = op_models.ReservationDetails.objects.get(
+            pk=request.data['reservation'])
+        
+        if(reservation_rooms):
+
+            if reservation:
+                reservation.status=settings.BOOKING_STATUS['booked']
+        else:
+            if reservation:
+                reservation.status=settings.BOOKING_STATUS['checkin']
+        
         request.data._mutable = False
         return self.get(request, *args, **kwargs)
     
@@ -78,6 +94,7 @@ class GuestCheckInCheckOutDetailsDetails(generics.RetrieveUpdateDestroyAPIView):
             print('check out date:')
             print(reservation_room[0].checkout_date)
             reservation_room[0].checkout_date = request.data['checkout_date']
+            reservation_room[0].status = settings.BOOKING_STATUS['checkout']
             reservation_room[0].save()
 
         return self.get(request, *args, **kwargs)

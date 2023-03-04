@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 from hcgms_api.configuration import models as conf_models
 from django.contrib.auth.models import User
@@ -19,7 +20,7 @@ class ReservationDetails(models.Model):
     
     is_bill_generated=models.BooleanField(default=False, null=False)
     is_payment_received=models.BooleanField(default=False, null=False)
-
+    status = models.CharField(max_length=10, default=settings.BOOKING_STATUS['booked'])
     created_by=models.ForeignKey(
         User, on_delete=models.SET_NULL, null=True, related_name='reservation_by_user')
     created_at = models.DateTimeField(auto_now_add=True)
@@ -43,7 +44,7 @@ class ReservationRoomDetails(models.Model):
     
     checkin_date=models.DateField(auto_now=False, auto_now_add=False)
     checkout_date=models.DateField(auto_now=False, auto_now_add=False)
-    is_checkin = models.BooleanField(default=False)
+    status = models.CharField(max_length=10, default=settings.BOOKING_STATUS['booked'])
 
     def __str__(self) -> str:
         return super().__str__()

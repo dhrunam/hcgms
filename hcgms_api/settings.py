@@ -184,3 +184,5 @@ REST_DURIN = {
     "API_ACCESS_EXCLUDE_FROM_SESSIONS": False,
     "API_ACCESS_RESPONSE_INCLUDE_TOKEN": False,
 }
+
+BOOKING_STATUS={'booked':'booked','checkin':'checkin', 'checkout':'checkout', 'cancelled':'cancelled','noshow':'noshow'}
