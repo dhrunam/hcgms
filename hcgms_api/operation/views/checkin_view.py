@@ -16,7 +16,7 @@ class GuestCheckInCheckOutDetailsList(generics.ListCreateAPIView):
     queryset = op_models.GuestCheckInCheckOutDetails.objects.all()
     serializer_class = serializers.CheckInCheckOutSerializer
     # pagination.PageNumberPagination.page_size = 100
-    @transaction.atomic
+    # @transaction.atomic
     def post(self, request, *args, **kwargs):
 
         with transaction.atomic():
@@ -51,25 +51,28 @@ class GuestCheckInCheckOutDetailsList(generics.ListCreateAPIView):
                 reservation_room[0].status= status=settings.BOOKING_STATUS['checkin']
                 reservation_room[0].save()
 
-
-        
-        reservation_rooms = op_models.ReservationRoomDetails.objects.filter(
-        reservation=request.data['reservation'], status=settings.BOOKING_STATUS['booked'])
-
-        reservation = op_models.ReservationDetails.objects.get(
-            pk=request.data['reservation'])
-        
-        if(reservation_rooms):
-
-            if reservation:
-                reservation.status=settings.BOOKING_STATUS['booked']
-        else:
-            if reservation:
-                reservation.status=settings.BOOKING_STATUS['checkin']
-        
-        request.data._mutable = False
+            request.data._mutable = False
         transaction.commit()
 
+        with transaction.atomic():
+            reservation_rooms = op_models.ReservationRoomDetails.objects.filter(
+            reservation=request.data['reservation'], status=settings.BOOKING_STATUS['booked'])
+
+            reservation = op_models.ReservationDetails.objects.get(
+                    pk=request.data['reservation'])
+                
+            if(reservation_rooms):
+
+                if reservation:
+                    reservation.status=settings.BOOKING_STATUS['booked']
+                    reservation.save()
+            else:
+                if reservation:
+                    reservation.status=settings.BOOKING_STATUS['checkin']
+                    reservation.save()
+                
+        
+        transaction.commit()
         return self.get(request, *args, **kwargs)
     
     def get_queryset(self):
