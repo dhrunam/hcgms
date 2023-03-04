@@ -8,7 +8,7 @@
     </div>
     <hr>
     <div class="row">
-        <div class="col-md-3" *ngFor="let c of checkin_data">
+        <div class="col-md-3" *ngFor="let c of checkout_data">
             <div class="card" data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="onGetRooms(c.id,c.reservation_no,c.reservation_room_details)">
                 <div class="card-body">
                     <h5 class="card-title">Booking ID: {{c.reservation_no}}</h5>
@@ -44,7 +44,7 @@
                         <td>{{i+1}}</td>
                         <td>{{r.related_room.room_no}}</td>
                         <td>{{r.related_room.related_category.name}}</td>
-                        <td><button class="btn btn-primary" (click)="onCheckin(r.related_room.id)">Check-In</button></td>
+                        <td><button class="btn btn-primary" (click)="onCheckout(r.related_room.id)">Check-Out</button></td>
                     </tr>
                 </tbody>
             </table>

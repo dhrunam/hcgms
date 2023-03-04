@@ -15,16 +15,17 @@ export class CheckOutComponent {
   bookingId:string = '';
   resv_id: string = '';
   date = new Date();
-  checkin_data: any = [];
+  checkout_data: any = [];
   rooms:any = [];
   property: string = ''
   constructor(private localStorageService: LocalStorageService, private timeCardService: TimeCardService){
     this.property = localStorageService.getPropertyId();
   }
   ngOnInit():void{
-    this.todayDate = `${this.date.getFullYear()}-${this.date.getMonth()< 10 ? '0':''}${this.date.getMonth()+1}-${this.date.getDate()< 10 ? '0':''}${this.date.getDate()}`;
-    this.timeCardService.get_checkin_reservations(this.todayDate).then((d:any) => {
-      this.checkin_data = d;
+    // this.todayDate = `${this.date.getFullYear()}-${this.date.getMonth()< 10 ? '0':''}${this.date.getMonth()+1}-${this.date.getDate()< 10 ? '0':''}${this.date.getDate()}`;
+    this.todayDate = `${this.date.getFullYear()}-${this.date.getMonth()< 10 ? '0':''}${this.date.getMonth()+1}-05`;
+    this.timeCardService.get_checkout_reservations(this.todayDate).then((d:any) => {
+      this.checkout_data = d;
     });
   }
   onGetRooms(r_id:string,booking_id:string, data: any){
@@ -32,12 +33,12 @@ export class CheckOutComponent {
     this.bookingId = booking_id;
     this.rooms = data;
   }
-  onCheckin(room_id: number){
+  onCheckout(room_id: number){
     let fd = new FormData();
     fd.append('reservation', this.resv_id);
     fd.append('property', this.property);
     fd.append('room', room_id.toString());
-    fd.append('checkin_date', this.todayDate);
-    this.timeCardService.on_checkin(fd);
+    fd.append('checkout_date', this.todayDate);
+    this.timeCardService.on_checkout(fd);
   }
 }

@@ -105,10 +105,16 @@ export class HttpService {
   confirm_reservation(fd:any){
     return this.http.post(`${URL}/api/reservation`, fd);
   }
-  get_reservations(checkin_date:string){
+  get_checkin_reservations(checkin_date:string){
     return this.http.get<any>(`${URL}/api/reservation?checkin_date=${checkin_date}`);
   }
   on_checkin(fd:any){
     return this.http.post(`${URL}/api/room/checkin`, fd);
+  }
+  get_checkout_reservations(checkout_date: string){
+    return this.http.get<any>(`${URL}/api/reservation?checkout_date=${checkout_date}`);
+  }
+  on_checkout(fd:any){
+    return this.http.put(`${URL}/api/room/checkin`, fd);
   }
 }

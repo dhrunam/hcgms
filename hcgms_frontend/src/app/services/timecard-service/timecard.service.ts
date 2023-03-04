@@ -7,7 +7,20 @@ export class TimeCardService{
     private subscription!: Subscription;
     constructor(private http: HttpService){}
     get_checkin_reservations(checkin_date:string){
-        this.subscription = this.http.get_reservations(checkin_date).subscribe({
+        this.subscription = this.http.get_checkin_reservations(checkin_date).subscribe({
+            next: data => { this.checkin_list = data },
+            error: err => console.log(err),
+        })
+        return new Promise(
+            (resolve, reject) => {
+                setTimeout(() => {
+                    resolve(this.checkin_list);
+                },200)
+            }
+        )
+    }
+    get_checkout_reservations(checkout_date:string){
+        this.subscription = this.http.get_checkout_reservations(checkout_date).subscribe({
             next: data => { this.checkin_list = data },
             error: err => console.log(err),
         })
@@ -21,6 +34,12 @@ export class TimeCardService{
     }
     on_checkin(fd:any){
         this.subscription = this.http.on_checkin(fd).subscribe({
+            next: data => console.log(data),
+            error: err => console.log(err)
+        })
+    }
+    on_checkout(fd:any){
+        this.subscription = this.http.on_checkout(fd).subscribe({
             next: data => console.log(data),
             error: err => console.log(err)
         })
