@@ -18,35 +18,41 @@ class GuestCheckInCheckOutDetailsList(generics.ListCreateAPIView):
     # pagination.PageNumberPagination.page_size = 100
     @transaction.atomic
     def post(self, request, *args, **kwargs):
-        request.data._mutable = True
 
-        reservation= op_models.ReservationDetails.objects.get(pk=request.data['reservation'])
-        if(reservation):
+        with transaction.atomic():
+        # Second transaction
+        # ...
+
+            request.data._mutable = True
+
+            reservation= op_models.ReservationDetails.objects.get(pk=request.data['reservation'])
+            if(reservation):
+                
+                if request.data.get('lead_guest','') !='':
+                    request.data['lead_guest']=reservation.lead_guest_name
+
             
-            if request.data.get('lead_guest','') =='':
-                request.data['lead_guest']=reservation.lead_guest_name
-
-           
-            if  request.data.get('address','') =='' :
-                request.data['address']=reservation.address
+                if  request.data.get('address','') !='' :
+                    request.data['address']=reservation.address
+                
+                if request.data.get('contact_no','') !='' :
+                    request.data['contact_no']=reservation.contact_no
             
-            if request.data.get('contact_no','') =='' :
-                request.data['contact_no']=reservation.contact_no
+            request.data['created_by'] = request.user.id
+
+            
+            reservation_details = self.create(request, *args, **kwargs)
         
-        request.data['created_by'] = request.user.id
+            # request.data['created_by'] = reservation_details.data['id']
+            reservation_room = op_models.ReservationRoomDetails.objects.filter(
+            reservation=request.data['reservation'], property=request.data['property'], room=request.data['room'])
+            if(reservation_room):
+                reservation_room[0].checkin_date = request.data['checkin_date']
+                reservation_room[0].status= status=settings.BOOKING_STATUS['checkin']
+                reservation_room[0].save()
 
+            transaction.commit()
         
-        reservation_details = self.create(request, *args, **kwargs)
-       
-        # request.data['created_by'] = reservation_details.data['id']
-        reservation_room = op_models.ReservationRoomDetails.objects.filter(
-        reservation=request.data['reservation'], property=request.data['property'], room=request.data['room'])
-        if(reservation_room):
-            reservation_room[0].checkin_date = request.data['checkin_date']
-            reservation_room[0].status= status=settings.BOOKING_STATUS['checkin']
-            reservation_room[0].save()
-
-
         reservation_rooms = op_models.ReservationRoomDetails.objects.filter(
         reservation=request.data['reservation'], status=settings.BOOKING_STATUS['booked'])
 
@@ -62,6 +68,7 @@ class GuestCheckInCheckOutDetailsList(generics.ListCreateAPIView):
                 reservation.status=settings.BOOKING_STATUS['checkin']
         
         request.data._mutable = False
+
         return self.get(request, *args, **kwargs)
     
     def get_queryset(self):

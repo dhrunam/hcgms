@@ -40,25 +40,61 @@ export class EditComponent {
   onGoBack(){
     this.editMode ? this.router.navigate(['../../'], {relativeTo: this.route}) : this.router.navigate(['../'], {relativeTo: this.route});
   }
-  onAddRoom(){
-    let fd = new FormData();
-    fd.append('room_no', this.room_no);
-    fd.append('occupancy', this.occupancy);
-    fd.append('description', this.description);
-    fd.append('property', this.property_id);
-    fd.append('room_category', this.room_category_id);
-    fd.append('is_operational', 'true');
-    this.roomService.add_room(fd);
+  onAddRoom(data:any){
+    if(!data.valid){
+      data.control.markAllAsTouched();
+    }
+    else{
+      if(this.property_id === 'N/A' && this.room_category_id === 'N/A'){
+        alert('Please select a guest house and a room category');
+      }
+      else if(this.property_id === 'N/A' || this.room_category_id === 'N/A'){
+        if(this.property_id === 'N/A'){
+          alert('Please select a guest house');
+        }
+        else{
+          alert('Please select a room category');
+        }
+      }
+      else{
+        let fd = new FormData();
+        fd.append('room_no', this.room_no);
+        fd.append('occupancy', this.occupancy);
+        fd.append('description', this.description);
+        fd.append('property', this.property_id);
+        fd.append('room_category', this.room_category_id);
+        fd.append('is_operational', 'true');
+        this.roomService.add_room(fd);
+      }
+    }
   }
-  onUpdateRoom(){
-    let fd = new FormData();
-    fd.append('id', this.id.toString());
-    fd.append('room_no', this.room_no);
-    fd.append('occupancy', this.occupancy);
-    fd.append('description', this.description);
-    fd.append('property', this.property_id);
-    fd.append('room_category', this.room_category_id);
-    this.roomService.update_room(fd);
+  onUpdateRoom(data: any){
+    if(!data.valid){
+      data.control.markAllAsTouched();
+    }
+    else{
+      if(this.property_id === 'N/A' && this.room_category_id === 'N/A'){
+        alert('Please select a guest house and a room category');
+      }
+      else if(this.property_id === 'N/A' || this.room_category_id === 'N/A'){
+        if(this.property_id === 'N/A'){
+          alert('Please select a guest house');
+        }
+        else{
+          alert('Please select a room category');
+        }
+      }
+      else{
+        let fd = new FormData();
+        fd.append('id', this.id.toString());
+        fd.append('room_no', this.room_no);
+        fd.append('occupancy', this.occupancy);
+        fd.append('description', this.description);
+        fd.append('property', this.property_id);
+        fd.append('room_category', this.room_category_id);
+        this.roomService.update_room(fd);
+      }
+    }
   }
   ngOnDestroy(){
     this.subscription.unsubscribe();

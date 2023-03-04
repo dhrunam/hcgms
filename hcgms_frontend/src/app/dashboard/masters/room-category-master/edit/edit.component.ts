@@ -12,6 +12,7 @@ export class EditComponent {
   id:number = 0;
   room_category: string = '';
   editMode: boolean = false;
+  showSuccess: string = '';
   private subscription!: Subscription;
   constructor(private router: Router, private route: ActivatedRoute, private roomCategoryService: RoomCategoryService){}
   ngOnInit(): void{
@@ -26,16 +27,20 @@ export class EditComponent {
     })
   }
   onAddRoomCategory(data: any){
+    this.showSuccess = '';
     if(!data.valid){
       data.control.markAllAsTouched();
     }
     else{
       let fd = new FormData();
       fd.append('name', this.room_category);
-      this.roomCategoryService.add_room_category(fd);
+      this.roomCategoryService.add_room_category(fd).then((d:any) => {
+        this.showSuccess = d.error ? this.showSuccess = 'false' : this.showSuccess = 'true';
+      });
     }
   }
   onEditRoomCategory(data:any){
+    this.showSuccess = ''
     if(!data.valid){
       data.control.markAllAsTouched();
     }
@@ -43,7 +48,9 @@ export class EditComponent {
       let fd = new FormData();
       fd.append('id', this.id.toString());
       fd.append('name', this.room_category);
-      this.roomCategoryService.update_room_category(fd);
+      this.roomCategoryService.update_room_category(fd).then((d:any) => {
+        this.showSuccess = d.error ? this.showSuccess = 'false' : this.showSuccess = 'true';
+      });;
     }
   }
   onGoBack(){
