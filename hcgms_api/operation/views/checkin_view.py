@@ -1,14 +1,16 @@
-from django.conf import settings
-from hcgms_api.operation import models as op_models
-from hcgms_api.configuration import models as conf_models
-from rest_framework import generics, pagination
-from rest_framework.permissions import IsAuthenticated
-from django.db import transaction, connection
-from hcgms_api.operation import serializers
-from durin.auth import TokenAuthentication
 import datetime
 
+from django.conf import settings
+from django.db import connection, transaction
+from durin.auth import TokenAuthentication
+from rest_framework import generics, pagination
+from rest_framework.permissions import IsAuthenticated
 
+from hcgms_api.configuration import models as conf_models
+from hcgms_api.operation import models as op_models
+from hcgms_api.operation import serializers
+
+import json
 
 class GuestCheckInCheckOutDetailsList(generics.ListCreateAPIView):
     # authentication_classes = (TokenAuthentication,)
@@ -19,60 +21,62 @@ class GuestCheckInCheckOutDetailsList(generics.ListCreateAPIView):
     # @transaction.atomic
     def post(self, request, *args, **kwargs):
 
-        with transaction.atomic():
-        # Second transaction
-        # ...
+        rooms = json.loads(request.data['rooms'])
 
-            request.data._mutable = True
+        if(rooms):
 
-            reservation= op_models.ReservationDetails.objects.get(pk=request.data['reservation'])
-            if(reservation):
+            reservation= op_models.ReservationDetails.objects.get(pk=rooms[0]['reservation'])
+            with transaction.atomic():
+
+                request.data._mutable = True
+                for element in rooms:
+                    
+
+                    
+                    if(reservation):
+                        
+                        if 'lead_guest' not in element:
+                            request.data['lead_guest']=reservation.lead_guest_name
+
+                    
+                        if  'address' not in element :
+                            request.data['address']=reservation.address
+                        
+                        if  'contact_no' not in element :
+                            request.data['contact_no']=reservation.contact_no
+                    
+                    request.data['created_by'] = request.user.id
+
+                    
+                    reservation_details = self.create(request, *args, **kwargs)
                 
-                if request.data.get('lead_guest','') !='':
-                    request.data['lead_guest']=reservation.lead_guest_name
+                    # request.data['created_by'] = reservation_details.data['id']
+                    reservation_room = op_models.ReservationRoomDetails.objects.filter(
+                    reservation=element['reservation'], property=element['property'], room=element['room'])
+                    if(reservation_room):
+                        reservation_room[0].checkin_date = element['checkin_date']
+                        reservation_room[0].status= status=settings.BOOKING_STATUS['checkin']
+                        reservation_room[0].save()
 
+                    request.data._mutable = False
+            transaction.commit()
+
+            with transaction.atomic():
+                reservation_rooms = op_models.ReservationRoomDetails.objects.filter(
+                reservation=reservation.id, status=settings.BOOKING_STATUS['booked'])
+                    
+                if(reservation_rooms):
+
+                    if reservation:
+                        reservation.status=settings.BOOKING_STATUS['booked']
+                        reservation.save()
+                else:
+                    if reservation:
+                        reservation.status=settings.BOOKING_STATUS['checkin']
+                        reservation.save()
+                    
             
-                if  request.data.get('address','') !='' :
-                    request.data['address']=reservation.address
-                
-                if request.data.get('contact_no','') !='' :
-                    request.data['contact_no']=reservation.contact_no
-            
-            request.data['created_by'] = request.user.id
-
-            
-            reservation_details = self.create(request, *args, **kwargs)
-        
-            # request.data['created_by'] = reservation_details.data['id']
-            reservation_room = op_models.ReservationRoomDetails.objects.filter(
-            reservation=request.data['reservation'], property=request.data['property'], room=request.data['room'])
-            if(reservation_room):
-                reservation_room[0].checkin_date = request.data['checkin_date']
-                reservation_room[0].status= status=settings.BOOKING_STATUS['checkin']
-                reservation_room[0].save()
-
-            request.data._mutable = False
-        transaction.commit()
-
-        with transaction.atomic():
-            reservation_rooms = op_models.ReservationRoomDetails.objects.filter(
-            reservation=request.data['reservation'], status=settings.BOOKING_STATUS['booked'])
-
-            reservation = op_models.ReservationDetails.objects.get(
-                    pk=request.data['reservation'])
-                
-            if(reservation_rooms):
-
-                if reservation:
-                    reservation.status=settings.BOOKING_STATUS['booked']
-                    reservation.save()
-            else:
-                if reservation:
-                    reservation.status=settings.BOOKING_STATUS['checkin']
-                    reservation.save()
-                
-        
-        transaction.commit()
+            transaction.commit()
         return self.get(request, *args, **kwargs)
     
     def get_queryset(self):
@@ -123,7 +127,7 @@ class GuestCheckInCheckOutDetailsDetails(generics.RetrieveUpdateDestroyAPIView):
 
         return self.get(request, *args, **kwargs)
     
-    @transaction.atomic
+    # @transaction.atomic
     def patch(self, request, *args, **kwargs):
         with transaction.atomic():
             request.data._mutable = True
