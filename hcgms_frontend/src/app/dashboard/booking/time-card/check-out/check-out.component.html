@@ -9,7 +9,7 @@
     <hr>
     <div class="row">
         <div class="col-md-3" *ngFor="let c of checkout_data">
-            <div class="card" data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="onGetRooms(c.id,c.reservation_no,c.reservation_room_details)">
+            <div class="card" data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="onGetRooms(c.id,c.reservation_no,c.related_checkin_rooms)">
                 <div class="card-body">
                     <h5 class="card-title">Booking ID: {{c.reservation_no}}</h5>
                     <h6 class="card-subtitle mt-3 mb-2 text-muted">Guest Name: {{c.lead_guest_name}}</h6>
@@ -35,7 +35,7 @@
                     <tr>
                         <th width="5%" scope="col">S.No.</th>
                         <th scope="col">Room No</th>
-                        <th scope="col">Room Category</th>
+                        <!-- <th scope="col">Room Category</th> -->
                         <th scope="col">Check-In</th>
                     </tr>
                 </thead>
@@ -43,8 +43,8 @@
                     <tr class="text-center" *ngFor="let r of rooms; let i=index">
                         <td>{{i+1}}</td>
                         <td>{{r.related_room.room_no}}</td>
-                        <td>{{r.related_room.related_category.name}}</td>
-                        <td><button class="btn btn-primary" (click)="onCheckout(r.related_room.id)">Check-Out</button></td>
+                        <!-- <td>{{r.related_room.related_category.name}}</td> -->
+                        <td><button class="btn btn-primary" (click)="onCheckout(r.related_room.id, r.id)">Check-Out</button></td>
                     </tr>
                 </tbody>
             </table>

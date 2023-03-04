@@ -33,12 +33,13 @@ export class CheckOutComponent {
     this.bookingId = booking_id;
     this.rooms = data;
   }
-  onCheckout(room_id: number){
+  onCheckout(room_id: number, id:number){
     let fd = new FormData();
     fd.append('reservation', this.resv_id);
     fd.append('property', this.property);
     fd.append('room', room_id.toString());
     fd.append('checkout_date', this.todayDate);
+    fd.append('id', id.toString());
     this.timeCardService.on_checkout(fd);
   }
 }

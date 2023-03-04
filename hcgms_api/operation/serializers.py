@@ -183,7 +183,6 @@ class CheckInCheckOutSerializer(serializers.ModelSerializer):
                     'checkin_date',
                     'checkout_date',
                     'remarks',
-                    'related_room',
 
 
                 ]

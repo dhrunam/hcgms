@@ -115,6 +115,6 @@ export class HttpService {
     return this.http.get<any>(`${URL}/api/reservation?checkout_date=${checkout_date}`);
   }
   on_checkout(fd:any){
-    return this.http.put(`${URL}/api/room/checkin`, fd);
+    return this.http.patch(`${URL}/api/room/checkin/${fd.get('id')}`, fd);
   }
 }

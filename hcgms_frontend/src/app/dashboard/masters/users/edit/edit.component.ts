@@ -40,38 +40,80 @@ export class EditComponent {
       })
     }
   }
-  onAddUser(){
-    let fd = new FormData();
-    fd.append('first_name', this.first_name);
-    fd.append('last_name', this.last_name);
-    fd.append('contact_number', this.contact);
-    fd.append('username', this.username);
-    fd.append('property', this.property);
-    fd.append('group', this.role);
-    fd.append('password', this.password);
-    fd.append('password2', this.password2);
-    this.userService.add_user(fd);
+  onAddUser(data:any){
+    if(!data.valid){
+      data.control.markAllAsTouched();
+    }
+    else{
+      if(this.property === 'N/A' && this.role === 'N/A'){
+        alert('Please select a guest house and a role');
+      }
+      else if(this.property === 'N/A' || this.role === 'N/A'){
+        if(this.property === 'N/A'){
+          alert('Please select a guest house');
+        }
+        else{
+          alert('Please select a role');
+        }
+      }
+      else{
+        let fd = new FormData();
+        fd.append('first_name', this.first_name);
+        fd.append('last_name', this.last_name);
+        fd.append('contact_number', this.contact);
+        fd.append('username', this.username);
+        fd.append('property', this.property);
+        fd.append('group', this.role);
+        fd.append('password', this.password);
+        fd.append('password2', this.password2);
+        this.userService.add_user(fd);
+      }
+      
+    }
   }
-  onUpdateUser(){
-    let fd = new FormData();
-    fd.append('id', this.id.toString());
-    fd.append('first_name', this.first_name);
-    fd.append('last_name', this.last_name);
-    fd.append('contact_number', this.contact);
-    fd.append('username', this.username);
-    fd.append('property', this.property);
-    fd.append('group', this.role);
-    this.userService.update_user(fd);
+  onUpdateUser(data:any){
+    if(!data.valid){
+      data.control.markAllAsTouched();
+    }
+    else{
+      if(this.property === 'N/A' && this.role === 'N/A'){
+        alert('Please select a guest house and a role');
+      }
+      else if(this.property === 'N/A' || this.role === 'N/A'){
+        if(this.property === 'N/A'){
+          alert('Please select a guest house');
+        }
+        else{
+          alert('Please select a role');
+        }
+      }
+      else{
+        let fd = new FormData();
+        fd.append('id', this.id.toString());
+        fd.append('first_name', this.first_name);
+        fd.append('last_name', this.last_name);
+        fd.append('contact_number', this.contact);
+        fd.append('username', this.username);
+        fd.append('property', this.property);
+        fd.append('group', this.role);
+        this.userService.update_user(fd);
+      }
+    }
   }
   onGoBack(){
     this.editMode ? this.router.navigate(['../../'], {relativeTo: this.route}) : this.router.navigate(['../'], {relativeTo: this.route});
   }
-  onChangeUserPassword(){
-    let fd = new FormData();
-    fd.append('id', this.id.toString());
-    fd.append('username', this.username);
-    fd.append('password', this.password);
-    fd.append('password2', this.password2);
-    this.userService.change_user_password(fd);
+  onChangeUserPassword(data: any){
+    if(!data.valid){
+      data.control.markAllAsTouched();
+    }
+    else{
+      let fd = new FormData();
+      fd.append('id', this.id.toString());
+      fd.append('username', this.username);
+      fd.append('password', this.password);
+      fd.append('password2', this.password2);
+      this.userService.change_user_password(fd);
+    }
   }
 }
