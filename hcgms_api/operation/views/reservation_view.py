@@ -115,6 +115,7 @@ class ReservationDetailsList(generics.ListCreateAPIView):
         reservation_no = self.request.query_params.get('reservation_no')
         reservation_for= self.request.query_params.get('reservation_for')
         checkin_date= self.request.query_params.get('checkin_date')
+        checkout_date= self.request.query_params.get('checkout_date')
         room_number = self.request.query_params.get('room_no')
         search_text = self.request.query_params.get('search_text')
         operation = self.request.query_params.get('operation')
@@ -123,6 +124,10 @@ class ReservationDetailsList(generics.ListCreateAPIView):
         if(reservation_for):
             queryset= queryset.filter(reservation_for__icontains=reservation_for)
         if(checkin_date):
+
+            queryset= queryset.filter(checkin_date=checkin_date,status = settings.BOOKING_STATUS['booked'] )
+        
+        if(checkout_date):
 
             queryset= queryset.filter(checkin_date=checkin_date,status = settings.BOOKING_STATUS['booked'] )
         
