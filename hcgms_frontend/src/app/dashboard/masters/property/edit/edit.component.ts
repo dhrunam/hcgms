@@ -15,6 +15,8 @@ export class EditComponent {
   prop_address: string = '';
   prop_short_name: string = '';
   prop_description: string = '';
+  showSuccess: string = '';
+  prop_code: string = '';
   private routeSubscription!: Subscription;
   constructor(private router: Router, private route: ActivatedRoute, private propertyService: PropertyService) {}
   ngOnInit(): void{
@@ -27,28 +29,45 @@ export class EditComponent {
           this.prop_address = d.address;
           this.prop_short_name = d.short_name;
           this.prop_description = d.description;
+          this.prop_code = d.code;
         });
       }
     })
   }
-  onAddProperty(){
-    let fd = new FormData();
-    fd.append('name', this.prop_name);
-    fd.append('description', this.prop_description);
-    fd.append('address', this.prop_address);
-    fd.append('short_name', this.prop_short_name);
-    fd.append('code', 'SHC03');
-    this.propertyService.add_property(fd);
+  onAddProperty(data:any){
+    this.showSuccess = '';
+    if(!data.valid){
+      data.control.markAllAsTouched();
+    }
+    else{
+      let fd = new FormData();
+      fd.append('name', this.prop_name);
+      fd.append('description', this.prop_description);
+      fd.append('address', this.prop_address);
+      fd.append('short_name', this.prop_short_name.toUpperCase());
+      fd.append('code', this.prop_code);
+      this.propertyService.add_property(fd).then((d:any) => {
+        this.showSuccess = d.error ? this.showSuccess = 'false' : this.showSuccess = 'true';
+      });
+    }
   }
-  onUpdateProperty(){
-    let fd = new FormData();
-    fd.append('id', this.id.toString());
-    fd.append('name', this.prop_name);
-    fd.append('description', this.prop_description);
-    fd.append('address', this.prop_address);
-    fd.append('short_name', this.prop_short_name);
-    fd.append('code', 'SHC03');
-    this.propertyService.update_property(fd);
+  onUpdateProperty(data:any){
+    this.showSuccess = '';
+    if(!data.valid){
+      data.control.markAllAsTouched();
+    }
+    else{
+      let fd = new FormData();
+      fd.append('id', this.id.toString());
+      fd.append('name', this.prop_name);
+      fd.append('description', this.prop_description);
+      fd.append('address', this.prop_address);
+      fd.append('short_name', this.prop_short_name.toUpperCase());
+      fd.append('code', this.prop_code);
+      this.propertyService.update_property(fd).then((d:any) => {
+        this.showSuccess = d.error ? this.showSuccess = 'false' : this.showSuccess = 'true';
+      });
+    }
   }
   onGoBack(){
     this.editMode ? this.router.navigate(['../../'], {relativeTo: this.route}) : this.router.navigate(['../'], {relativeTo: this.route});

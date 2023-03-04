@@ -103,7 +103,8 @@ class ReservationDetailsSerializer(serializers.ModelSerializer):
                     'created_at',
                     'reservation_room_details',
                     'related_property',
-                    'related_services'
+                    'related_services',
+                    'related_checkin_rooms'
 
                 ]
         

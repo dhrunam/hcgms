@@ -6,6 +6,7 @@
     background-color: #7CB8EC;
     border-color: #7CB8EC;
 }
-input.ng-invalid.ng-touched{
+input.ng-invalid.ng-touched,
+textarea.ng-invalid.ng-touched{
     border: 1px solid red;
 }

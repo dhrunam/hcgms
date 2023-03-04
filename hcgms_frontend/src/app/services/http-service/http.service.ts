@@ -27,8 +27,8 @@ export class HttpService {
   update_property(fd:any){
     return this.http.put(`${URL}/api/property/${fd.get('id')}`, fd);
   }
-  delete_property(id:number){
-    return this.http.delete(`${URL}/api/property/${id}`);
+  delete_property(fd:any){
+    return this.http.patch(`${URL}/api/property/${fd.get('id')}`, fd);
   }
   get_room_categories(){
     return this.http.get<any>(`${URL}/api/room/category`);
