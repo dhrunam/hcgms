@@ -11,6 +11,21 @@ from hcgms_api.operation import models
 from hcgms_api.configuration import models as conf_model
 from hcgms_api.configuration import serializers as conf_serializers
 
+class HelperRoomSearchSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = conf_model.Room
+        fields = [
+                    'id', 
+                    'property', 
+                    'room_category',
+                    'room_no',
+                    'occupancy',
+                    'description',
+                    'is_operational',
+
+
+                ]
+
 class MiscellaneousServiceChargeDetailsSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -54,6 +69,7 @@ class HelperCheckInCheckOutSerializer(serializers.ModelSerializer):
     # related_property = conf_serializers.HelperPropertySerializer(source='property', read_only=True)
     # related_category = conf_serializers.RoomCategorySerializer(source='room_category', read_only=True)
     # cost = serializers.DecimalField(max_digits=8, decimal_places=2,  read_only=True)
+    related_room = HelperRoomSearchSerializer(source='room', read_only=True)
     class Meta:
         model = models.GuestCheckInCheckOutDetails
         fields = [
@@ -69,6 +85,7 @@ class HelperCheckInCheckOutSerializer(serializers.ModelSerializer):
                     'checkin_date',
                     'checkout_date',
                     'remarks',
+                    'related_room',
 
 
                 ]
@@ -150,7 +167,7 @@ class RoomSearchSerializer(serializers.ModelSerializer):
 class CheckInCheckOutSerializer(serializers.ModelSerializer):
     # related_property = conf_serializers.HelperPropertySerializer(source='property', read_only=True)
     # related_category = conf_serializers.RoomCategorySerializer(source='room_category', read_only=True)
-    # cost = serializers.DecimalField(max_digits=8, decimal_places=2,  read_only=True)
+    # related_room = RoomSearchSerializer(source='room', read_only=True)
     class Meta:
         model = models.GuestCheckInCheckOutDetails
         fields = [
@@ -166,6 +183,7 @@ class CheckInCheckOutSerializer(serializers.ModelSerializer):
                     'checkin_date',
                     'checkout_date',
                     'remarks',
+                    'related_room',
 
 
                 ]
