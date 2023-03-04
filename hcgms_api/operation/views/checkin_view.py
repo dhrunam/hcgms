@@ -20,6 +20,19 @@ class GuestCheckInCheckOutDetailsList(generics.ListCreateAPIView):
     def post(self, request, *args, **kwargs):
         request.data._mutable = True
 
+        reservation= op_models.ReservationDetails.objects.get(pk=request.data['reservation'])
+        if(reservation):
+
+            if request.data['lead_guest'] is None:
+                request.data['lead_guest']=reservation.lead_guest_name
+
+
+            if request.data['address'] is None:
+                request.data['address']=reservation.address
+            
+            if request.data['contact_no'] is None:
+                request.data['contact_no']=reservation.contact_no
+        
         request.data['created_by'] = request.user.id
 
         
@@ -30,7 +43,7 @@ class GuestCheckInCheckOutDetailsList(generics.ListCreateAPIView):
         reservation=request.data['reservation'], property=request.data['property'], room=request.data['room'])
         if(reservation_room):
             reservation_room[0].checkin_date = request.data['checkin_date']
-            reservation_room[0].status= request.data['status']
+            reservation_room[0].status= status=settings.BOOKING_STATUS['checkin']
             reservation_room[0].save()
 
 

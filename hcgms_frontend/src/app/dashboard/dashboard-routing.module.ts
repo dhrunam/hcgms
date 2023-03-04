@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AdminCheckGuard } from '../guards/role-guards/admin-check.guard';
+import { OtherServicesComponent } from './booking/other-services/other-services.component';
 import { DashboardComponent } from './dashboard.component';
 
 const routes: Routes = [
@@ -15,6 +16,7 @@ const routes: Routes = [
       { path: 'reservation', loadChildren: () => import('./booking/reservation/reservation.module').then(m => m.ReservationModule), canActivateChild: [AdminCheckGuard] },
       { path: 'check-in', loadComponent: () => import('./booking/time-card/check-in/check-in.component').then(c => c.CheckInComponent ) },
       { path: 'check-out', loadComponent: () => import('./booking/time-card/check-out/check-out.component').then(c => c.CheckOutComponent ) },
+      { path: 'other-services', loadComponent: () => import('./booking/other-services/other-services.component').then(c => c.OtherServicesComponent)},
     ]
   },
   
