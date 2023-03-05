@@ -13,7 +13,6 @@ export class ReservationComponent {
   showErr: boolean = true;
   onShowHouses(data: { status: boolean}){
     if(!data.status){
-      console.log(data.status);
       this.showHouses = data.status;
       this.showAck = data.status;
       this.showDetails = data.status;

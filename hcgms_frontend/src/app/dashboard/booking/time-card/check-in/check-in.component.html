@@ -47,7 +47,7 @@
                 </thead>
                 <tbody>
                     <tr class="text-center" *ngFor="let r of rooms; let i=index">
-                        <td><input type="checkbox" name="chk" (change)="onChangeEvent($event, r.related_room.id, i)"></td>
+                        <td><input type="checkbox" name="chk" (change)="onChangeEvent($event, r.related_room.id)"></td>
                         <td>{{i+1}}</td>
                         <td>{{r.related_room.room_no}}</td>
                         <td>{{r.related_room.related_category.name}}</td>

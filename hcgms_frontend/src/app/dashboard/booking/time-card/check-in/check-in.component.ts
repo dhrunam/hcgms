@@ -67,7 +67,7 @@ export class CheckInComponent {
       this.send_data = [];
     }
   }
-  onChangeEvent(event:any, room_id:number,id:number){
+  onChangeEvent(event:any, room_id:number){
     if(event.target.checked){
       let details = {
         'property': this.property,

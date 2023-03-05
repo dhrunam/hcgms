@@ -11,6 +11,7 @@ import { TimeCardService } from 'src/app/services/timecard-service/timecard.serv
   styleUrls: ['./check-out.component.css']
 })
 export class CheckOutComponent {
+  send_data: any = [];
   todayDate: string = '';
   bookingId:string = '';
   resv_id: string = '';
@@ -35,11 +36,50 @@ export class CheckOutComponent {
   }
   onCheckout(room_id: number, id:number){
     let fd = new FormData();
-    fd.append('reservation', this.resv_id);
-    fd.append('property', this.property);
-    fd.append('room', room_id.toString());
-    fd.append('checkout_date', this.todayDate);
-    fd.append('id', id.toString());
+    fd.append('rooms', JSON.stringify(this.send_data));
     this.timeCardService.on_checkout(fd);
+  }
+  selectAll(event: any){
+    this.send_data = [];
+    var ele:any = document.getElementsByName('chk');
+    if(event.target.checked){
+      for (var i = 0; i < ele.length; i++) {
+        if (ele[i].type == 'checkbox')
+            ele[i].checked = true;
+      }
+      this.rooms.forEach((data:any) => {
+        let details = {
+          'property': this.property,
+          'reservation': this.resv_id,
+          'room': data.related_room.id,
+          'checkout_date': this.todayDate,
+        }
+        this.send_data.push(details);
+      })
+    }
+    else{
+      for (var i = 0; i < ele.length; i++) {
+        if (ele[i].type == 'checkbox')
+            ele[i].checked = false;
+      }
+      this.send_data = [];
+    }
+  }
+  onChangeEvent(event:any, room_id:number){
+    if(event.target.checked){
+      let details = {
+        'property': this.property,
+        'reservation': this.resv_id,
+        'room': room_id,
+        'checkout_date': this.todayDate,
+      }
+      this.send_data.push(details);
+    }
+    else{
+      const index = this.send_data.findIndex((obj:any) => obj.room === room_id);
+      this.send_data.splice(index,1);
+      var ele:any = document.getElementById('selectAll');
+      ele.checked = false;
+    }
   }
 }
