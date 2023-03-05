@@ -3,6 +3,7 @@ import { Subscription } from "rxjs";
 import { HttpService } from "src/app/services/http-service/http.service";
 @Injectable({providedIn: 'root'})
 export class RoomService{
+    status:any;
     properties: any = [];
     categories: any = [];
     rooms: any = [];
@@ -63,15 +64,29 @@ export class RoomService{
     }
     add_room(data:any){
         this.subscription = this.http.add_room(data).subscribe({
-            next: data => { return true },
-            error: err => console.log(err)
-        })
+            next: data => { this.status = data },
+            error: err => { this.status = err },
+        });
+        return new Promise(
+            (resolve,reject) => {
+                setTimeout(() => {
+                    resolve(this.status);
+                }, 200)
+            }
+        )
     }
     update_room(data:any){
         this.subscription = this.http.update_room(data).subscribe({
-            next: data => { return true},
-            error: err => console.log(err)
-        })
+            next: data => { this.status = data },
+            error: err => { this.status = err },
+        });
+        return new Promise(
+            (resolve,reject) => {
+                setTimeout(() => {
+                    resolve(this.status);
+                }, 200)
+            }
+        )
     }
     delete_room(id:number){
         this.subscription = this.http.delete_room(id).subscribe({

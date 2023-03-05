@@ -18,6 +18,7 @@ export class EditComponent {
   property_id: string = 'N/A';
   room_category_id: string = 'N/A';
   room_is_operational: boolean = false;
+  showSuccess:string = '';
   private subscription!: Subscription;
   constructor(private roomService: RoomService, private router: Router, private route: ActivatedRoute){}
   ngOnInit():void{
@@ -64,7 +65,9 @@ export class EditComponent {
         fd.append('property', this.property_id);
         fd.append('room_category', this.room_category_id);
         fd.append('is_operational', 'true');
-        this.roomService.add_room(fd);
+        this.roomService.add_room(fd).then((d:any) => {
+          this.showSuccess = d.error ? 'false' : 'true';
+        });
       }
     }
   }
@@ -92,7 +95,10 @@ export class EditComponent {
         fd.append('description', this.description);
         fd.append('property', this.property_id);
         fd.append('room_category', this.room_category_id);
-        this.roomService.update_room(fd);
+        fd.append('is_operational', 'true');
+        this.roomService.update_room(fd).then((d:any) => {
+          this.showSuccess = d.error ? 'false' : 'true';
+        });;
       }
     }
   }

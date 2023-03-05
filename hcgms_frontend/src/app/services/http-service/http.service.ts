@@ -117,4 +117,7 @@ export class HttpService {
   on_checkout(fd:any){
     return this.http.patch(`${URL}/api/room/checkin/${fd.get('id')}`, fd);
   }
+  on_get_billing_reservation(room_no:string){
+    return this.http.get<any>(`${URL}/api/reservation?room_no=${room_no}`);
+  }
 }

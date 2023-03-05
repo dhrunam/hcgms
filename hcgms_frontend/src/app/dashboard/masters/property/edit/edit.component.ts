@@ -46,6 +46,7 @@ export class EditComponent {
       fd.append('address', this.prop_address);
       fd.append('short_name', this.prop_short_name.toUpperCase());
       fd.append('code', this.prop_code);
+      fd.append('is_operational', 'true');
       this.propertyService.add_property(fd).then((d:any) => {
         this.showSuccess = d.error ? this.showSuccess = 'false' : this.showSuccess = 'true';
       });
@@ -64,6 +65,7 @@ export class EditComponent {
       fd.append('address', this.prop_address);
       fd.append('short_name', this.prop_short_name.toUpperCase());
       fd.append('code', this.prop_code);
+      fd.append('is_operational', 'true');
       this.propertyService.update_property(fd).then((d:any) => {
         this.showSuccess = d.error ? this.showSuccess = 'false' : this.showSuccess = 'true';
       });
