@@ -79,6 +79,14 @@
                 </label>
             </div>
         </li>
+        <li *ngIf="role === 3">
+            <div class="icon-link" routerLink="/dashboard/bill" routerLinkActive="active">
+                <label>
+                    <i class="bi bi-pc-display-horizontal"></i>
+                    <span class="links_name">Billing</span>
+                </label>
+            </div>
+        </li>
         <!-- <li class="parent" [hidden]="group === 2 || group === 3 || group === 4">
             <div class="icon-link">
                 <label class="arrow">

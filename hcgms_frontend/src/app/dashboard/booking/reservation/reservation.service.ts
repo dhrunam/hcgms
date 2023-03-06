@@ -6,7 +6,7 @@ import { HttpService } from "src/app/services/http-service/http.service";
 export class ReservationService{
     acknowledgement = new Subject<any>();
     roomDetails = new Subject<{property: number, checkin_date: Date, checkout_date: Date, rooms: any}>();
-    results = new Subject<{data: any, checkin_date: Date, checkout_date: Date, property: number}>();
+    results = new Subject<{data: any, checkin_date: Date, checkout_date: Date, property: number, days: number}>();
     properties: any = [];
     searchRooms: any;
     room_detail:any = [];

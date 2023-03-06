@@ -11,7 +11,7 @@
 <div class="header d-flex justify-content-between px-3 py-2 mt-5">
     <div></div>
     <h5>Acknowledgement Receipt</h5>
-    <i class="bi bi-printer" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Print" style="font-size: 22px;"></i>
+    <i class="bi bi-printer" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Print" style="font-size: 22px;" (click)="onPrintAck()"></i>
 </div>
 <div class="row mt-3">
     <div class="col-md-6">
@@ -138,7 +138,9 @@
                 <th scope="col" width="5%">S.No.</th>
                 <th scope="col">Room No</th>
                 <th scope="col">Room Type</th>
+                <th scope="col">No. of Days</th>
                 <th scope="col">Room Cost</th>
+                <th scope="col">Total Cost</th>
             </tr>
         </thead>
         <tbody>
@@ -146,12 +148,14 @@
                 <td scope="col" class="text-center">{{i+1}}</td>
                 <td scope="col">{{ r.related_room.room_no }}</td>
                 <td scope="col">{{ r.related_room.related_category.name }}</td>
+                <td scope="col">{{ days[i].days }}</td>
                 <td scope="col">₹ {{ r.room_rate }}</td>
+                <td scope="col">₹ {{ r.room_rate * days[i].days }}</td>
             </tr>
         </tbody>
         <tfoot>
             <tr>
-                <th id="total" colspan="3">Total:</th>
+                <th id="total" colspan="5">Total:</th>
                 <td>₹ {{ totalCost }}</td>
             </tr>
         </tfoot>

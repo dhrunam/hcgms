@@ -44,6 +44,7 @@ export class DetailsComponent {
             property: d[0].related_property.name,
             reservation_room_details: d[0].reservation_room_details,
             totalCost: d[0].total_room_cost,
+            days: this.roomDetails.rooms
           }
         );
       });

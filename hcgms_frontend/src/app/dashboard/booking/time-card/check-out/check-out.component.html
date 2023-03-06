@@ -7,7 +7,10 @@
         <h5>Date: {{ todayDate | date: 'dd-MM-YYYY' }}</h5>
     </div>
     <hr>
-    <div class="row">
+    <div *ngIf="!showResv">
+        <h4>No Bookings Available</h4>
+    </div>
+    <div class="row" *ngIf="showResv">
         <div class="col-md-3" *ngFor="let c of checkout_data">
             <div class="card" data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="onGetRooms(c.id,c.reservation_no,c.reservation_room_details)">
                 <div class="card-body">
@@ -54,7 +57,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" (click)="onCheckout()">Check-Out</button>
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="onCheckout()">Check-Out</button>
         </div>
       </div>
     </div>
