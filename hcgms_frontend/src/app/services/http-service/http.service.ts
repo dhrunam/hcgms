@@ -121,4 +121,23 @@ export class HttpService {
   on_get_billing_reservation(room_no:string){
     return this.http.get<any>(`${URL}/api/reservation?room_no=${room_no}`);
   }
+
+  get_misscellaneous_services_of_reservation(fd:any){
+    return this.http.get(`${URL}/api/reservation/miscellaneous/charge?reservation=${fd.reservation}`);
+  }
+
+  on_misscellaneous_service_save(fd:any){
+    return this.http.post(`${URL}/api/reservation/miscellaneous/charge`, {
+      id :fd.id,
+      reservation : fd.reservation,
+      particular : fd.particular,
+      cost : fd.cost,
+      remarks: fd.remarks,
+      start_date : fd.start_date,
+      end_date : fd.end_date,
+    });
+  }
+  on_misscellaneous_service_update(fd:any){
+    return this.http.post(`${URL}/api/reservation/miscellaneous/charge/${fd.get('id')}`, fd);
+  }
 }

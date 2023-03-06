@@ -69,7 +69,7 @@ class ReservationDetailsList(generics.ListCreateAPIView):
             self, request.data)
         if rooms:
             
-            no_of_days=Calculator.get_number_of_days(request.data['checkin_date'], request.data['checkout_date']),
+            no_of_days=Calculator.get_number_of_days(request.data['checkin_date'], request.data['checkout_date'])
             request.data['total_room_cost']=Calculator.calculate_total_room_cost(self, rooms, no_of_days)
 
         request.data['status']=settings.BOOKING_STATUS['booked']

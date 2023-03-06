@@ -23,7 +23,7 @@ export class TokenInterceptorInterceptor implements HttpInterceptor {
       authReq = request.clone({ headers: request.headers.set(TOKEN_HEADER_KEY, 'Token ' + token) });
     }
     return next.handle(authReq).pipe(catchError((err:any)=>{
-      if(err.error.response == 'Invalid Token.'){
+      if(err.error.details == 'Invalid token.'){
         alert('Session Expired !! Please login again');
         window.location.href = '/';
         this.local_storage.clearSession();

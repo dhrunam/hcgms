@@ -8,7 +8,8 @@ import { UtilitiesModule } from '../utilities/utilities.module';
 
 @NgModule({
   declarations: [
-    DashboardComponent
+    DashboardComponent,
+
   ],
   imports: [
     CommonModule,
