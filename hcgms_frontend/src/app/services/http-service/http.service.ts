@@ -122,6 +122,9 @@ export class HttpService {
     return this.http.get<any>(`${URL}/api/reservation?room_no=${room_no}`);
   }
 
+  get_other_services_reservations(){
+    return this.http.get<any>(`${URL}/api/reservation?operation=other_service`);
+  }
   get_misscellaneous_services_of_reservation(fd:any){
     return this.http.get(`${URL}/api/reservation/miscellaneous/charge?reservation=${fd.reservation}`);
   }
