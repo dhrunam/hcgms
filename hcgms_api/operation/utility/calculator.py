@@ -1,6 +1,7 @@
 from django.db.models.query import QuerySet
 from hcgms_api.configuration import models as conf_models
 import datetime
+from decimal import Decimal
 
 class Calculator():
     def calculate_total_room_cost(self, rooms, days=1):
@@ -17,6 +18,7 @@ class Calculator():
                 print('Total Room Cost:', total_cost)
 
         if isinstance(rooms, list):
+                print
                 for element in rooms:
                     print(element)
                     roomRate = int(element['room_rate'])
@@ -64,6 +66,7 @@ class Calculator():
 
     def get_number_of_days(start_date, end_date):
             date_difference = datetime.datetime.strptime(end_date, '%Y-%m-%d') - datetime.datetime.strptime(start_date, '%Y-%m-%d')
+            print('Number of Days:',date_difference.days)
             if date_difference.days == 0 :
                 return date_difference.days + 1
             

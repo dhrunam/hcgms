@@ -15,7 +15,10 @@ const routes: Routes = [
       { path: 'reservation', loadChildren: () => import('./booking/reservation/reservation.module').then(m => m.ReservationModule), canActivateChild: [AdminCheckGuard] },
       { path: 'check-in', loadComponent: () => import('./booking/time-card/check-in/check-in.component').then(c => c.CheckInComponent ) },
       { path: 'check-out', loadComponent: () => import('./booking/time-card/check-out/check-out.component').then(c => c.CheckOutComponent ) },
-      { path: 'bill', loadComponent: () => import('./booking/billing/billing.component').then(c => c.BillingComponent)}
+      { path: 'bill', loadComponent: () => import('./booking/billing/billing.component').then(c => c.BillingComponent)},
+      { path: 'other-service', loadChildren: () => import('./booking/other-services/other-services.module').then(m => m.OtherServicesModule)},
+
+    
     ]
   },
   

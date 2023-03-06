@@ -46,7 +46,7 @@ export class AcknowledgmentComponent {
   getRoomDetails(data:any){
     this.room_details = [['Room No', 'Room Category', 'No. of Days', 'Room Rate', 'Total Cost']];
     for(var i=0; i<data.length;i++){
-      this.room_details.push([data[i].related_room.room_no,data[i].related_room.related_category.name, this.days[i].days, data[i].room_rate,data[i].room_rate]);
+      this.room_details.push([data[i].related_room.room_no,data[i].related_room.related_category.name, this.days[i].days, `₹ ${data[i].room_rate}`,`₹ ${data[i].room_rate * this.days[i].days}`]);
     }
     return this.room_details;
   }
@@ -119,7 +119,13 @@ export class AcknowledgmentComponent {
             widths: [ '*', '*', '*', '*','*'],
             body: this.getRoomDetails(this.rooms),
           },
-          margin: [0, 0, 0, 100]
+          margin: [0, 0, 0, 20]
+        },
+        {
+          text: `Total: ${this.totalCost}`,
+          bold: true,
+          alignment: 'right',
+          margin: [0, 0, 0, 10]
         },
       ],
       styles: {
