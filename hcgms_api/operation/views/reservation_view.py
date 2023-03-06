@@ -9,7 +9,7 @@ from django.db.models import Q
 from hcgms_api.operation import models as op_models
 from hcgms_api.account import models as acc_models
 from hcgms_api.configuration import models as conf_models
-from hcgms_api.operation.utility.cost_calculator import CostCalculator
+from hcgms_api.operation.utility.calculator import Calculator
 from hcgms_api.operation import serializers
 from durin.auth import TokenAuthentication
 import datetime
@@ -68,7 +68,9 @@ class ReservationDetailsList(generics.ListCreateAPIView):
         request.data['reservation_no'] = generate_reservation_no(
             self, request.data)
         if rooms:
-            request.data['total_room_cost']=CostCalculator.calculate_total_room_cost(self,rooms)
+            
+            no_of_days=Calculator.get_number_of_days(request.data['checkin_date'], request.data['checkout_date']),
+            request.data['total_room_cost']=Calculator.calculate_total_room_cost(self, rooms, no_of_days)
 
         request.data['status']=settings.BOOKING_STATUS['booked']
 
@@ -78,7 +80,7 @@ class ReservationDetailsList(generics.ListCreateAPIView):
         if(rooms):
             for element in rooms:
 
-                tax_details=CostCalculator.get_applicable_tax_details(self, element['room_rate'])
+                tax_details=Calculator.get_applicable_tax_details(self, element['room_rate'])
 
                 reservation_room=op_models.ReservationRoomDetails.objects.create(
                         reservation = op_models.ReservationDetails.objects.get(id=reservation_details.data['id']),
@@ -178,7 +180,9 @@ class ReservationDetailsDetails(generics.RetrieveUpdateDestroyAPIView):
         request.data['created_by'] = request.user.id
         rooms = json.loads(request.data['rooms'])
         if rooms:
-            request.data['total_room_cost']=CostCalculator.calculate_total_room_cost(self,rooms)
+            
+            no_of_days=Calculator.get_number_of_days(request.data['checkin_date'], request.data['checkout_date']),
+            request.data['total_room_cost']=Calculator.calculate_total_room_cost(self, rooms, no_of_days)
 
         request.data._mutable = False
         reservation_details = self.update(request, *args, **kwargs)

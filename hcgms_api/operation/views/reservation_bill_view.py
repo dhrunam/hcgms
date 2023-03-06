@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from hcgms_api.operation import models as op_models
 from hcgms_api.configuration import models as conf_models
 from hcgms_api.operation import serializers
-from hcgms_api.operation.utility.cost_calculator import CostCalculator
+from hcgms_api.operation.utility.calculator import Calculator
 from durin.auth import TokenAuthentication
 import datetime
 import json
@@ -54,14 +54,16 @@ class ReservationBillList(generics.ListCreateAPIView):
     @transaction.atomic
     def post(self, request, *args, **kwargs):
         request.data._mutable = True
+        reservation= op_models.ReservationDetails.objects.get(pk=request.data['reservation'])
 
         reservation_rooms=op_models.ReservationRoomDetails.objects.filter(reservation=request.data['reservation'])
-        if(reservation_rooms):
-            request.data['total_room_cost'] = CostCalculator.calculate_total_room_cost(self,reservation_rooms )
+        if(reservation_rooms) and reservation:
+            no_of_days = Calculator.get_number_of_days(reservation.checkin_date.strftime('%Y-%m-%d'), reservation.checkout_date.strftime('%Y-%m-%d'))
+            request.data['total_room_cost'] =Calculator.calculate_total_room_cost(self,reservation_rooms, no_of_days )
         
         service_details=op_models.MiscellaneousServiceChargeDetails.objects.filter(reservation=request.data['reservation'])
         if(service_details):
-            request.data['total_service_cost'] = CostCalculator.calculate_total_service_cost(self, service_details)
+            request.data['total_service_cost'] = Calculator.calculate_total_service_cost(self, service_details)
             
         
 
@@ -72,8 +74,7 @@ class ReservationBillList(generics.ListCreateAPIView):
 
 
         reservation_bill = self.create(request, *args, **kwargs)
-        reservation= op_models.ReservationDetails.objects.get(pk=request.data['reservation'])
-
+        
         if(reservation):
             reservation.is_bill_generated = True
             reservation.save()
@@ -117,7 +118,18 @@ class ReservationBillDetails(generics.RetrieveUpdateDestroyAPIView):
         request.data._mutable = True
 
         request.data['created_by'] = request.user.id
+        reservation= op_models.ReservationDetails.objects.get(pk=request.data['reservation'])
 
+        reservation_rooms=op_models.ReservationRoomDetails.objects.filter(reservation=request.data['reservation'])
+        if(reservation_rooms) and reservation:
+            no_of_days = Calculator.get_number_of_days(reservation.checkin_date.strftime('%Y-%m-%d'), reservation.checkout_date.strftime('%Y-%m-%d'))
+            request.data['total_room_cost'] =Calculator.calculate_total_room_cost(self,reservation_rooms, no_of_days )
+        
+        service_details=op_models.MiscellaneousServiceChargeDetails.objects.filter(reservation=request.data['reservation'])
+        if(service_details):
+            request.data['total_service_cost'] = Calculator.calculate_total_service_cost(self, service_details)
+            
+        
 
         request.data._mutable = False
         reservation_bill = self.update(request, *args, **kwargs)
@@ -135,7 +147,19 @@ class ReservationBillDetails(generics.RetrieveUpdateDestroyAPIView):
         request.data._mutable = True
 
         request.data['created_by'] = request.user.id
+       
+        reservation= op_models.ReservationDetails.objects.get(pk=request.data['reservation'])
 
+        reservation_rooms=op_models.ReservationRoomDetails.objects.filter(reservation=request.data['reservation'])
+        if(reservation_rooms) and reservation:
+            no_of_days = Calculator.get_number_of_days(reservation.checkin_date.strftime('%Y-%m-%d'), reservation.checkout_date.strftime('%Y-%m-%d'))
+            request.data['total_room_cost'] =Calculator.calculate_total_room_cost(self,reservation_rooms, no_of_days )
+        
+        service_details=op_models.MiscellaneousServiceChargeDetails.objects.filter(reservation=request.data['reservation'])
+        if(service_details):
+            request.data['total_service_cost'] = Calculator.calculate_total_service_cost(self, service_details)
+            
+        
 
         request.data._mutable = False
         reservation_details = self.partial_update(request, *args, **kwargs)

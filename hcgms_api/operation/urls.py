@@ -14,7 +14,10 @@ urlpatterns = [
     path('api/room/search/v2', views.RoomSearchGroupByProperty.as_view()),
 
     path('api/room/checkin', views.GuestCheckInCheckOutDetailsList.as_view()),
-    path('api/room/checkin/<int:pk>', views.GuestCheckInCheckOutDetailsDetails.as_view()),
+    path('api/room/checkout', views.GuestCheckOutDetailsList.as_view()),
+    path('api/room/noshow', views.GuesNoShowDetailsList.as_view()),
+
+
 
     path('api/reservation/miscellaneous/charge', views.MiscellaneousServiceChargeList.as_view()),
     path('api/reservation/miscellaneous/charge/<int:pk>', views.MiscellaneousServiceChargeDetails.as_view()),

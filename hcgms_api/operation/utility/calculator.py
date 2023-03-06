@@ -2,29 +2,31 @@ from django.db.models.query import QuerySet
 from hcgms_api.configuration import models as conf_models
 import datetime
 
-class CostCalculator():
-    def calculate_total_room_cost(self, rooms):
-        print(type(rooms))
+class Calculator():
+    def calculate_total_room_cost(self, rooms, days=1):
+        print('days:',days)
+        if days == 0:
+            days=1
         total_cost=0
         if isinstance(rooms, QuerySet):
 
                 for element in rooms:
                     print(element)
-                    total_cost+=element.room_rate
+                    total_cost+=element.room_rate * days
                         
                 print('Total Room Cost:', total_cost)
 
         if isinstance(rooms, list):
                 for element in rooms:
                     print(element)
-                    total_cost+=element['room_rate']
+                    total_cost+=element['room_rate'] * days
                         
                 print('Total Room Cost:', total_cost)
                 
         if(isinstance(rooms, dict) ):
                 for element in rooms:
                     print(element)
-                    total_cost+=element['room_rate']
+                    total_cost+=element['room_rate'] * days
                 print('Total Room Cost:', total_cost)
         
         return total_cost
@@ -57,3 +59,10 @@ class CostCalculator():
                     result['other_cess_rate']=applicable_tax_details.service_tax_percentage
 
                 return result
+
+    def get_number_of_days(start_date, end_date):
+            date_difference = datetime.datetime.strptime(end_date, '%Y-%m-%d') - datetime.datetime.strptime(start_date, '%Y-%m-%d')
+            if date_difference.days == 0 :
+                return date_difference.days + 1
+            
+            return date_difference.days

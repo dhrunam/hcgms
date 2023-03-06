@@ -5,7 +5,7 @@ from django.db import connection, transaction
 from durin.auth import TokenAuthentication
 from rest_framework import generics, pagination
 from rest_framework.permissions import IsAuthenticated
-
+from django.db.models import Q
 from hcgms_api.configuration import models as conf_models
 from hcgms_api.operation import models as op_models
 from hcgms_api.operation import serializers
@@ -51,11 +51,11 @@ class GuestCheckInCheckOutDetailsList(generics.ListCreateAPIView):
                     request.data['room'] = element['room']
                     reservation_details = self.create(request, *args, **kwargs)
                     reservation_room = op_models.ReservationRoomDetails.objects.filter(
-                    reservation=element['reservation'], property=element['property'], room=element['room'])
+                    reservation=element['reservation'], property=element['property'], room=element['room']).last()
                     if(reservation_room):
-                        reservation_room[0].checkin_date = element['checkin_date']
-                        reservation_room[0].status= status=settings.BOOKING_STATUS['checkin']
-                        reservation_room[0].save()
+                        reservation_room.checkin_date = element['checkin_date']
+                        reservation_room.status= status=settings.BOOKING_STATUS['checkin']
+                        reservation_room.save()
 
                 request.data._mutable = False
             transaction.commit()
@@ -72,6 +72,142 @@ class GuestCheckInCheckOutDetailsList(generics.ListCreateAPIView):
                 else:
                     if reservation:
                         reservation.status=settings.BOOKING_STATUS['checkin']
+                        reservation.save()
+                    
+            
+            transaction.commit()
+        return self.get(request, *args, **kwargs)
+    
+    def get_queryset(self):
+        """
+        This view should return a list of all the purchases item  received
+        for the specified order .
+        """
+        if self.request.method == "POST":
+            reservation_id=self.request.data['reservation']
+            if(reservation_id):
+                return op_models.GuestCheckInCheckOutDetails.objects.filter(reservation=reservation_id)
+        # order_number = self.request.data['order_no']
+        # reservation_no = self.request.query_params.get('reservation_no')
+        # reservation_for= self.request.query_params.get('reservation_for')
+        # if(reservation_no):
+        #     return op_models.ReservationDetails.objects.filter(reservation_no=reservation_no)
+        # if(reservation_for):
+        #     return op_models.ReservationDetails.objects.filter(reservation_for=reservation_for)
+        # else:
+        return op_models.GuestCheckInCheckOutDetails.objects.all()
+
+
+class GuestCheckOutDetailsList(generics.ListCreateAPIView):
+    # authentication_classes = (TokenAuthentication,)
+    # permission_classes = (IsAuthenticated,)
+    queryset = op_models.GuestCheckInCheckOutDetails.objects.all()
+    serializer_class = serializers.CheckInCheckOutSerializer
+    # pagination.PageNumberPagination.page_size = 100
+    # @transaction.atomic
+    def post(self, request, *args, **kwargs):
+        rooms = json.loads(request.data['rooms'])
+        if(rooms):
+
+            reservation= op_models.ReservationDetails.objects.get(pk=rooms[0]['reservation'])
+            with transaction.atomic():
+                request.data._mutable = True
+               
+                for element in rooms:
+
+                    guest_checkin_checkout_details =op_models.GuestCheckInCheckOutDetails.objects.filter(reservation= element['reservation'],
+                    property=element['property'], room=element['room']).last()
+                    if(guest_checkin_checkout_details):
+                        guest_checkin_checkout_details.checkout_date=element['checkout_date']
+                        guest_checkin_checkout_details.save() 
+
+
+                    reservation_room = op_models.ReservationRoomDetails.objects.filter(
+                    reservation=element['reservation'], property=element['property'], room=element['room']).last()
+                    if(reservation_room):
+                        reservation_room.checkout_date = element['checkout_date']
+                        reservation_room.status= status=settings.BOOKING_STATUS['checkout']
+                        reservation_room.save()
+
+                request.data._mutable = False
+            transaction.commit()
+
+            with transaction.atomic():
+                reservation_rooms = op_models.ReservationRoomDetails.objects.filter(
+                reservation=reservation.id, status=settings.BOOKING_STATUS['checkin'])
+                    
+                if(reservation_rooms):
+
+                    if reservation:
+                            pass
+                else:
+                    if reservation:
+                        reservation.status=settings.BOOKING_STATUS['checkout']
+                        reservation.save()
+                    
+            
+            transaction.commit()
+        return self.get(request, *args, **kwargs)
+    
+    def get_queryset(self):
+        """
+        This view should return a list of all the purchases item  received
+        for the specified order .
+        """
+        if self.request.method == "POST":
+            reservation_id=self.request.data['reservation']
+            if(reservation_id):
+                return op_models.GuestCheckInCheckOutDetails.objects.filter(reservation=reservation_id)
+        # order_number = self.request.data['order_no']
+        # reservation_no = self.request.query_params.get('reservation_no')
+        # reservation_for= self.request.query_params.get('reservation_for')
+        # if(reservation_no):
+        #     return op_models.ReservationDetails.objects.filter(reservation_no=reservation_no)
+        # if(reservation_for):
+        #     return op_models.ReservationDetails.objects.filter(reservation_for=reservation_for)
+        # else:
+        return op_models.GuestCheckInCheckOutDetails.objects.all()
+
+
+class GuesNoShowDetailsList(generics.ListCreateAPIView):
+    # authentication_classes = (TokenAuthentication,)
+    # permission_classes = (IsAuthenticated,)
+    queryset = op_models.GuestCheckInCheckOutDetails.objects.all()
+    serializer_class = serializers.CheckInCheckOutSerializer
+    # pagination.PageNumberPagination.page_size = 100
+    # @transaction.atomic
+    def post(self, request, *args, **kwargs):
+        rooms = json.loads(request.data['rooms'])
+        if(rooms):
+
+            reservation= op_models.ReservationDetails.objects.get(pk=rooms[0]['reservation'])
+            with transaction.atomic():
+                request.data._mutable = True
+               
+                for element in rooms:
+
+                    reservation_room = op_models.ReservationRoomDetails.objects.filter(
+                    reservation=element['reservation'], property=element['property'], room=element['room']).last()
+                    if(reservation_room):
+
+                        reservation_room.status= status=settings.BOOKING_STATUS['noshow']
+                        reservation_room.save()
+
+                request.data._mutable = False
+            transaction.commit()
+
+            with transaction.atomic():
+                reservation_rooms = op_models.ReservationRoomDetails.objects.filter(
+                reservation=reservation.id).filter(Q(status=settings.BOOKING_STATUS['checkin']) 
+                | Q(status=settings.BOOKING_STATUS['checkout']))
+                    
+                if(reservation_rooms):
+
+                    if reservation:
+                            pass
+                else:
+                    if reservation:
+                        reservation.status=settings.BOOKING_STATUS['noshow']
                         reservation.save()
                     
             

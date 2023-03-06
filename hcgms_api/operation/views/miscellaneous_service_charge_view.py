@@ -4,7 +4,7 @@ from rest_framework import generics, pagination
 from rest_framework.permissions import IsAuthenticated
 from django.db import transaction, connection
 from hcgms_api.operation import serializers
-from hcgms_api.operation.utility.cost_calculator import CostCalculator
+from hcgms_api.operation.utility.calculator import Calculator
 from durin.auth import TokenAuthentication
 import datetime
 
@@ -21,12 +21,12 @@ class MiscellaneousServiceChargeList(generics.ListCreateAPIView):
         request.data._mutable = True
 
         request.data['created_by'] = request.user.id
-        tax_details=CostCalculator.get_applicable_tax_details(self,  request.data['cost'])
+        tax_details=Calculator.get_applicable_tax_details(self,  request.data['cost'])
         
         request.data['cgst_rate']=tax_details['cgst_rate'],
         request.data['sgst_rate']=tax_details['sgst_rate'],
         request.data['other_cess_rate']=tax_details['other_cess_rate'],
-        
+
         reservation_details = self.create(request, *args, **kwargs)
        
         # request.data['created_by'] = reservation_details.data['id']

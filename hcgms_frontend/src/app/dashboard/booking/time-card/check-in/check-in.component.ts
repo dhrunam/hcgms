@@ -24,8 +24,8 @@ export class CheckInComponent {
     this.property = localStorageService.getPropertyId();
   }
   ngOnInit():void{
-    // this.todayDate = `${this.date.getFullYear()}-${this.date.getMonth()< 10 ? '0':''}${this.date.getMonth()+1}-${this.date.getDate()< 10 ? '0':''}${this.date.getDate()}`;
-    this.todayDate = `${this.date.getFullYear()}-${this.date.getMonth()< 10 ? '0':''}${this.date.getMonth()+1}-04`;
+    this.todayDate = `${this.date.getFullYear()}-${this.date.getMonth()< 10 ? '0':''}${this.date.getMonth()+1}-${this.date.getDate()< 10 ? '0':''}${this.date.getDate()}`;
+    // this.todayDate = `${this.date.getFullYear()}-${this.date.getMonth()< 10 ? '0':''}${this.date.getMonth()+1}-04`;
     this.timeCardService.get_checkin_reservations(this.todayDate).then((d:any) => {
       this.showData = d[0] ? true : false;
       this.checkin_data = d;
