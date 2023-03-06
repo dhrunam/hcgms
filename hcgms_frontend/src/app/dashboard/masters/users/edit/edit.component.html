@@ -7,48 +7,48 @@
     <form #user="ngForm" (ngSubmit)="editMode ? onUpdateUser(user) : onAddUser(user)">  
         <div class="row">
             <div class="col-md-3">
-                <label class="form-label">First Name</label>
+                <label class="form-label">First Name<span class="text-danger">*</span></label>
                 <input type="text" class="form-control" [(ngModel)]="first_name" name="f_name" #f_name="ngModel" required>
                 <small class="text-danger" *ngIf="f_name.touched && f_name.invalid">Please enter first name</small>
             </div>
             <div class="col-md-3">
-                <label class="form-label">Last Name</label>
+                <label class="form-label">Last Name<span class="text-danger">*</span></label>
                 <input type="text" class="form-control" [(ngModel)]="last_name" name="l_name" #l_name="ngModel" required>
                 <small class="text-danger" *ngIf="l_name.touched && l_name.invalid">Please enter last name</small>
             </div>
             <div class="col-md-3">
-                <label class="form-label">Username</label>
+                <label class="form-label">Username<span class="text-danger">*</span></label>
                 <input type="text" class="form-control" [(ngModel)]="username" name="u_name" #u_name="ngModel" required>
                 <small class="text-danger" *ngIf="u_name.touched && u_name.invalid">Please enter username</small>
             </div>
             <div class="col-md-3">
-                <label class="form-label">Contact Number</label>
+                <label class="form-label">Contact Number<span class="text-danger">*</span></label>
                 <input type="text" class="form-control" [(ngModel)]="contact" name="c_no" #c_no="ngModel" required>
                 <small class="text-danger" *ngIf="c_no.touched && c_no.invalid">Please enter contact number</small>
             </div>
         </div>
         <div class="row mt-3">
             <div class="col-md-3">
-                <label class="form-label">Property</label>
+                <label class="form-label">Property<span class="text-danger">*</span></label>
                 <select class="form-select" [(ngModel)]="property" name="prop" #prop="ngModel" required>
                     <option [value]="'N/A'">---Select Property---</option>
                     <option *ngFor="let p of properties" [value]="p.id">{{p.name}}</option>
                 </select>
             </div>
             <div class="col-md-3">
-                <label class="form-label">Role</label>
+                <label class="form-label">Role<span class="text-danger">*</span></label>
                 <select class="form-select" [(ngModel)]="role" name="rol" #rol="ngModel" required>
                     <option [value]="'N/A'">---Select Role---</option>
                     <option *ngFor="let r of roles" [value]="r.id">{{r.name}}</option>
                 </select>
             </div>
             <div class="col-md-3" *ngIf="!editMode">
-                <label class="form-label">Password</label>
+                <label class="form-label">Password<span class="text-danger">*</span></label>
                 <input type="password" class="form-control" [(ngModel)]="password" name="pswd" #pswd="ngModel" required>
                 <small class="text-danger" *ngIf="pswd.touched && pswd.invalid">Please enter password</small>
             </div>
             <div class="col-md-3" *ngIf="!editMode">
-                <label class="form-label">Confirm Password</label>
+                <label class="form-label">Confirm Password<span class="text-danger">*</span></label>
                 <input type="password" class="form-control" [(ngModel)]="password2" name="pswd2" #pswd2="ngModel" required>
                 <div *ngIf="pswd2.touched">
                     <small class="text-danger" *ngIf="pswd2.invalid">Please confirm password</small>
@@ -91,14 +91,14 @@
                     </div>
                     <div class="row mt-3">
                         <div class="col-md-12">
-                            <label class="form-label">Password</label>
+                            <label class="form-label">Password<span class="text-danger">*</span></label>
                             <input type="password" class="form-control" [(ngModel)]="password" name="pswd" #pswd="ngModel" required>
                             <small class="text-danger" *ngIf="pswd.invalid && pswd.touched">Please enter password</small>
                         </div>
                     </div>
                     <div class="row mt-3">
                         <div class="col-md-12">
-                            <label class="form-label">Confirm Password</label>
+                            <label class="form-label">Confirm Password<span class="text-danger">*</span></label>
                             <input type="password" class="form-control" [(ngModel)]="password2" name="pswd2" #pswd2="ngModel" required>
                             <div *ngIf="pswd2.touched">
                                 <small class="text-danger" *ngIf="pswd2.invalid">Please confirm password</small>

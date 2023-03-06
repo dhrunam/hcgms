@@ -118,4 +118,7 @@ export class HttpService {
     console.log(fd.get('reservation'));
     return this.http.post(`${URL}/api/room/checkout`, fd);
   }
+  on_get_billing_reservation(room_no:string){
+    return this.http.get<any>(`${URL}/api/reservation?room_no=${room_no}`);
+  }
 }

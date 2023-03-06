@@ -49,8 +49,13 @@ export class HousesComponent {
     }
   }
   onEnterBookingDetails(){
-    this.roomDetails = { property: this.property, checkin_date: this.checkin_date, checkout_date: this.checkout_date, rooms: this.rooms};
-    this.reservationService.roomDetails.next(this.roomDetails);
-    this.details.emit({status: true});
+    if(!this.rooms[0]){
+      alert('Please select room(s) to continue');
+    }
+    else{
+      this.roomDetails = { property: this.property, checkin_date: this.checkin_date, checkout_date: this.checkout_date, rooms: this.rooms};
+      this.reservationService.roomDetails.next(this.roomDetails);
+      this.details.emit({status: true});
+    }
   }
 }
