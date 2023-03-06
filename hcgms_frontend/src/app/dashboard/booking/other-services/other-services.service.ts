@@ -9,8 +9,9 @@ export class OtherServicesService {
     other_seervices: any = [];
     private subscription!: Subscription;
     constructor(private http: HttpService){}
-    get_checkin_reservations(checkin_date:string){
-        this.subscription = this.http.get_checkin_reservations(checkin_date).subscribe({
+    
+    get_other_services_reservations(){
+        this.subscription = this.http.get_other_services_reservations().subscribe({
             next: data => { this.other_seervices = data },
             error: err => console.log(err),
         })
@@ -22,6 +23,7 @@ export class OtherServicesService {
             }
         )
     }
+    
     get_miscellaneous_service_of_reservation(fd:any){
         this.subscription = this.http.get_misscellaneous_services_of_reservation(fd).subscribe({
             next: data => { this.other_seervices = data},
@@ -35,6 +37,7 @@ export class OtherServicesService {
             }
         )
     }
+    
     on_miscellaneous_service_save(fd:any){
         this.subscription = this.http.on_misscellaneous_service_save(fd).subscribe({
             next: data =>  { this.other_seervices = data},

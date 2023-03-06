@@ -159,8 +159,11 @@ class ReservationDetailsList(generics.ListCreateAPIView):
                 print('Date of the day:' ,str(today))
                 queryset=queryset.filter(checkin_date__lte=today,
                          checkout_date__gte=today)
-            else:
-                queryset= queryset.filter(id=0)
+            if(operation=='other_service'):
+                queryset= queryset.filter(checkin_date__lte=today,checkout_date__gte=today,status = settings.BOOKING_STATUS['checkin'] )
+        
+            
+
 
         else:
             return queryset.order_by('-id')
