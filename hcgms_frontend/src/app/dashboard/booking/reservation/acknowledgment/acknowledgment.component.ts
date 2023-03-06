@@ -29,6 +29,8 @@ export class AcknowledgmentComponent {
   private subscription!: Subscription;
   constructor(private reservationService: ReservationService, private cdr: ChangeDetectorRef, private datePipe: DatePipe){}
   ngOnInit(): void{
+  }
+  ngAfterViewInit(){
     this.reservationService.acknowledgement.subscribe((d:any) => {
       this.details.booking_id = d.reservation_no;
       this.details.checkin_date = d.checkin_date;

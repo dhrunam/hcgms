@@ -50,7 +50,8 @@ export class TimeCardService{
         this.subscription = this.http.on_checkout(fd).subscribe({
             next: data => { this.status = data },
             error: err => { this.status = err}
-        })
+        });
+        this.onGenerateBill(fd);
         return new Promise(
             (resolve, reject) => {
                 setTimeout(() => {
@@ -58,6 +59,12 @@ export class TimeCardService{
                 },200)
             }
         )
+    }
+    onGenerateBill(fd:any){
+        this.http.on_generate_bill(fd).subscribe({
+            next: data => { return true },
+            error: err => { return false }
+        })
     }
     ngOnDestroy(): void{
         this.subscription.unsubscribe();
