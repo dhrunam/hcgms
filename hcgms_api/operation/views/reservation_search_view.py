@@ -70,7 +70,8 @@ class RoomSearchList(generics.ListAPIView):
                 ) as rr on rr.room_id=cr.id and rr.property_id=cr.property_id
 
             ) as f
-            where f.status=0
+             --where 
+             --f.status=0
              order by f.property_id asc
                     
                     ;
@@ -131,7 +132,8 @@ class RoomSearchGroupByProperty(APIView):
                 ) as rr on rr.room_id=cr.id and rr.property_id=cr.property_id
 
             ) as f
-            where f.status=0
+            --where 
+            --f.status=0
              order by f.property_id asc
                     
                     ;
