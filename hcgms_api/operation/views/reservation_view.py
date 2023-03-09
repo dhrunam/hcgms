@@ -208,6 +208,53 @@ class ReservationDetailsDetails(generics.RetrieveUpdateDestroyAPIView):
         return self.get(request, *args, **kwargs)
     
 
+    # @transaction.atomic
+    def patch(self, request, *args, **kwargs):
+        with transaction.atomic():
+            request.data._mutable = True
+
+            request.data['created_by'] = request.user.id
+           
+            if request.data['operation'] in settings.BOOKING_STATUS:
+                 request.data['status'] = request.data['operation']
+
+            request.data._mutable = False
+            reservation_details = self.partial_update(request, *args, **kwargs)
+                    
+            reservation_room = op_models.ReservationRoomDetails.objects.filter(
+            reservation=request.data['reservation'], property=request.data['property'], room=request.data['room'])
+            if(reservation_room):
+                
+                if 'checkin_date' in request.data:
+
+                    reservation_room[0].checkin_date = request.data['checkin_date']
+                    reservation_room[0].status = settings.BOOKING_STATUS['checkin']
+
+                if 'checkout_date' in request.data:
+
+                    reservation_room[0].checkout_date = request.data['checkout_date']
+                    reservation_room[0].status = settings.BOOKING_STATUS['checkout']
+                    
+                reservation_room[0].save()
+
+        transaction.commit()
+        with transaction.atomic():
+            if request.data['operation'] in settings.BOOKING_STATUS:
+                
+                reservation_rooms = op_models.ReservationRoomDetails.objects.filter(
+                reservation=request.data['reservation'])
+
+                if reservation_rooms.exists():
+                    for element in reservation_rooms:
+                        element.status=request.data['operation']
+                        element.save()
+            
+                
+        
+        transaction.commit()
+
+        return self.get(request, *args, **kwargs)
+
 
 # class RoomSearchGroupByProperty(APIView):
 #     def get(self, request, format=None):

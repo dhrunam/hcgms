@@ -53,6 +53,7 @@ class ReservationBillList(generics.ListCreateAPIView):
     # pagination.PageNumberPagination.page_size = 100
     @transaction.atomic
     def post(self, request, *args, **kwargs):
+        
         request.data._mutable = True
         reservation= op_models.ReservationDetails.objects.get(pk=request.data['reservation'])
 
