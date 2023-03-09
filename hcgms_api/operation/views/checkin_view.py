@@ -9,8 +9,40 @@ from django.db.models import Q
 from hcgms_api.configuration import models as conf_models
 from hcgms_api.operation import models as op_models
 from hcgms_api.operation import serializers
+from hcgms_api.operation.utility.calculator import Calculator
+from hcgms_api.operation.utility.custom_id_manager import IDManager
 
 import json
+
+def generate_bill(self, request):
+    reservation= op_models.ReservationDetails.objects.get(pk=request.data['reservation'])
+
+    reservation_rooms=op_models.ReservationRoomDetails.objects.filter(reservation=request.data['reservation'])
+        
+    if(reservation_rooms) and reservation:
+            no_of_days = Calculator.get_number_of_days(reservation.checkin_date.strftime('%Y-%m-%d'), reservation.checkout_date.strftime('%Y-%m-%d'))
+            request.data['total_room_cost'] =Calculator.calculate_total_room_cost(self,reservation_rooms, no_of_days )
+        
+    service_details=op_models.MiscellaneousServiceChargeDetails.objects.filter(reservation=request.data['reservation'])
+    if(service_details):
+        request.data['total_service_cost'] = Calculator.calculate_total_service_cost(self, service_details)
+
+        request.data['bill_no'] =IDManager.generate_bill_no(self,request.data)
+        
+        request.data['created_by'] = self.request.user.id
+
+    op_models.ReservationBillDetails.objects.create(
+        reservation = reservation,
+        property = conf_models.Property.objects.get(id = reservation.property),
+        total_service_cost = request.data.get('total_service_cost',0),
+        total_room_cost = request.data.get('total_room_cost',0),
+        discount = request.data.get('discount',0),
+        refund=request.data.get('refund',0),
+        created_by= request.user.id
+    )
+    if(reservation):
+            reservation.is_bill_generated = True
+            reservation.save()
 
 class GuestCheckInCheckOutDetailsList(generics.ListCreateAPIView):
     # authentication_classes = (TokenAuthentication,)
@@ -29,14 +61,11 @@ class GuestCheckInCheckOutDetailsList(generics.ListCreateAPIView):
                
                 for element in rooms:
                     
-                    
-                    
                     if(reservation):
                         
                         if 'lead_guest' not in element:
                             request.data['lead_guest']=reservation.lead_guest_name
 
-                    
                         if  'address' not in element :
                             request.data['address']=reservation.address
                         
@@ -61,6 +90,7 @@ class GuestCheckInCheckOutDetailsList(generics.ListCreateAPIView):
             transaction.commit()
 
             with transaction.atomic():
+                request.data._mutable = True
                 reservation_rooms = op_models.ReservationRoomDetails.objects.filter(
                 reservation=reservation.id, status=settings.BOOKING_STATUS['booked'])
                     
@@ -74,7 +104,7 @@ class GuestCheckInCheckOutDetailsList(generics.ListCreateAPIView):
                         reservation.status=settings.BOOKING_STATUS['checkin']
                         reservation.save()
                     
-            
+                request.data._mutable = False
             transaction.commit()
         return self.get(request, *args, **kwargs)
     
@@ -133,6 +163,7 @@ class GuestCheckOutDetailsList(generics.ListCreateAPIView):
             transaction.commit()
 
             with transaction.atomic():
+                request.data._mutable = True
                 reservation_rooms = op_models.ReservationRoomDetails.objects.filter(
                 reservation=reservation.id, status=settings.BOOKING_STATUS['checkin'])
                     
@@ -144,8 +175,10 @@ class GuestCheckOutDetailsList(generics.ListCreateAPIView):
                     if reservation:
                         reservation.status=settings.BOOKING_STATUS['checkout']
                         reservation.save()
+
+                generate_bill(self,request)
                     
-            
+                request.data._mutable = False
             transaction.commit()
         return self.get(request, *args, **kwargs)
     

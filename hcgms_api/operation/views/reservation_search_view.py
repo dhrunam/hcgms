@@ -45,7 +45,7 @@ class RoomSearchList(generics.ListAPIView):
                 FROM public.operation_reservationroomdetails as rr
                 
                 where 
-                (
+                ((
                     checkin_date<=%s-- checkin_date
                     and
                     checkout_date>%s -- checkin_date
@@ -61,6 +61,10 @@ class RoomSearchList(generics.ListAPIView):
                     checkin_date>%s -- checkin_date
                     and
                     checkout_date<%s--checkout_date
+                ))
+                and
+                (
+                    status='booked' or   status='checkin'
                 )
                 
                 ) as rr on rr.room_id=cr.id and rr.property_id=cr.property_id
@@ -102,7 +106,7 @@ class RoomSearchGroupByProperty(APIView):
                 FROM public.operation_reservationroomdetails as rr
                 
                 where 
-                (
+                ((
                     checkin_date<=%s-- checkin_date
                     and
                     checkout_date>%s -- checkin_date
@@ -118,6 +122,10 @@ class RoomSearchGroupByProperty(APIView):
                     checkin_date>%s -- checkin_date
                     and
                     checkout_date<%s--checkout_date
+                ))
+                and
+                (
+                    status='booked' or   status='checkin'
                 )
                 
                 ) as rr on rr.room_id=cr.id and rr.property_id=cr.property_id
