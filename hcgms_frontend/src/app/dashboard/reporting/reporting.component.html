@@ -1,0 +1,31 @@
+<section>
+    <div class="container">
+        <div class="title text-center mt-5">
+            <h2>Generate Report</h2>
+        </div>
+        <div class="d-flex justify-content-center mt-4">
+            <div class="row">
+                <div class="col-md-12">
+                    <select class="form-select">
+                        <option value="N/A">---Select Date---</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="report mt-4">
+            <h4>Report</h4>
+            <hr>
+            <ol class="list-group">
+                <li class="list-group-item d-flex justify-content-between align-items-start">
+                    <div class="ms-2 me-auto">
+                        <div class="fw-bold">Subheading</div>
+                        Content for list item
+                    </div>
+                    <div class="d-flex justify-content-center align-items-center">
+                        <button class="btn btn-primary" (click)="generateReport()">Generate</button>
+                    </div>
+                </li>
+            </ol>
+        </div>
+    </div>
+</section>

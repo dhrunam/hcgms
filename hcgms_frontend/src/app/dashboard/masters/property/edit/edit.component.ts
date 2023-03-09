@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
 import { PropertyService } from '../property.service';
 
 @Component({
@@ -17,10 +16,9 @@ export class EditComponent {
   prop_description: string = '';
   showSuccess: string = '';
   prop_code: string = '';
-  private routeSubscription!: Subscription;
   constructor(private router: Router, private route: ActivatedRoute, private propertyService: PropertyService) {}
   ngOnInit(): void{
-    this.routeSubscription = this.route.params.subscribe((param:Params) => {
+    this.route.params.subscribe((param:Params) => {
       this.editMode = param['id'] != null;
       if(this.editMode){
         this.propertyService.get_property(param['id']).then((d:any) => { 
@@ -73,8 +71,5 @@ export class EditComponent {
   }
   onGoBack(){
     this.editMode ? this.router.navigate(['../../'], {relativeTo: this.route}) : this.router.navigate(['../'], {relativeTo: this.route});
-  }
-  ngOnDestroy(){
-    this.routeSubscription.unsubscribe();
   }
 }

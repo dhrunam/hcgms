@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, EventEmitter, Output } from '@angular/core';
 import { ReservationService } from '../reservation.service';
-
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-houses',
   templateUrl: './houses.component.html',
@@ -18,9 +18,10 @@ export class HousesComponent {
   listRooms: boolean = false;
   days:number = 0;
   roomDetails !: {property: number, checkin_date: Date, checkout_date: Date, rooms: Array<any>};
+  private subscription!: Subscription;
   constructor(private reservationService: ReservationService, private cdr: ChangeDetectorRef){}
   ngOnInit(): void{
-    this.reservationService.results.subscribe({
+    this.subscription = this.reservationService.results.subscribe({
       next: data => {
         setTimeout(() => {
           this.listRooms = data.data[0] ? true : false;
@@ -60,5 +61,8 @@ export class HousesComponent {
       this.reservationService.roomDetails.next(this.roomDetails);
       this.details.emit({status: true});
     }
+  }
+  ngOnDestroy(){
+    this.subscription.unsubscribe();
   }
 }

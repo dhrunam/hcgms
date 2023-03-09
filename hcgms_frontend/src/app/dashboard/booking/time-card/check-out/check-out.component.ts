@@ -33,7 +33,6 @@ export class CheckOutComponent {
     this.bookingId = booking_id;
     this.rooms = data;
   }
-  // onCheckout(room_id: number, id:number){
   onCheckout(){
     let fd = new FormData();
     fd.append('rooms', JSON.stringify(this.send_data));

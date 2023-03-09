@@ -13,12 +13,6 @@ export class ViewComponent {
   ngOnInit(): void{
     this.getCategories();
   }
-  ngAfterViewInit(): void{
-    // setTimeout(() => {
-    //   const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-    //   const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
-    // }, 200)
-  }
   onRouteAddRoomCategory(){
     this.router.navigate(['../new'], { relativeTo: this.route } );
   }

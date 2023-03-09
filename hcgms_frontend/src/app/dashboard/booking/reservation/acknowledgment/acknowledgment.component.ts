@@ -31,7 +31,7 @@ export class AcknowledgmentComponent {
   ngOnInit(): void{
   }
   ngAfterViewInit(){
-    this.reservationService.acknowledgement.subscribe((d:any) => {
+    this.subscription = this.reservationService.acknowledgement.subscribe((d:any) => {
       this.details.booking_id = d.reservation_no;
       this.details.checkin_date = d.checkin_date;
       this.details.checkout_date = d.checkout_date;
@@ -137,5 +137,8 @@ export class AcknowledgmentComponent {
       }
     }
     pdfMake.createPdf(docDefinition).open();
+  }
+  ngOnDestroy(){
+    this.subscription.unsubscribe();
   }
 }

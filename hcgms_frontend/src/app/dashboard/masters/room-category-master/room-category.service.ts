@@ -6,10 +6,9 @@ export class RoomCategoryService{
     status: any;
     categories: any = [];
     category!: { id:number, name:string};
-    private subscription!: Subscription;
     constructor(private http: HttpService){}
     get_room_categories(){
-        this.subscription = this.http.get_room_categories().subscribe({
+        this.http.get_room_categories().subscribe({
             next: data => { this.categories = data;},
             error: err => console.log(err)
         })
@@ -22,7 +21,7 @@ export class RoomCategoryService{
         )
     }
     get_room_category(id:number){
-        this.subscription = this.http.get_room_category(id).subscribe({
+        this.http.get_room_category(id).subscribe({
             next: data => { this.category = { id: data.id, name: data.name } },
             error: err => console.log(err)
         })
@@ -35,7 +34,7 @@ export class RoomCategoryService{
         )
     }
     add_room_category(data: any){
-        this.subscription = this.http.add_room_category(data).subscribe({
+        this.http.add_room_category(data).subscribe({
             next: data => { this.status = data },
             error: err => { this.status = err}
         })
@@ -48,7 +47,7 @@ export class RoomCategoryService{
         )
     }
     update_room_category(data: any){
-        this.subscription = this.http.update_room_category(data).subscribe({
+        this.http.update_room_category(data).subscribe({
             next: data => { this.status = data },
             error: err => { this.status = err}
         });
@@ -61,12 +60,9 @@ export class RoomCategoryService{
         )
     }
     delete_room_category(id:number){
-        this.subscription = this.http.delete_room_category(id).subscribe({
+        this.http.delete_room_category(id).subscribe({
             next: data => { this.get_room_categories() },
             error: err => console.log(err)
         })
-    }
-    ngOnDestroy(){
-        this.subscription.unsubscribe();
     }
 }

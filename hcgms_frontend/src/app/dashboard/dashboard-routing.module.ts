@@ -17,11 +17,9 @@ const routes: Routes = [
       { path: 'check-out', loadComponent: () => import('./booking/time-card/check-out/check-out.component').then(c => c.CheckOutComponent ) },
       { path: 'bill', loadComponent: () => import('./booking/billing/billing.component').then(c => c.BillingComponent)},
       { path: 'other-service', loadChildren: () => import('./booking/other-services/other-services.module').then(m => m.OtherServicesModule)},
-
-    
+      { path: 'report', loadChildren: () => import('./reporting/reporting.module').then(m => m.ReportingModule) },
     ]
-  },
-  
+  }
 ];
 
 @NgModule({
