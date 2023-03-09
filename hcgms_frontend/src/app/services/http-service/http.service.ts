@@ -115,8 +115,10 @@ export class HttpService {
     return this.http.get<any>(`${URL}/api/reservation?checkout_date=${checkout_date}`);
   }
   on_checkout(fd:any){
-    console.log(fd.get('reservation'));
     return this.http.post(`${URL}/api/room/checkout`, fd);
+  }
+  on_generate_bill(fd:any){
+    return this.http.post(`${URL}/api/reservation/bill`, fd);
   }
   on_get_billing_reservation(room_no:string){
     return this.http.get<any>(`${URL}/api/reservation?room_no=${room_no}`);

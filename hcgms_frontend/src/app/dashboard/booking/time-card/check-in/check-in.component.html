@@ -33,7 +33,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-            <div class="text-end">
+            <div>
                 <input type="checkbox" (click)="selectAll($event)" id="selectAll">&nbsp;&nbsp;Select All
             </div>
             <table class="table table-bordered">
@@ -57,7 +57,7 @@
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" (click)="onCheckin()">Check-In</button>
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="onCheckin()">Check-In</button>
         </div>
       </div>
     </div>

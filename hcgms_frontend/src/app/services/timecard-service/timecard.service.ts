@@ -3,6 +3,7 @@ import { Subscription } from "rxjs";
 import { HttpService } from "src/app/services/http-service/http.service";
 @Injectable({providedIn: 'root'})
 export class TimeCardService{
+    status: any;
     checkin_list: any = [];
     private subscription!: Subscription;
     constructor(private http: HttpService){}
@@ -34,14 +35,35 @@ export class TimeCardService{
     }
     on_checkin(fd:any){
         this.subscription = this.http.on_checkin(fd).subscribe({
-            next: data => console.log(data),
-            error: err => console.log(err)
+            next: data => { this.status = data },
+            error: err => { this.status = err }
         })
+        return new Promise(
+            (resolve, reject) => {
+                setTimeout(() => {
+                    resolve(this.status);
+                },200)
+            }
+        )
     }
     on_checkout(fd:any){
         this.subscription = this.http.on_checkout(fd).subscribe({
-            next: data => console.log(data),
-            error: err => console.log(err)
+            next: data => { this.status = data },
+            error: err => { this.status = err}
+        });
+        this.onGenerateBill(fd);
+        return new Promise(
+            (resolve, reject) => {
+                setTimeout(() => {
+                    resolve(this.status);
+                },200)
+            }
+        )
+    }
+    onGenerateBill(fd:any){
+        this.http.on_generate_bill(fd).subscribe({
+            next: data => { return true },
+            error: err => { return false }
         })
     }
     ngOnDestroy(): void{

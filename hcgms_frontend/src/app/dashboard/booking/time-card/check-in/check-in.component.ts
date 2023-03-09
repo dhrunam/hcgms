@@ -26,10 +26,7 @@ export class CheckInComponent {
   ngOnInit():void{
     // this.todayDate = `${this.date.getFullYear()}-${this.date.getMonth()< 10 ? '0':''}${this.date.getMonth()+1}-${this.date.getDate()< 10 ? '0':''}${this.date.getDate()}`;
     this.todayDate = `${this.date.getFullYear()}-${this.date.getMonth()< 10 ? '0':''}${this.date.getMonth()+1}-${this.date.getDate() < 10 ? '0':''}${this.date.getDate()}`;
-    this.timeCardService.get_checkin_reservations(this.todayDate).then((d:any) => {
-      this.showData = d[0] ? true : false;
-      this.checkin_data = d;
-    });
+    this.getBooking();
   }
   onGetRooms(r_id:string,booking_id:string, data: any){
     this.resv_id = r_id;
@@ -39,7 +36,9 @@ export class CheckInComponent {
   onCheckin(){
     let fd = new FormData();
     fd.append('rooms', JSON.stringify(this.send_data));
-    this.timeCardService.on_checkin(fd);
+    this.timeCardService.on_checkin(fd).then((d:any) => {
+      this.getBooking();
+    });
   }
   selectAll(event: any){
     this.send_data = [];
@@ -83,5 +82,11 @@ export class CheckInComponent {
       var ele:any = document.getElementById('selectAll');
       ele.checked = false;
     }
+  }
+  getBooking(){
+    this.timeCardService.get_checkin_reservations(this.todayDate).then((d:any) => {
+      this.showData = d[0] ? true : false;
+      this.checkin_data = d;
+    });
   }
 }

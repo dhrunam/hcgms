@@ -72,6 +72,14 @@
             </div>
         </li>
         <li *ngIf="role === 3">
+            <div class="icon-link" routerLink="/dashboard/check-out" routerLinkActive="active">
+                <label>
+                    <i class="bi bi-pc-display-horizontal"></i>
+                    <span class="links_name">Check-Out</span>
+                </label>
+            </div>
+        </li>
+        <li *ngIf="role === 3">
             <div class="icon-link" routerLink="/dashboard/other-service" routerLinkActive="active">
                 <label>
                     <i class="bi bi-pc-display-horizontal"></i>
@@ -80,10 +88,10 @@
             </div>
         </li>
         <li *ngIf="role === 3">
-            <div class="icon-link" routerLink="/dashboard/check-out" routerLinkActive="active">
+            <div class="icon-link" routerLink="/dashboard/bill" routerLinkActive="active">
                 <label>
                     <i class="bi bi-pc-display-horizontal"></i>
-                    <span class="links_name">Check-Out</span>
+                    <span class="links_name">Billing</span>
                 </label>
             </div>
         </li>

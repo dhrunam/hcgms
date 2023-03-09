@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 
 import { ReservationRoutingModule } from './reservation-routing.module';
 import { ReservationComponent } from './reservation.component';
@@ -22,6 +22,7 @@ import { AcknowledgmentComponent } from './acknowledgment/acknowledgment.compone
     CommonModule,
     ReservationRoutingModule,
     FormsModule
-  ]
+  ],
+  providers: [DatePipe]
 })
 export class ReservationModule { }

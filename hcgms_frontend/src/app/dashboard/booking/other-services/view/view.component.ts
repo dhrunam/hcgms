@@ -52,7 +52,6 @@ export class ViewComponent implements OnInit {
     this.showData = d[0] ? true : false;
     this.reservation_data=d;
     this.other_services=d.related_services;
-    console.log(d);
    });
    this.initialize_entry_form();
  }
@@ -75,8 +74,6 @@ export class ViewComponent implements OnInit {
   console.log('id:' + id)
   this.submitted = true;
     if (this.entryForm.invalid) {
-      console.log('Form is invalid..')
-      console.log(this.entryForm.errors)
       return;
     }
     console.log('Form is submitted..')

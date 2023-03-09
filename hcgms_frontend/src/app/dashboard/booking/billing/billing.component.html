@@ -17,7 +17,10 @@
         <div class="reservation" *ngIf="showData">
             <h4>Reservation(s)</h4>
             <hr>
-            <div class="row">
+            <div *ngIf="!showResv">
+                <h4>No bookings to show</h4>
+            </div>
+            <div class="row" *ngIf="showResv">
                 <div class="col-md-3" *ngFor="let r of reservations">
                     <div class="card">
                         <div class="card-body">

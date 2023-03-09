@@ -21,7 +21,9 @@ class Calculator():
                 print
                 for element in rooms:
                     print(element)
-                    total_cost+=element['room_rate'] * days
+                    roomRate = int(element['room_rate'])
+                    init_cost = roomRate * days
+                    total_cost += init_cost
                         
                 print('Total Room Cost:', total_cost)
                 

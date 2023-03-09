@@ -19,12 +19,14 @@ export class BillingComponent {
   showDetails: string = '';
   rooms: any = [];
   reservations: any = [];
-  room_details:any = [['Room No.','Category','Rate','Total']];
+  showResv: boolean = false;
+  room_details:any = [];
   constructor(private billingService: BillingService, private localStorageService: LocalStorageService, private datePipe: DatePipe){
     this.property_id = this.localStorageService.getPropertyId();
   }
   ngOnInit(): void{
     this.billingService.get_rooms(this.property_id).then((d:any) => {
+      this.showResv = d[0] ? true : false;
       this.rooms = d;
     })
   }
@@ -60,10 +62,20 @@ export class BillingComponent {
       img.src = url;
     });
   }
+  daysBetween(startDate: any, endDate: any) {
+    const date_1 = new Date(startDate);
+    const date_2 = new Date(endDate);
+    let difference = date_2.getTime() - date_1.getTime();
+    let TotalDays = Math.ceil(difference / (1000 * 3600 * 24));
+    return TotalDays;
+  }
   getRoomDetails(data:any){
+    let days:number = this.daysBetween(data.checkin_date, data.checkout_date);
+    this.room_details = [['Room No.','Category','Rate','Days','Total']];
     data.reservation_room_details.forEach((d:any) => {
-      this.room_details.push([d.related_room.room_no,d.related_room.related_category.name,d.room_rate,d.room_rate]);
+      this.room_details.push([d.related_room.room_no,d.related_room.related_category.name,`₹ ${d.room_rate}`,days,`₹ ${d.room_rate*days}`]);
     })
+    
     return this.room_details;
   }
   async printBill(data:any){
@@ -107,10 +119,16 @@ export class BillingComponent {
         {
           table: {
             headerRows: 1,
-            widths: [ '*', '*', '*', '*'],
+            widths: [ '*', '*', '*', '*','*'],
             body: this.getRoomDetails(data),
           },
-          margin: [0, 0, 0, 100]
+          margin: [0, 0, 0, 20]
+        },
+        {
+          text: `Total: ₹ ${data.total_room_cost}`,
+          bold: true,
+          alignment: 'right',
+          margin: [0, 0, 0, 50]
         },
         {
           text: 'Name & Signature',

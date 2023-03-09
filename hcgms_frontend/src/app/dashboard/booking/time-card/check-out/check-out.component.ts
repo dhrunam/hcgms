@@ -18,16 +18,15 @@ export class CheckOutComponent {
   date = new Date();
   checkout_data: any = [];
   rooms:any = [];
-  property: string = ''
+  property: string = '';
+  showResv: boolean = false;
   constructor(private localStorageService: LocalStorageService, private timeCardService: TimeCardService){
     this.property = localStorageService.getPropertyId();
   }
   ngOnInit():void{
      this.todayDate = `${this.date.getFullYear()}-${this.date.getMonth()< 10 ? '0':''}${this.date.getMonth()+1}-${this.date.getDate()< 10 ? '0':''}${this.date.getDate()}`;
     // this.todayDate = `${this.date.getFullYear()}-${this.date.getMonth()< 10 ? '0':''}${this.date.getMonth()+1}-05`;
-    this.timeCardService.get_checkout_reservations(this.todayDate).then((d:any) => {
-      this.checkout_data = d;
-    });
+    this.getBooking();
   }
   onGetRooms(r_id:string,booking_id:string, data: any){
     this.resv_id = r_id;
@@ -39,7 +38,9 @@ export class CheckOutComponent {
     let fd = new FormData();
     fd.append('rooms', JSON.stringify(this.send_data));
     fd.append('reservation', this.send_data[0]['reservation']);
-    this.timeCardService.on_checkout(fd);
+    this.timeCardService.on_checkout(fd).then((d:any) => {
+      this.getBooking();
+    });;
   }
   selectAll(event: any){
     this.send_data = [];
@@ -83,5 +84,11 @@ export class CheckOutComponent {
       var ele:any = document.getElementById('selectAll');
       ele.checked = false;
     }
+  }
+  getBooking(){
+    this.timeCardService.get_checkout_reservations(this.todayDate).then((d:any) => {
+      this.showResv = d[0] ? true : false;
+      this.checkout_data = d;
+    });
   }
 }

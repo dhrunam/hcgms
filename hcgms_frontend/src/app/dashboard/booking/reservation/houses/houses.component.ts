@@ -16,6 +16,7 @@ export class HousesComponent {
   totalCost: number = 0;
   property: number = 0;
   listRooms: boolean = false;
+  days:number = 0;
   roomDetails !: {property: number, checkin_date: Date, checkout_date: Date, rooms: Array<any>};
   constructor(private reservationService: ReservationService, private cdr: ChangeDetectorRef){}
   ngOnInit(): void{
@@ -27,6 +28,7 @@ export class HousesComponent {
           this.checkin_date = data.checkin_date;
           this.checkout_date = data.checkout_date;
           this.property = data.property;
+          this.days = data.days;
         },500);
       },
       error: err => console.log(err), 
@@ -41,6 +43,7 @@ export class HousesComponent {
       const data = {
         'room': room_id,
         'room_rate': rate,
+        'days': this.days
       }
       this.rooms.push(data);
     }
