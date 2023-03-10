@@ -221,7 +221,6 @@ class ReservationDetailsDetails(generics.RetrieveUpdateDestroyAPIView):
             
             reservation_details = self.partial_update(request, *args, **kwargs)
 
-            print('Reservation ID:', reservation_details.data['id'])
             request.data._mutable = False    
             reservation_room = op_models.ReservationRoomDetails.objects.filter(
             reservation=reservation_details.data['id'])
@@ -376,3 +375,32 @@ class ReservationDetailsDetails(generics.RetrieveUpdateDestroyAPIView):
 #         return Response(results)
 
 # ===
+
+
+class ReservationDetailsListForReporting(generics.ListAPIView):
+    # authentication_classes = (TokenAuthentication,)
+    # permission_classes = (IsAuthenticated,)
+    queryset = op_models.ReservationDetails.objects.all()
+    serializer_class = serializers.ReservationDetailsSerializer
+    # pagination.PageNumberPagination.page_size = 100
+
+    def get_queryset(self):
+        """
+        This view should return a list of all the purchases item  received
+        for the specified order .
+        """
+
+        queryset = op_models.ReservationDetails.objects.all()
+
+        start_date= self.request.query_params.get('start_date')
+        end_date= self.request.query_params.get('end_date')
+        
+        if(start_date and end_date):
+
+            queryset= queryset.filter(
+            Q(checkin_date__gte=start_date,checkin_date__lte=end_date )
+            )
+        else:
+            return queryset.order_by('-id')
+
+        return queryset.order_by('-id')
