@@ -27,7 +27,7 @@ export class SearchComponent {
       }
       else{
         let days:number = this.daysBetween(data.value.start_date, data.value.end_date)
-        this.reservationService.search_rooms(data.value.start_date, data.value.end_date, data.value.property_id).then((d:any) => {
+        this.reservationService.search_rooms(data.value.start_date, data.value.end_date, data.value.property_id).then((d:any) => {        
           if(!d[0]){
             this.houses.emit({status: false});
           }

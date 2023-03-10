@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LocalStorageService } from 'src/app/services/local-storage-service/local-storage.service';
-import { TimeCardService } from 'src/app/services/timecard-service/timecard.service';
+import { TimeCardService } from 'src/app/dashboard/booking/time-card/timecard-service/timecard.service';
 
 @Component({
   selector: 'app-check-out',

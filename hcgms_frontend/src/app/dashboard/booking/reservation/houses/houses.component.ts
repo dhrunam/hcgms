@@ -4,7 +4,14 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-houses',
   templateUrl: './houses.component.html',
-  styleUrls: ['./houses.component.css']
+  styles: [`
+    .na{
+      color: red;
+    }
+    .av{
+      color: green;
+    }
+  `]
 })
 export class HousesComponent {
   @Output('switchDetails') details = new EventEmitter<{status: boolean}>();

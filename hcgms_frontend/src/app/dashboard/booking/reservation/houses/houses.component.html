@@ -10,15 +10,17 @@
                     <th scope="col">Room No</th>
                     <th scope="col">Room Type</th>
                     <th scope="col">Room Cost</th>
+                    <th scope="col" class="text-center">Availability</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let room of results[0].rooms; let i=index">
-                    <td scope="col" class="text-center"><input type="checkbox" (change)="onStatusCheck($event, room.id, i, room.cost)"></td>
+                    <td scope="col" class="text-center"><input type="checkbox" [disabled]="room.status === 1" (change)="onStatusCheck($event, room.id, i, room.cost)"></td>
                     <td scope="col" class="text-center">{{i+1}}</td>
                     <td scope="col">{{ room.room }}</td>
                     <td scope="col">{{ room.room_category_name }}</td>
                     <td scope="col">₹ {{ room.cost }}</td>
+                    <td scope="col" class="text-center" width="10%" [ngClass]="{'na': room.status === 1, 'av': room.status !== 1}">{{ room.status === 1 ? 'Not Available' : 'Available'}}</td>
                 </tr>
             </tbody>
         </table>
