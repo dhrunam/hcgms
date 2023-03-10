@@ -49,7 +49,6 @@ export class TimeCardService{
             next: data => { this.status = data },
             error: err => { this.status = err}
         });
-        this.onGenerateBill(fd);
         return new Promise(
             (resolve, reject) => {
                 setTimeout(() => {
@@ -58,10 +57,10 @@ export class TimeCardService{
             }
         )
     }
-    onGenerateBill(fd:any){
-        this.http.on_generate_bill(fd).subscribe({
-            next: data => { return true },
-            error: err => { return false }
-        })
-    }
+    // onGenerateBill(fd:any){
+    //     this.http.on_generate_bill(fd).subscribe({
+    //         next: data => { return true },
+    //         error: err => { return false }
+    //     })
+    // }
 }

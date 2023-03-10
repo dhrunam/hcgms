@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 
 import { ReportingRoutingModule } from './reporting-routing.module';
 import { ReportingComponent } from './reporting.component';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -11,7 +12,9 @@ import { ReportingComponent } from './reporting.component';
   ],
   imports: [
     CommonModule,
-    ReportingRoutingModule
-  ]
+    ReportingRoutingModule,
+    FormsModule
+  ],
+  providers: [DatePipe]
 })
 export class ReportingModule { }

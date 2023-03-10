@@ -1,5 +1,6 @@
-import { style } from '@angular/animations';
+import { DatePipe } from '@angular/common';
 import { Component } from '@angular/core';
+import * as moment from 'moment';
 import * as pdfMake from "pdfmake/build/pdfmake";
 import * as pdfFonts from "pdfmake/build/vfs_fonts";
 (pdfMake as any).vfs = pdfFonts.pdfMake.vfs;
@@ -9,6 +10,14 @@ import * as pdfFonts from "pdfmake/build/vfs_fonts";
   styleUrls: ['./reporting.component.css']
 })
 export class ReportingComponent {
+  start_date!:Date;
+  end_date!: Date | any;
+  date: string = '';
+  constructor(private datePipe: DatePipe){}
+  ngOnInit():void{
+    let newDate = new Date();
+    this.date = `${newDate.getFullYear()}-${newDate.getMonth() < 10 ? '0': ''}${newDate.getMonth()}-${newDate.getDate() < 10 ? '0':''}${newDate.getDate()}`;
+  }
   getBase64ImageFromURL(url: string) {
     return new Promise((resolve, reject) => {
       var img = new Image();
@@ -39,7 +48,7 @@ export class ReportingComponent {
       content: [
         {
           image: await this.getBase64ImageFromURL("../../../assets/images/hcs_logo.png" ),
-          fit: [150,150],
+          fit: [100,100],
           alignment: 'center',
         },
         {
@@ -51,12 +60,23 @@ export class ReportingComponent {
               margin: [0, 40, 50, 0]
             },
             {
-              text: 'Date: ',
+              text: `Dated: ${this.datePipe.transform(this.date,'dd-MM-YYYY')}`,
               alignment: 'right',
               bold: true,
               margin: [0, 40, 50, 0]
             },  
           ]
+        },
+        {
+          table: {
+            headerRows: 1,
+            widths: [30,'*','*','*','*'],
+            body: [
+              [{text:'S.No.', bold:true, alignment: 'center'},{text:'Name', bold:true, alignment: 'center'},{text:'Room/Suite', bold:true, alignment: 'center'},{text:'Period', bold:true, alignment: 'center'},{text:'Category', bold:true, alignment: 'center'}],
+              ['1','','','','']
+            ]
+          },
+          margin: [0, 30, 0, 0]
         },
         {
           text: '1. Entire charges will be paid in advance',
@@ -103,5 +123,11 @@ export class ReportingComponent {
       },
     }
     pdfMake.createPdf(docDefinition).open();
+  }
+  getSecondDate(date: any){
+    this.start_date = date
+    var second_date = moment(date).add(15,'d').toDate();
+    this.end_date = this.datePipe.transform(second_date, 'YYYY-MM-dd');
+    console.log(this.start_date, this.end_date);
   }
 }

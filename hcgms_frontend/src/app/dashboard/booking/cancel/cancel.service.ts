@@ -19,7 +19,17 @@ export class CancelService{
             }
         )
     }
-    on_cancellation(){
-        
+    on_cancellation(data:any){
+        this.http.on_cancel_booking(data).subscribe({
+            next: data => { return true },
+            error: err => console.log(err)
+        })
+        return new Promise(
+            (resolve,reject) => {
+                setTimeout(() => {
+                    resolve(true);
+                },200)
+            }
+        )
     }
 }

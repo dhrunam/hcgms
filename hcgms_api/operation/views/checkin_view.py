@@ -33,12 +33,12 @@ def generate_bill(self, request):
 
     op_models.ReservationBillDetails.objects.create(
         reservation = reservation,
-        property = conf_models.Property.objects.get(id = reservation.property),
+        property = conf_models.Property.objects.get(id = reservation.property.id),
         total_service_cost = request.data.get('total_service_cost',0),
         total_room_cost = request.data.get('total_room_cost',0),
         discount = request.data.get('discount',0),
         refund=request.data.get('refund',0),
-        created_by= request.user.id
+        created_by= request.user
     )
     if(reservation):
             reservation.is_bill_generated = True

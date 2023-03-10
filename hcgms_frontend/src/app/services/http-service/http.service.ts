@@ -145,4 +145,7 @@ export class HttpService {
   on_misscellaneous_service_update(fd:any){
     return this.http.post(`${URL}/api/reservation/miscellaneous/charge/${fd.get('id')}`, fd);
   }
+  on_cancel_booking(fd:any){
+    return this.http.patch(`${URL}/api/reservation/${fd.get('id')}`, fd)
+  }
 }
