@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import * as moment from 'moment';
 import * as pdfMake from "pdfmake/build/pdfmake";
 import * as pdfFonts from "pdfmake/build/vfs_fonts";
+import { ReportingService } from './reporting.service';
 (pdfMake as any).vfs = pdfFonts.pdfMake.vfs;
 @Component({
   selector: 'app-reporting',
@@ -13,7 +14,9 @@ export class ReportingComponent {
   start_date!:Date;
   end_date!: Date | any;
   date: string = '';
-  constructor(private datePipe: DatePipe){}
+  data: any = [];
+  table_data:any = [];
+  constructor(private datePipe: DatePipe, private reportingService: ReportingService){}
   ngOnInit():void{
     let newDate = new Date();
     this.date = `${newDate.getFullYear()}-${newDate.getMonth() < 10 ? '0': ''}${newDate.getMonth()}-${newDate.getDate() < 10 ? '0':''}${newDate.getDate()}`;
@@ -71,10 +74,8 @@ export class ReportingComponent {
           table: {
             headerRows: 1,
             widths: [30,'*','*','*','*'],
-            body: [
-              [{text:'S.No.', bold:true, alignment: 'center'},{text:'Name', bold:true, alignment: 'center'},{text:'Room/Suite', bold:true, alignment: 'center'},{text:'Period', bold:true, alignment: 'center'},{text:'Category', bold:true, alignment: 'center'}],
-              ['1','','','','']
-            ]
+            body: this.getTableData()
+            
           },
           margin: [0, 30, 0, 0]
         },
@@ -128,6 +129,42 @@ export class ReportingComponent {
     this.start_date = date
     var second_date = moment(date).add(15,'d').toDate();
     this.end_date = this.datePipe.transform(second_date, 'YYYY-MM-dd');
-    console.log(this.start_date, this.end_date);
+    this.reportingService.getDetails(this.start_date.toString(), this.end_date).then((d:any) => {
+      this.data = d;
+      console.log(d);
+      this.getTableData();
+    })
+  }
+  getTableData(){
+    this.table_data.push([
+      {text: 'S.No.', bold: true},
+      {text: 'Name', bold: true},
+      {text: 'Room/Suite', bold: true},
+      {text: 'Period', bold: true},
+      {text: 'Category', bold: true},
+    ]);
+    for(var i=0;i<this.data.length;i++){
+      for(var j=0;j<this.data[i].reservation_room_details.length;j++){
+        if(this.data[i].reservation_room_details.length > 0){
+          let data = [
+            {rowSpan: this.data[i].reservation_room_details.length, text: `${i}`},
+            {rowSpan: this.data[i].reservation_room_details.length, text: `${this.data[i].lead_guest_name}`},
+            `${this.data[i].reservation_room_details[j].related_room.room_no}`,
+            'Test',
+            `${this.data[i].reservation_room_details[j].related_room.related_category.name}`,
+          ]
+          this.table_data.push(data)
+        }
+        let data2 = [
+          '',
+          '',
+          `${this.data[i].reservation_room_details[j].related_room.room_no}`,
+          'Test',
+          `${this.data[i].reservation_room_details[j].related_room.related_category.name}`,
+        ]
+        this.table_data.push(data2)
+      }
+    }
+    return this.table_data;
   }
 }

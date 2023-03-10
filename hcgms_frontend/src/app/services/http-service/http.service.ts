@@ -148,4 +148,7 @@ export class HttpService {
   on_cancel_booking(fd:any){
     return this.http.patch(`${URL}/api/reservation/${fd.get('id')}`, fd)
   }
+  get_report(checkin_date: string, checkout_date: string){
+    return this.http.get<any>(`${URL}/api/reservation/report?start_date=${checkin_date}&end_date=${checkout_date}`);
+  }
 }
