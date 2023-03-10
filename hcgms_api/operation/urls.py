@@ -26,7 +26,7 @@ urlpatterns = [
     path('api/reservation/bill', views.ReservationBillList.as_view()),
     path('api/reservation/bill/<int:pk>', views.ReservationBillDetails.as_view()),
     
-    # path('api/room/category/<int:pk>', views.RoomCategoryDetails.as_view()),
+    path('api/reservation/report', views.ReservationDetailsListForReporting.as_view()),
 
     # path('api/room', views.RoomList.as_view()),
     # path('api/room/<int:pk>', views.RoomDetails.as_view()),
