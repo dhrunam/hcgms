@@ -218,11 +218,13 @@ class ReservationDetailsDetails(generics.RetrieveUpdateDestroyAPIView):
             if request.data['operation'] in settings.BOOKING_STATUS:
                  request.data['status'] = request.data['operation']
 
-            request.data._mutable = False
+            
             reservation_details = self.partial_update(request, *args, **kwargs)
-                    
+
+            print('Reservation ID:', reservation_details.data['id'])
+            request.data._mutable = False    
             reservation_room = op_models.ReservationRoomDetails.objects.filter(
-            reservation=request.data['reservation'], property=request.data['property'], room=request.data['room'])
+            reservation=reservation_details.data['id'])
             if(reservation_room):
                 
                 if 'checkin_date' in request.data:
@@ -242,7 +244,7 @@ class ReservationDetailsDetails(generics.RetrieveUpdateDestroyAPIView):
             if request.data['operation'] in settings.BOOKING_STATUS:
                 
                 reservation_rooms = op_models.ReservationRoomDetails.objects.filter(
-                reservation=request.data['reservation'])
+                reservation=reservation_details.data['id'])
 
                 if reservation_rooms.exists():
                     for element in reservation_rooms:

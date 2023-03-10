@@ -100,7 +100,7 @@ class ReservationDetailsSerializer(serializers.ModelSerializer):
     # model2s = Model2Serializer(source='model3s.all.model2', many=True)
     related_services = MiscellaneousServiceChargeDetailsSerializer(source='miscellaneous_service_charge.all', many=True,read_only=True)
     related_checkin_rooms=HelperCheckInCheckOutSerializer(source='guest_checkin_check_out.all', many=True,read_only=True)
-
+    
     class Meta:
         model = models.ReservationDetails
         fields = [
@@ -129,18 +129,26 @@ class ReservationDetailsSerializer(serializers.ModelSerializer):
                 ]
         
     def validate(self, attrs):
-
-
         today=datetime.date.today()
-        if attrs['checkin_date'] > attrs['checkout_date']:
-            raise serializers.ValidationError(
-                {"checkin_date": "Checkin date  cannot be greater than Checkout date."})
+        if 'checkin_date' in attrs and 'checkout_date' in attrs:
 
-        if attrs['checkin_date'] < today:
-            raise serializers.ValidationError(
-                {"checkin_date": "Checkin date  cannot be less than today's date."})
+            if attrs['checkin_date'] > attrs['checkout_date']:
+                raise serializers.ValidationError(
+                    {"checkin_date": "Checkin date  cannot be greater than Checkout date."})
 
-        return attrs
+            if attrs['checkin_date'] < today:
+                raise serializers.ValidationError(
+                    {"checkin_date": "Checkin date  cannot be less than today's date."})
+
+        return attrs 
+    
+    def partial_update(self, instance, validated_data):
+        # remove the required fields from the validated data
+        for field in self.Meta.required_fields:
+            if field in validated_data:
+                del validated_data[field]
+        return super().partial_update(instance, validated_data)
+
 
 
 
