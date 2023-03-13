@@ -8,7 +8,7 @@ from durin.auth import TokenAuthentication
 class ApplicableTaxDetailsList(generics.ListCreateAPIView):
     # authentication_classes = (TokenAuthentication,)
     # permission_classes = (IsAuthenticated,)
-    queryset = models.ApplicableTaxDetails.objects.all()
+    queryset = models.ApplicableTaxDetails.objects.all().order_by('id')
     serializer_class = serializers.ApplicableTaxDetailsSerializer
     # pagination.PageNumberPagination.page_size = 100
 

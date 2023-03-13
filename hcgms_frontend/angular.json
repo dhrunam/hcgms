@@ -19,6 +19,12 @@
             "polyfills": [
               "zone.js"
             ],
+            "allowedCommonJsDependencies": [
+              "moment",
+              "crypto-js",
+              "pdfmake/build/pdfmake",
+              "pdfmake/build/vfs_fonts"
+            ],
             "tsConfig": "tsconfig.app.json",
             "assets": [
               "src/favicon.ico",

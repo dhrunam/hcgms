@@ -7,6 +7,7 @@ import { UserService } from '../users.service';
   styleUrls: ['./edit.component.css']
 })
 export class EditComponent {
+  showLoader: boolean = false;
   showSuccess: string = '';
   showPswdSuccess: boolean = false;
   editMode: boolean = false;
@@ -32,7 +33,9 @@ export class EditComponent {
   }
   ngAfterViewInit(){
     if(this.editMode){
+      this.showLoader = true;
       this.userService.get_user(this.id).then((d: any) => {
+        this.showLoader = false;
         this.first_name = d.first_name;
         this.contact = d.contact;
         this.username = d.username;
@@ -60,6 +63,7 @@ export class EditComponent {
         }
       }
       else{
+        this.showLoader = true;
         let fd = new FormData();
         fd.append('first_name', this.first_name);
         fd.append('last_name', this.last_name);
@@ -70,6 +74,7 @@ export class EditComponent {
         fd.append('password', this.password);
         fd.append('password2', this.password2);
         this.userService.add_user(fd).then((d:any) => {
+          this.showLoader = false;
           this.showSuccess = d.error ? 'false' : 'true';
         });
       }
@@ -94,6 +99,7 @@ export class EditComponent {
         }
       }
       else{
+        this.showLoader = true;
         let fd = new FormData();
         fd.append('id', this.id.toString());
         fd.append('first_name', this.first_name);
@@ -103,6 +109,7 @@ export class EditComponent {
         fd.append('property', this.property);
         fd.append('group', this.role);
         this.userService.update_user(fd).then((d:any) => {
+          this.showLoader = false;
           this.showSuccess = d.error ? 'false' : 'true';
         });;
       }
@@ -117,12 +124,14 @@ export class EditComponent {
       data.control.markAllAsTouched();
     }
     else{
+      this.showLoader = true;
       let fd = new FormData();
       fd.append('id', this.id.toString());
       fd.append('username', this.username);
       fd.append('password', this.password);
       fd.append('password2', this.password2);
       this.userService.change_user_password(fd).then((d:any) => {
+        this.showLoader = false;
         this.showPswdSuccess = true;
       });;
     }

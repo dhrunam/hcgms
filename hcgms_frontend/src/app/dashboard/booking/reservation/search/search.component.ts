@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, Output } from '@angular/core';
 import { ReservationService } from '../reservation.service';
 
@@ -8,9 +9,12 @@ import { ReservationService } from '../reservation.service';
 })
 export class SearchComponent {
   @Output('switchHouses') houses = new EventEmitter<{status: boolean}>();
+  todayDate: any;
   property: string = 'N/A';
   properties: any = [];
-  constructor(private reservationService: ReservationService){}
+  constructor(private reservationService: ReservationService, private datePipe: DatePipe){
+    this.todayDate = this.datePipe.transform(new Date(), 'YYYY-MM-dd');
+  }
   ngOnInit(): void{
     this.reservationService.getProperties().then((d:any) => this.properties = d);
   }

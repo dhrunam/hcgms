@@ -8,6 +8,7 @@ import { PropertyService } from '../property.service';
   styleUrls: ['./edit.component.css']
 })
 export class EditComponent {
+  showLoader: boolean = false;
   editMode: boolean = false;
   id:number = 0;
   prop_name: string = '';
@@ -21,7 +22,9 @@ export class EditComponent {
     this.route.params.subscribe((param:Params) => {
       this.editMode = param['id'] != null;
       if(this.editMode){
+        this.showLoader = true;
         this.propertyService.get_property(param['id']).then((d:any) => { 
+          this.showLoader = false;
           this.id = d.id;
           this.prop_name = d.name;
           this.prop_address = d.address;
@@ -38,6 +41,7 @@ export class EditComponent {
       data.control.markAllAsTouched();
     }
     else{
+      this.showLoader = true;
       let fd = new FormData();
       fd.append('name', this.prop_name);
       fd.append('description', this.prop_description);
@@ -46,6 +50,7 @@ export class EditComponent {
       fd.append('code', this.prop_code);
       fd.append('is_operational', 'true');
       this.propertyService.add_property(fd).then((d:any) => {
+        this.showLoader = false;
         this.showSuccess = d.error ? this.showSuccess = 'false' : this.showSuccess = 'true';
       });
     }
@@ -56,6 +61,7 @@ export class EditComponent {
       data.control.markAllAsTouched();
     }
     else{
+      this.showLoader = true;
       let fd = new FormData();
       fd.append('id', this.id.toString());
       fd.append('name', this.prop_name);
@@ -65,6 +71,7 @@ export class EditComponent {
       fd.append('code', this.prop_code);
       fd.append('is_operational', 'true');
       this.propertyService.update_property(fd).then((d:any) => {
+        this.showLoader = false;
         this.showSuccess = d.error ? this.showSuccess = 'false' : this.showSuccess = 'true';
       });
     }

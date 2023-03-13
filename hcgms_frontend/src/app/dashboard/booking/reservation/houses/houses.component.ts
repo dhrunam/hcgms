@@ -15,6 +15,7 @@ import { Subscription } from 'rxjs';
 })
 export class HousesComponent {
   @Output('switchDetails') details = new EventEmitter<{status: boolean}>();
+  showLoader: boolean = false;
   results: any = [];
   rooms: any = [];
   checkin_date!: Date;
@@ -28,6 +29,7 @@ export class HousesComponent {
   private subscription!: Subscription;
   constructor(private reservationService: ReservationService, private cdr: ChangeDetectorRef){}
   ngOnInit(): void{
+    this.showLoader = true;
     this.subscription = this.reservationService.results.subscribe({
       next: data => {
         setTimeout(() => {
@@ -37,6 +39,7 @@ export class HousesComponent {
           this.checkout_date = data.checkout_date;
           this.property = data.property;
           this.days = data.days;
+          this.showLoader = false;
         },500);
       },
       error: err => console.log(err), 

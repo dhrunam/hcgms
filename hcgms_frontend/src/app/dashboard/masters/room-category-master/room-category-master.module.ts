@@ -6,6 +6,7 @@ import { RoomCategoryMasterComponent } from './room-category-master.component';
 import { ViewComponent } from './view/view.component';
 import { EditComponent } from './edit/edit.component';
 import { FormsModule } from '@angular/forms';
+import { UtilitiesModule } from 'src/app/utilities/utilities.module';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import { FormsModule } from '@angular/forms';
   imports: [
     CommonModule,
     RoomCategoryMasterRoutingModule,
-    FormsModule
+    FormsModule,
+    UtilitiesModule
   ]
 })
 export class RoomCategoryMasterModule { }

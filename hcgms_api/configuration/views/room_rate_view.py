@@ -8,7 +8,7 @@ from durin.auth import TokenAuthentication
 class RoomRateList(generics.ListCreateAPIView):
     # authentication_classes = (TokenAuthentication,)
     # permission_classes = (IsAuthenticated,)
-    queryset = models.RoomRate.objects.all()
+    queryset = models.RoomRate.objects.all().order_by('id')
     serializer_class = serializers.RoomRateSerializer
     # pagination.PageNumberPagination.page_size = 100
     def post(self, request, *args, **kwargs):

@@ -6,7 +6,7 @@ import datetime
 class IDManager():
     
     def generate_bill_no(self, data):
-
+        print(data)
         latest_record = op_models.ReservationBillDetails.objects.filter(property=data['property']).last()
         property = conf_models.Property.objects.get(pk=data['property'])
         # date_object = datetime.datetime.strptime(data['checkin_date'], '%Y-%m-%d')

@@ -127,20 +127,12 @@ export class HttpService {
   get_other_services_reservations(){
     return this.http.get<any>(`${URL}/api/reservation?operation=other_service`);
   }
-  get_misscellaneous_services_of_reservation(fd:any){
-    return this.http.get(`${URL}/api/reservation/miscellaneous/charge?reservation=${fd.reservation}`);
+  get_misscellaneous_services_of_reservation(id:number){
+    return this.http.get(`${URL}/api/reservation/miscellaneous/charge?reservation=${id}`);
   }
 
   on_misscellaneous_service_save(fd:any){
-    return this.http.post(`${URL}/api/reservation/miscellaneous/charge`, {
-      id :fd.id,
-      reservation : fd.reservation,
-      particular : fd.particular,
-      cost : fd.cost,
-      remarks: fd.remarks,
-      start_date : fd.start_date,
-      end_date : fd.end_date,
-    });
+    return this.http.post(`${URL}/api/reservation/miscellaneous/charge`, fd);
   }
   on_misscellaneous_service_update(fd:any){
     return this.http.post(`${URL}/api/reservation/miscellaneous/charge/${fd.get('id')}`, fd);

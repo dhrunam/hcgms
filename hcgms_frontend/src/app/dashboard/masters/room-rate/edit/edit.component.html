@@ -1,4 +1,5 @@
-<div class="px-5 py-2">
+<app-loader *ngIf="showLoader"></app-loader>
+<div class="px-5 py-2" *ngIf="!showLoader">
     <h3 *ngIf="!editMode; else alt">Add Room Tariff</h3>
     <ng-template #alt>
         <h3>Edit Room Tariff</h3>

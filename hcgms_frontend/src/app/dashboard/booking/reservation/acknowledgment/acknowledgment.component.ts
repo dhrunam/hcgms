@@ -11,6 +11,7 @@ import * as pdfFonts from "pdfmake/build/vfs_fonts";
   styleUrls: ['./acknowledgment.component.css']
 })
 export class AcknowledgmentComponent {
+  showLoader: boolean = false;
   acknowledge: any = [];
   details = {
     booking_id: '',
@@ -31,7 +32,9 @@ export class AcknowledgmentComponent {
   ngOnInit(): void{
   }
   ngAfterViewInit(){
+    this.showLoader = true;
     this.subscription = this.reservationService.acknowledgement.subscribe((d:any) => {
+      this.showLoader = false;
       this.details.booking_id = d.reservation_no;
       this.details.checkin_date = d.checkin_date;
       this.details.checkout_date = d.checkout_date;

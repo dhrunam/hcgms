@@ -1,5 +1,5 @@
-
-<div class="px-5 py-2">
+<app-loader *ngIf="showLoader"></app-loader>
+<div class="px-5 py-2"  *ngIf="!showLoader">
     <div class="text-end">
         <button class="btn btn-primary" (click)="onRouteAddRoom()">+ Add Room</button>
     </div>
@@ -23,11 +23,11 @@
                 <td>{{r.room_no}}</td>
                 <td>{{r.related_category.name}}</td>
                 <td>{{r.related_property.name}}</td>
-                <td class="text-center" width="13%">
-                    <input type="checkbox" (click)="isOperational(r.id,'false')" checked *ngIf="r.is_operational; else unchecked">
-                    <ng-template #unchecked>
-                        <input type="checkbox" (click)="isOperational(r.id,'true')">
-                    </ng-template>
+                <td width="13%">
+                    <div class="form-check form-switch d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" (click)="isOperational(r.id, 'true')" *ngIf="!r.is_operational">
+                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" (click)="isOperational(r.id, 'false')" *ngIf="r.is_operational" checked>
+                    </div>
                 </td>
                 <td width="10%" class="text-center"><i class="bi bi-pencil-square" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit" (click)="onRouteEditRoom(r.id)"></i></td>
             </tr>

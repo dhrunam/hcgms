@@ -9,6 +9,7 @@ declare var bootstrap: any;
 })
 export class ViewComponent {
   rooms: any = [];
+  showLoader: boolean = false;
   constructor(private roomService: RoomService, private router: Router, private route: ActivatedRoute){}
   ngOnInit():void{
     this.getRooms();
@@ -27,7 +28,9 @@ export class ViewComponent {
     this.getRooms();
   }
   getRooms(){
+    this.showLoader = true;
     this.roomService.get_rooms().then((d:any) => {
+      this.showLoader = false
       this.rooms = d;
     })
   }

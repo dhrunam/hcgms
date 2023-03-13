@@ -9,6 +9,7 @@ declare var bootstrap: any;
 })
 export class ViewComponent {
   users: any = [];
+  showLoader: boolean = false;
   constructor(private userService: UserService, private router: Router, private route: ActivatedRoute){}
   ngOnInit(): void{
     this.getUser();
@@ -24,7 +25,9 @@ export class ViewComponent {
     this.getUser();
   }
   getUser(){
+    this.showLoader = true;
     this.userService.get_users().then((d:any) => {
+      this.showLoader = false;
       this.users = d;
     })
   }

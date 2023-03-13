@@ -37,6 +37,7 @@ export class CheckOutComponent {
     let fd = new FormData();
     fd.append('rooms', JSON.stringify(this.send_data));
     fd.append('reservation', this.send_data[0]['reservation']);
+    fd.append('property', this.property);
     this.timeCardService.on_checkout(fd).then((d:any) => {
       this.getBooking();
     });;

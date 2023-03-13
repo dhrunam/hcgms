@@ -1,7 +1,7 @@
 <div class="mt-5 text-center">
     <h2>Reservation</h2>
 </div>
-<div class="container mt-4">
+<div class="mt-4">
     <app-search (switchHouses)="onShowHouses($event)" [hidden]="!showSearch"></app-search>
     <div class="error text-center mt-4" [hidden]="showErr">
         <h5>No Rooms Available</h5>

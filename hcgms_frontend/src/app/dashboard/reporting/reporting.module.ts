@@ -4,6 +4,7 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { ReportingRoutingModule } from './reporting-routing.module';
 import { ReportingComponent } from './reporting.component';
 import { FormsModule } from '@angular/forms';
+import { UtilitiesModule } from 'src/app/utilities/utilities.module';
 
 
 @NgModule({
@@ -13,7 +14,8 @@ import { FormsModule } from '@angular/forms';
   imports: [
     CommonModule,
     ReportingRoutingModule,
-    FormsModule
+    FormsModule,
+    UtilitiesModule
   ],
   providers: [DatePipe]
 })

@@ -3,13 +3,15 @@ import { CommonModule } from '@angular/common';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { HeaderComponent } from './header/header.component';
 import { RouterModule } from '@angular/router';
+import { LoaderComponent } from './loader/loader.component';
 
 
 
 @NgModule({
   declarations: [
     SidebarComponent,
-    HeaderComponent
+    HeaderComponent,
+    LoaderComponent
   ],
   imports: [
     CommonModule,
@@ -17,7 +19,8 @@ import { RouterModule } from '@angular/router';
   ],
   exports: [
     SidebarComponent,
-    HeaderComponent
+    HeaderComponent,
+    LoaderComponent,
   ]
 })
 export class UtilitiesModule { }

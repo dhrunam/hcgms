@@ -8,6 +8,7 @@ declare var bootstrap: any;
   styleUrls: ['./view.component.css']
 })
 export class ViewComponent {
+  showLoader: boolean = false;
   room_rates: any = [];
   constructor(private roomRateService: RoomRateService, private router: Router, private route: ActivatedRoute){}
 
@@ -25,7 +26,9 @@ export class ViewComponent {
     this.getRoomRates();
   }
   getRoomRates(){
+    this.showLoader = true;
     this.roomRateService.get_room_rates().then((d:any) => {
+      this.showLoader = false;
       this.room_rates = d;
     })
   }

@@ -1,4 +1,5 @@
-<section *ngIf="listRooms" class="mt-4">
+<app-loader *ngIf="showLoader"></app-loader>
+<section *ngIf="listRooms && !showLoader" class="mt-4 px-5">
     <div class="list-houses">
         <h4>Room(s)</h4>
         <hr>

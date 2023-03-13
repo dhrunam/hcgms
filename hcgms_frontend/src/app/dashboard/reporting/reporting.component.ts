@@ -11,16 +11,14 @@ import { ReportingService } from './reporting.service';
   styleUrls: ['./reporting.component.css']
 })
 export class ReportingComponent {
-  start_date!:Date;
+  start_date:string = '';
   end_date!: Date | any;
   date: string = '';
   data: any = [];
   table_data:any = [];
+  showReport: boolean = false;
+  showLoader: boolean = false;
   constructor(private datePipe: DatePipe, private reportingService: ReportingService){}
-  ngOnInit():void{
-    let newDate = new Date();
-    this.date = `${newDate.getFullYear()}-${newDate.getMonth() < 10 ? '0': ''}${newDate.getMonth()}-${newDate.getDate() < 10 ? '0':''}${newDate.getDate()}`;
-  }
   getBase64ImageFromURL(url: string) {
     return new Promise((resolve, reject) => {
       var img = new Image();
@@ -63,7 +61,7 @@ export class ReportingComponent {
               margin: [0, 40, 50, 0]
             },
             {
-              text: `Dated: ${this.datePipe.transform(this.date,'dd-MM-YYYY')}`,
+              text: `Dated: ${this.datePipe.transform(this.start_date,'dd-MM-YYYY')}`,
               alignment: 'right',
               bold: true,
               margin: [0, 40, 50, 0]
@@ -73,7 +71,7 @@ export class ReportingComponent {
         {
           table: {
             headerRows: 1,
-            widths: [30,'*','*','*','*'],
+            widths: [30,'*',80,'*',50],
             body: this.getTableData()
             
           },
@@ -126,43 +124,50 @@ export class ReportingComponent {
     pdfMake.createPdf(docDefinition).open();
   }
   getSecondDate(date: any){
-    this.start_date = date
+    this.start_date = date.toString();
     var second_date = moment(date).add(15,'d').toDate();
     this.end_date = this.datePipe.transform(second_date, 'YYYY-MM-dd');
-    this.reportingService.getDetails(this.start_date.toString(), this.end_date).then((d:any) => {
+    this.showLoader = true;
+    this.reportingService.getDetails(this.start_date, this.end_date).then((d:any) => {
+      this.showLoader = false;
+      this.showReport = true;
       this.data = d;
-      console.log(d);
       this.getTableData();
     })
   }
   getTableData(){
-    this.table_data.push([
+    this.table_data = [[
       {text: 'S.No.', bold: true},
       {text: 'Name', bold: true},
       {text: 'Room/Suite', bold: true},
       {text: 'Period', bold: true},
       {text: 'Category', bold: true},
-    ]);
+    ]];
+    console.log(this.data);
     for(var i=0;i<this.data.length;i++){
       for(var j=0;j<this.data[i].reservation_room_details.length;j++){
         if(this.data[i].reservation_room_details.length > 0){
-          let data = [
-            {rowSpan: this.data[i].reservation_room_details.length, text: `${i}`},
-            {rowSpan: this.data[i].reservation_room_details.length, text: `${this.data[i].lead_guest_name}`},
-            `${this.data[i].reservation_room_details[j].related_room.room_no}`,
-            'Test',
-            `${this.data[i].reservation_room_details[j].related_room.related_category.name}`,
-          ]
-          this.table_data.push(data)
+          if(j === 0){
+            let data = [
+              {rowSpan: this.data[i].reservation_room_details.length, text: `${i+1}`},
+              {rowSpan: this.data[i].reservation_room_details.length, text: `${this.data[i].lead_guest_name}`},
+              `${this.data[i].reservation_room_details[j].related_room.room_no}`,
+              `${this.datePipe.transform(this.data[i].checkin_date, 'dd-MM-YYYY')} - ${this.datePipe.transform(this.data[i].checkout_date,'dd-MM-YYYY')}`,
+              `${this.data[i].reservation_room_details[j].related_room.related_category.name}`,
+            ]
+            this.table_data.push(data)
+          }
+          else{
+            let data = [
+              `${i+1}`,
+              `${this.data[i].lead_guest_name}`,
+              `${this.data[i].reservation_room_details[j].related_room.room_no}`,
+              `${this.datePipe.transform(this.data[i].checkin_date,'dd-MM-YYYY')} - ${this.datePipe.transform(this.data[i].checkout_date, 'dd-MM-YYYY')}`,
+              `${this.data[i].reservation_room_details[j].related_room.related_category.name}`,
+            ]
+            this.table_data.push(data)
+          }
         }
-        let data2 = [
-          '',
-          '',
-          `${this.data[i].reservation_room_details[j].related_room.room_no}`,
-          'Test',
-          `${this.data[i].reservation_room_details[j].related_room.related_category.name}`,
-        ]
-        this.table_data.push(data2)
       }
     }
     return this.table_data;

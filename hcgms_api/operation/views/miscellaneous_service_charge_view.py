@@ -18,7 +18,7 @@ class MiscellaneousServiceChargeList(generics.ListCreateAPIView):
     # pagination.PageNumberPagination.page_size = 100
     @transaction.atomic
     def post(self, request, *args, **kwargs):
-        # request.data._mutable = True
+        request.data._mutable = True
 
         request.data['created_by'] = request.user.id
         tax_details=Calculator.get_applicable_tax_details(self,  request.data['cost'])
@@ -31,7 +31,7 @@ class MiscellaneousServiceChargeList(generics.ListCreateAPIView):
        
         # request.data['created_by'] = reservation_details.data['id']
 
-        # request.data._mutable = False
+        request.data._mutable = False
         return self.get(request, *args, **kwargs)
     
     def get_queryset(self):

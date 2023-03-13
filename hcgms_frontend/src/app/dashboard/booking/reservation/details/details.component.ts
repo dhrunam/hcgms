@@ -7,12 +7,17 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./details.component.css']
 })
 export class DetailsComponent {
+  showLoader: boolean = false;
   private subscription!: Subscription;
   @Output('switchAck') ack = new EventEmitter<{status: boolean}>()
   roomDetails: any = [];
   constructor(private reservationService: ReservationService){}
   ngOnInit(): void {
-    this.subscription = this.reservationService.roomDetails.subscribe((d:any) => this.roomDetails = d);
+    this.showLoader = true;
+    this.subscription = this.reservationService.roomDetails.subscribe((d:any) => {
+      this.showLoader = false;
+      this.roomDetails = d
+    });
   }
   onConfirmReservation(data: any){
     if(!data.valid){

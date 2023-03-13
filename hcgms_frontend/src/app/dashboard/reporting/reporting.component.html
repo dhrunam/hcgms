@@ -10,14 +10,14 @@
                 </div>
             </div>
         </div>
-        <div class="report mt-4">
+        <app-loader *ngIf="showLoader"></app-loader>
+        <div class="report mt-4" *ngIf="showReport && !showLoader">
             <h4>Report</h4>
             <hr>
             <ol class="list-group">
                 <li class="list-group-item d-flex justify-content-between align-items-start">
                     <div class="ms-2 me-auto">
                         <div class="fw-bold">Report</div>
-                        Report {{ date | date: 'dd-MM-YYYY'}}
                     </div>
                     <div class="d-flex justify-content-center align-items-center">
                         <button class="btn btn-primary" (click)="generateReport()">Generate</button>

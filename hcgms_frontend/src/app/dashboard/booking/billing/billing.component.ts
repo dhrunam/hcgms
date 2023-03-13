@@ -33,6 +33,7 @@ export class BillingComponent {
   onGetReservations(event:any){
     let room_no:string = event.target.value;
     this.billingService.get_reservations(room_no).then((d:any) => {
+      console.log(d);
       this.showData = true;
       this.reservations = d;
     })

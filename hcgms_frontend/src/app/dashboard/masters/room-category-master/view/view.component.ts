@@ -9,6 +9,7 @@ declare var bootstrap:any;
 })
 export class ViewComponent {
   categories: any = [];
+  showLoader: boolean = false;
   constructor(private router: Router, private route: ActivatedRoute, private roomCategoryService: RoomCategoryService){}
   ngOnInit(): void{
     this.getCategories();
@@ -24,6 +25,10 @@ export class ViewComponent {
     this.getCategories();
   }
   getCategories(){
-    this.roomCategoryService.get_room_categories().then(d => this.categories = d);
+    this.showLoader = true;
+    this.roomCategoryService.get_room_categories().then(d => {
+      this.showLoader = false;
+      this.categories = d;
+    });
   }
 }

@@ -22,8 +22,9 @@ export class OtherServicesService {
         )
     }
     
-    get_miscellaneous_service_of_reservation(fd:any){
-        this.http.get_misscellaneous_services_of_reservation(fd).subscribe({
+    get_miscellaneous_service_of_reservation(id:number){
+        this.http.get_misscellaneous_services_of_reservation(id)
+        .subscribe({
             next: data => { this.other_seervices = data},
             error: err => console.log(err)
         })
