@@ -2,7 +2,7 @@
     <div class="text-center mt-5">
         <h2>Generate Bill</h2>
     </div>
-    <div class="container mt-4">
+    <div class="px-5 mt-4">
         <div class="d-flex justify-content-center">
             <div class="row">
                 <div class="col-md-12">
@@ -28,7 +28,7 @@
                             <h6 class="card-subtitle mt-3 mb-2 text-muted">Guest Name: {{r.lead_guest_name}}</h6>
                             <h6 class="card-subtitle mt-3 mb-2 text-muted">Contact Number: {{r.contact_no}}</h6>
                             <h6 class="card-subtitle mt-3 mb-2 text-muted">Room(s) Booked: 
-                                <label *ngFor="let room of r.reservation_room_details">{{room.related_room.room_no}}</label>
+                                <label *ngFor="let room of r.reservation_room_details">{{room.related_room.room_no}},</label>
                             </h6>
                             <div class="text-end">
                                 <a class="card-link" style="cursor: pointer" (click)="printBill(r)">Print</a>

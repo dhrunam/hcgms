@@ -12,12 +12,12 @@
         </div>
         <div class="col-md-2">
             <label class="form-label">From Date<span class="text-danger">*</span></label>
-            <input type="date" class="form-control" ngModel #from_date="ngModel" name="from_date" required>
+            <input type="date" class="form-control" [min]="todayDate" ngModel #from_date="ngModel" name="from_date" required>
             <small class="text-danger" *ngIf="from_date.touched && from_date.invalid">Please select from date</small>
         </div>
         <div class="col-md-2">
             <label class="form-label">To Date<span class="text-danger">*</span></label>
-            <input type="date" class="form-control" ngModel #to_date="ngModel" name="to_date" required>
+            <input type="date" class="form-control" [min]="todayDate" ngModel #to_date="ngModel" name="to_date" required>
             <small class="text-danger" *ngIf="to_date.touched && to_date.invalid">Please select to date</small>
         </div>
         <div class="col-md-3">

@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Params } from '@angular/router';
@@ -13,7 +14,10 @@ export class EditComponent {
   showParticulars: boolean = false;
   particulars: any = [];
   id:string = '';
-  constructor(private route: ActivatedRoute, private otherServices: OtherServicesService){}
+  todayDate:any;
+  constructor(private route: ActivatedRoute, private otherServices: OtherServicesService, private datePipe: DatePipe){
+    this.todayDate = this.datePipe.transform(new Date(), 'YYYY-MM-dd');
+  }
 
   ngOnInit():void{
     this.route.params.subscribe((data:Params) => {

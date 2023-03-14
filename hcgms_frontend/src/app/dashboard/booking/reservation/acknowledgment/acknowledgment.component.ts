@@ -31,7 +31,7 @@ export class AcknowledgmentComponent {
   constructor(private reservationService: ReservationService, private cdr: ChangeDetectorRef, private datePipe: DatePipe){}
   ngOnInit(): void{
   }
-  ngAfterViewInit(){
+  ngAfterViewInit():void{
     this.showLoader = true;
     this.subscription = this.reservationService.acknowledgement.subscribe((d:any) => {
       this.showLoader = false;
@@ -47,6 +47,9 @@ export class AcknowledgmentComponent {
       this.totalCost = d.totalCost;
       this.days = d.days;
     });
+  }
+  ngAfterViewChecked(): void{
+    this.cdr.detectChanges();
   }
   getRoomDetails(data:any){
     this.room_details = [['Room No', 'Room Category', 'No. of Days', 'Room Rate', 'Total Cost']];

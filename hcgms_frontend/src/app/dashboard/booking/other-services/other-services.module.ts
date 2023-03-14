@@ -20,5 +20,8 @@ import { OtherServicesRoutingModule } from './other-services-routing.module';
     FormsModule,
     ReactiveFormsModule
   ],
+  providers: [
+    DatePipe,
+  ]
 })
 export class OtherServicesModule { }
