@@ -21,7 +21,7 @@ export class BillingService{
     }
     get_reservations(room_no:string){
         this.http.on_get_billing_reservation(room_no).subscribe({
-            next: data => { this.reservations = data },
+            next: data => { this.reservations = data; console.log(data) },
             error: err => console.log(err)
         })
         return new Promise(
