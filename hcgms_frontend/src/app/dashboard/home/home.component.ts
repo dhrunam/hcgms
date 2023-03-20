@@ -25,7 +25,7 @@ export class HomeComponent {
     this.username = this.localStorageService.getUserName();
     this.role = this.localStorageService.getRoleId();
     let date = new Date();
-    this.date = `${date.getFullYear()}-${date.getMonth() < 10 ? '0' : ''}${date.getMonth()}-${date.getDate() < 10 ? '0' : ''}${date.getDate()}`;
+    this.date = `${date.getFullYear()}-${date.getMonth() < 10 ? '0' : ''}${date.getMonth()+1}-${date.getDate() < 10 ? '0' : ''}${date.getDate()}`;
   }
 
   ngOnInit(): void{
@@ -44,6 +44,8 @@ export class HomeComponent {
     this.homeService.getCheckoutCount(this.date).subscribe({
       next: data => this.checkout = data,
     })
-    this.total = this.homeService.getTotalCheckInOutCount();
+    this.homeService.getTotalCheckInOutCount(this.date).subscribe({
+      next: data => this.total = data ,
+    })
   }
 }
