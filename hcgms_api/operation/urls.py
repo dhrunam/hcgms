@@ -28,6 +28,12 @@ urlpatterns = [
     
     path('api/reservation/report', views.ReservationDetailsListForReporting.as_view()),
 
+
+    # api/reservation/report/ci_co?date_of_the_day=2023-02-24
+    path('api/reservation/report/ci_co', views.ReservationDetailsListForReportingCheckInCheckOut.as_view()),
+
+
+
     # path('api/room', views.RoomList.as_view()),
     # path('api/room/<int:pk>', views.RoomDetails.as_view()),
 
