@@ -404,3 +404,34 @@ class ReservationDetailsListForReporting(generics.ListAPIView):
             return queryset.order_by('-id')
 
         return queryset.order_by('-id')
+
+
+
+
+class ReservationDetailsListForReportingCheckInCheckOut(generics.ListAPIView):
+    # authentication_classes = (TokenAuthentication,)
+    # permission_classes = (IsAuthenticated,)
+    queryset = op_models.ReservationDetails.objects.all()
+    serializer_class = serializers.ReservationDetailsSerializer
+    # pagination.PageNumberPagination.page_size = 100
+
+    def get_queryset(self):
+        """
+        This view should return a list of all the purchases item  received
+        for the specified order .
+        """
+
+        queryset = op_models.ReservationDetails.objects.all()
+
+        date= self.request.query_params.get('date_of_the_day')
+
+        
+        if(date):
+
+            queryset= queryset.filter(
+            Q(checkin_date=date,checkout_date=date )
+            ).exclude(status='cancelled')
+        else:
+            return queryset.order_by('-id')
+
+        return queryset.order_by('-id')
