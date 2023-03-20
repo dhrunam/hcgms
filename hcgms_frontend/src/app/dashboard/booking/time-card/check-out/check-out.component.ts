@@ -24,11 +24,13 @@ export class CheckOutComponent {
     this.property = localStorageService.getPropertyId();
   }
   ngOnInit():void{
-    //  this.todayDate = `${this.date.getFullYear()}-${this.date.getMonth()< 10 ? '0':''}${this.date.getMonth()+1}-${this.date.getDate()< 10 ? '0':''}${this.date.getDate()}`;
-    this.todayDate = `${this.date.getFullYear()}-${this.date.getMonth()< 10 ? '0':''}${this.date.getMonth()+1}-14`;
+    this.todayDate = `${this.date.getFullYear()}-${this.date.getMonth()< 10 ? '0':''}${this.date.getMonth()+1}-${this.date.getDate()< 10 ? '0':''}${this.date.getDate()}`;
+    //this.todayDate = `${this.date.getFullYear()}-${this.date.getMonth()< 10 ? '0':''}${this.date.getMonth()+1}-14`;
     this.getBooking();
   }
   onGetRooms(r_id:string,booking_id:string, data: any){
+    var ele:any = document.getElementById('selectAll');
+    ele.checked = false;
     this.resv_id = r_id;
     this.bookingId = booking_id;
     this.rooms = data;
@@ -69,6 +71,8 @@ export class CheckOutComponent {
     }
   }
   onChangeEvent(event:any, room_id:number){
+    var ele:any = document.getElementById('selectAll');
+    ele.checked = false;
     if(event.target.checked){
       let details = {
         'property': this.property,
@@ -81,8 +85,6 @@ export class CheckOutComponent {
     else{
       const index = this.send_data.findIndex((obj:any) => obj.room === room_id);
       this.send_data.splice(index,1);
-      var ele:any = document.getElementById('selectAll');
-      ele.checked = false;
     }
   }
   getBooking(){

@@ -53,6 +53,17 @@ export class ReportingComponent {
           alignment: 'center',
         },
         {
+          text: 'HIGH COURT OF SIKKIM',
+          alignment: 'center',
+          bold: true,
+          margin: [0, 15, 0, 0]
+        },
+        {
+          text: 'GANGTOK',
+          alignment: 'center',
+          bold: true,
+        },
+        {
           columns: [
             {
               text: 'No. ',

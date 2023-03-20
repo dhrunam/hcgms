@@ -29,6 +29,8 @@ export class CheckInComponent {
     this.getBooking();
   }
   onGetRooms(r_id:string,booking_id:string, data: any){
+    var ele:any = document.getElementById('selectAll');
+    ele.checked = false;
     this.resv_id = r_id;
     this.bookingId = booking_id;
     this.rooms = data;
