@@ -38,8 +38,10 @@ export class CheckInComponent {
   onCheckin(){
     let fd = new FormData();
     fd.append('rooms', JSON.stringify(this.send_data));
-    this.timeCardService.on_checkin(fd).then((d:any) => {
-      this.getBooking();
+    this.timeCardService.on_checkin(fd).subscribe({
+      next: data => {
+        this.getBooking();
+      }
     });
   }
   selectAll(event: any){
@@ -86,9 +88,11 @@ export class CheckInComponent {
     }
   }
   getBooking(){
-    this.timeCardService.get_checkin_reservations(this.todayDate).then((d:any) => {
-      this.showData = d[0] ? true : false;
-      this.checkin_data = d;
+    this.timeCardService.get_checkin_reservations(this.todayDate).subscribe({
+      next: data => {
+        this.showData = data[0] ? true : false;
+        this.checkin_data = data;
+      }
     });
   }
 }

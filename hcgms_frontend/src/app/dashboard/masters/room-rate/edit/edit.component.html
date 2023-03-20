@@ -1,11 +1,8 @@
 <app-loader *ngIf="showLoader"></app-loader>
 <div class="px-5 py-2" *ngIf="!showLoader">
-    <h3 *ngIf="!editMode; else alt">Add Room Tariff</h3>
-    <ng-template #alt>
-        <h3>Edit Room Tariff</h3>
-    </ng-template>
+    <h3>{{ editMode ? 'Update Room Tariff' : 'Add Room Tariff'}}</h3>
     <hr>
-    <form #roomRate="ngForm" (ngSubmit)="!editMode ? onAddRoomTariff(roomRate) : onUpdateRoomTariff(roomRate)">
+    <form #roomRate="ngForm" (ngSubmit)="onSubmit(roomRate)">
         <div class="row">
             <div class="col-md-3">
                 <label class="form-label">Property<span class="text-danger">*</span></label>
@@ -25,37 +22,28 @@
             </div>
             <div class="col-md-3">
                 <label class="form-label">Cost<span class="text-danger">*</span></label>
-                <input type="text" class="form-control" [(ngModel)]="cost" name="c" #c="ngModel" required>
+                <input type="text" class="form-control" [ngModel]="cost" name="c" #c="ngModel" required>
                 <small class="text-danger" *ngIf="c.touched && c.invalid">Please enter cost</small>
             </div>
             <div class="col-md-3">
                 <label class="form-label">Start Date<span class="text-danger">*</span></label>
-                <input type="date" class="form-control" [(ngModel)]="start_date" name="start" #start="ngModel" required>
+                <input type="date" class="form-control" [ngModel]="start_date" name="start" #start="ngModel" required>
                 <small class="text-danger" *ngIf="start.touched && start.invalid">Please select start date</small>
             </div>
         </div>
         <div class="row mt-3">
             <div class="col-md-3">
                 <label class="form-label">End Date<span class="text-danger">*</span></label>
-                <input type="date" class="form-control" [(ngModel)]="end_date" name="end" #end="ngModel" required>
+                <input type="date" class="form-control" [ngModel]="end_date" name="end" #end="ngModel" required>
                 <small class="text-danger" *ngIf="end.touched && end.invalid">Please select end date</small>
             </div>
         </div>
-        <div class="alert alert-success mt-3" *ngIf="showSuccess === 'true'">
-            <span *ngIf="!editMode; else err">Room Tariff Added Successfully !!</span>
-            <ng-template #err>
-                <span>Room Tariff Updated Successfully !!</span>
-            </ng-template>
-        </div>
-        <div class="alert alert-danger mt-3" *ngIf="showSuccess === 'false'">
-            Error !!
+        <div class="alert alert-success mt-3" [ngClass]="{'alert-danger': showSuccess === 'false', 'alert-success': showSuccess === 'true'}" *ngIf="showSuccess === 'true' || showSuccess === 'false'">
+            <span>{{ showSuccess === 'true' ? (editMode ? 'Room Tariff Updated Successfully' : 'Room Tariff Added Successfully') : 'Error'}}</span>
         </div>
         <div class="d-flex justify-content-center align-items-center">
             <button class="btn btn-primary" type="button" (click)="onGoBack()">Go Back</button>
-            <button class="btn btn-primary ms-3" type="submit" *ngIf="!editMode; else edit">Submit</button>
-            <ng-template #edit>
-                <button class="btn btn-primary ms-3" type="submit">Update</button>
-            </ng-template>
+            <button class="btn btn-primary ms-3" type="submit">{{ editMode ? 'Update' : 'Submit'}}</button>
         </div>
     </form>
 </div>

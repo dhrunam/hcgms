@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PropertyService } from '../property.service';
-declare var bootstrap: any;
-declare var $:any;
 @Component({
   selector: 'app-view',
   templateUrl: './view.component.html',
@@ -25,14 +23,18 @@ export class ViewComponent{
     let fd = new FormData();
     fd.append('id', id.toString());
     fd.append('is_operational', status.toString())
-    this.propertyService.delete_property(fd);
-    this.getProperties();
+    this.propertyService.delete_property(fd).subscribe({
+      next: () => this.getProperties(),
+    });
+    
   }
   getProperties(){
     this.showLoader = true;
-    this.propertyService.get_properties().then(d => {
-      this.properties = d;
-      this.showLoader = false;
+    this.propertyService.get_properties().subscribe({
+      next: data => {
+        this.properties = data;
+        this.showLoader = false;
+      }
     })
   }
 }

@@ -139,11 +139,13 @@ export class ReportingComponent {
     var second_date = moment(date).add(15,'d').toDate();
     this.end_date = this.datePipe.transform(second_date, 'YYYY-MM-dd');
     this.showLoader = true;
-    this.reportingService.getDetails(this.start_date, this.end_date).then((d:any) => {
-      this.showLoader = false;
-      this.showReport = true;
-      this.data = d;
-      this.getTableData();
+    this.reportingService.getDetails(this.start_date, this.end_date).subscribe({
+      next: data => {
+        this.showLoader = false;
+        this.showReport = true;
+        this.data = data;
+        this.getTableData();
+      }
     })
   }
   getTableData(){

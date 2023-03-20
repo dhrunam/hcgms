@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
+import { Observable } from 'rxjs';
 import { UserService } from '../users.service';
 @Component({
   selector: 'app-edit',
@@ -25,27 +27,31 @@ export class EditComponent {
   constructor(private router: Router, private route: ActivatedRoute, private userService: UserService){}
   ngOnInit():  void{
     this.route.params.subscribe((data: Params) => {
-      this.id = +data['id'];
+      this.id = data['id'];
       this.editMode = data['id'] != null;
-      this.userService.get_properties().then((d:any) => this.properties = d);
-      this.userService.get_roles().then((d:any) => this.roles = d);
+      this.userService.get_properties().subscribe({
+        next: data => this.properties = data,
+      });
+      this.userService.get_roles().subscribe({
+        next: data => this.roles = data,
+      });
+      if(this.editMode){
+        this.showLoader = true;
+        this.userService.get_user(this.id).subscribe({
+          next: data => {
+            this.showLoader = false;
+            this.first_name = data.first_name;
+            this.contact = data.related_profile[0].contact_number;
+            this.username = data.username;
+            this.last_name = data.last_name;
+            this.property = data.related_profile[0].related_property.id;
+            this.role = data.related_groups[0].id;
+          }
+        })
+      }
     })
   }
-  ngAfterViewInit(){
-    if(this.editMode){
-      this.showLoader = true;
-      this.userService.get_user(this.id).then((d: any) => {
-        this.showLoader = false;
-        this.first_name = d.first_name;
-        this.contact = d.contact;
-        this.username = d.username;
-        this.last_name = d.last_name;
-        this.property = d.property;
-        this.role = d.role;
-      })
-    }
-  }
-  onAddUser(data:any){
+  onSubmit(data: NgForm){
     this.showSuccess = '';
     if(!data.valid){
       data.control.markAllAsTouched();
@@ -63,75 +69,52 @@ export class EditComponent {
         }
       }
       else{
+        let observable: Observable<any>
         this.showLoader = true;
         let fd = new FormData();
-        fd.append('first_name', this.first_name);
-        fd.append('last_name', this.last_name);
-        fd.append('contact_number', this.contact);
-        fd.append('username', this.username);
+        fd.append('first_name', data.value.f_name);
+        fd.append('last_name', data.value.l_name);
+        fd.append('contact_number', data.value.c_no);
+        fd.append('username', data.value.u_name);
         fd.append('property', this.property);
         fd.append('group', this.role);
-        fd.append('password', this.password);
-        fd.append('password2', this.password2);
-        this.userService.add_user(fd).then((d:any) => {
-          this.showLoader = false;
-          this.showSuccess = d.error ? 'false' : 'true';
-        });
-      }
-      
-    }
-  }
-  onUpdateUser(data:any){
-    this.showSuccess = '';
-    if(!data.valid){
-      data.control.markAllAsTouched();
-    }
-    else{
-      if(this.property === 'N/A' && this.role === 'N/A'){
-        alert('Please select a guest house and a role');
-      }
-      else if(this.property === 'N/A' || this.role === 'N/A'){
-        if(this.property === 'N/A'){
-          alert('Please select a guest house');
+        if(this.editMode){
+          fd.append('id', this.id.toString());
+          observable = this.userService.update_user(fd);
         }
         else{
-          alert('Please select a role');
+          fd.append('password', data.value.pswd);
+          fd.append('password2', data.value.pswd2);
+          observable = this.userService.add_user(fd)
         }
-      }
-      else{
-        this.showLoader = true;
-        let fd = new FormData();
-        fd.append('id', this.id.toString());
-        fd.append('first_name', this.first_name);
-        fd.append('last_name', this.last_name);
-        fd.append('contact_number', this.contact);
-        fd.append('username', this.username);
-        fd.append('property', this.property);
-        fd.append('group', this.role);
-        this.userService.update_user(fd).then((d:any) => {
-          this.showLoader = false;
-          this.showSuccess = d.error ? 'false' : 'true';
-        });;
+        observable.subscribe({
+          next: data => {
+            this.showLoader = false;
+            this.showSuccess = 'true';
+          },
+          error: err => {
+            this.showLoader = false;
+            this.showSuccess = 'false';
+          }
+        })
       }
     }
   }
   onGoBack(){
     this.editMode ? this.router.navigate(['../../'], {relativeTo: this.route}) : this.router.navigate(['../'], {relativeTo: this.route});
   }
-  onChangeUserPassword(data: any){
+  onChangeUserPassword(data: NgForm){
     this.showSuccess = '';
     if(!data.valid){
       data.control.markAllAsTouched();
     }
     else{
-      this.showLoader = true;
       let fd = new FormData();
       fd.append('id', this.id.toString());
       fd.append('username', this.username);
-      fd.append('password', this.password);
-      fd.append('password2', this.password2);
-      this.userService.change_user_password(fd).then((d:any) => {
-        this.showLoader = false;
+      fd.append('password', data.value.chpswd);
+      fd.append('password2', data.value.chpswd2);
+      this.userService.change_user_password(fd).subscribe((d:any) => {
         this.showPswdSuccess = true;
       });;
     }

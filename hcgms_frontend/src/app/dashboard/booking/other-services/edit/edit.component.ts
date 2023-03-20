@@ -7,7 +7,7 @@ import { OtherServicesService } from '../other-services.service';
 @Component({
   selector: 'app-edit',
   templateUrl: './edit.component.html',
-  styleUrls: ['./edit.component.css']
+  styleUrls: ['./edit.component.css'],
 })
 export class EditComponent {
   @ViewChild('parForm') parForm!: NgForm;
@@ -18,7 +18,6 @@ export class EditComponent {
   constructor(private route: ActivatedRoute, private otherServices: OtherServicesService, private datePipe: DatePipe){
     this.todayDate = this.datePipe.transform(new Date(), 'YYYY-MM-dd');
   }
-
   ngOnInit():void{
     this.route.params.subscribe((data:Params) => {
       this.id = data['id'];
@@ -37,16 +36,20 @@ export class EditComponent {
       fd.append('remarks', this.parForm.value.remarks);
       fd.append('start_date', this.parForm.value.from_date);
       fd.append('end_date', this.parForm.value.to_date);
-      this.otherServices.on_miscellaneous_service_save(fd).then((d:any) => {
-        this.getParticulars(this.id);
+      this.otherServices.on_miscellaneous_service_save(fd).subscribe({
+        next: () => {
+          this.getParticulars(this.id);
+        }
       })
       this.parForm.reset();
     }
   }
   getParticulars(id:any){
-    this.otherServices.get_miscellaneous_service_of_reservation(id).then((d:any) => {
-      this.showParticulars = d[0] ? true : false;
-      this.particulars = d;
+    this.otherServices.get_miscellaneous_service_of_reservation(id).subscribe({
+      next: (data:any) => {
+        this.showParticulars = data[0] ? true : false;
+        this.particulars = data;
+      }
     })
   }  
 }

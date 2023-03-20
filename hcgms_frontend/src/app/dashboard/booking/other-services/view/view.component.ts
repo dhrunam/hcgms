@@ -21,9 +21,14 @@ export class ViewComponent implements OnInit {
   ngOnInit():void{
     this.todayDate = `${this.date.getFullYear()}-${this.date.getMonth()< 10 ? '0':''}${this.date.getMonth()+1}-${this.date.getDate()< 10 ? '0':''}${this.date.getDate()}`;
    // this.todayDate = `${this.date.getFullYear()}-${this.date.getMonth()< 10 ? '0':''}${this.date.getMonth()+1}-05`;
-    this.otherServices.get_other_services_reservations().then((d:any) => {
-    this.showData = d[0] ? true : false;
-    this.reservation_data=d;
-   });
+    this.otherServices.get_other_services_reservations().subscribe({
+      next: data => {
+        this.showData = true;
+        this.reservation_data = data;
+       },
+       error: err => {
+        this.showData = false;
+       }
+    });
  }
 }

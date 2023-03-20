@@ -22,14 +22,17 @@ export class ViewComponent {
     this.router.navigate(['../',id,'edit'], { relativeTo: this.route } );
   }
   onDeleteRoomTariff(id:number){
-    this.roomRateService.delete_room_rate(id);
-    this.getRoomRates();
+    this.roomRateService.delete_room_rate(id).subscribe({
+      next: () => this.getRoomRates(),
+    });
   }
   getRoomRates(){
     this.showLoader = true;
-    this.roomRateService.get_room_rates().then((d:any) => {
-      this.showLoader = false;
-      this.room_rates = d;
+    this.roomRateService.get_room_rates().subscribe({
+      next: data => {
+        this.showLoader = false;
+        this.room_rates = data;
+      }
     })
   }
 }

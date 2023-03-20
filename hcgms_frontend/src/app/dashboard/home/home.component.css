@@ -1,0 +1,14 @@
+i{
+    font-size: 60px;
+    color: #7CB8EC;
+}
+h1{
+    color: #7CB8EC;
+}
+.card{
+    border: 1px solid #7CB8EC;
+}
+.card-header{
+    background-color: #7CB8EC;
+    color: #fff;
+}

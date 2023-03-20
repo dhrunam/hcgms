@@ -24,18 +24,17 @@ export class ViewComponent {
     let fd = new FormData();
     fd.append('id', id);
     fd.append('is_operational', status);
-    this.roomService.room_is_operational(fd);
-    this.getRooms();
+    this.roomService.room_is_operational(fd).subscribe({
+      next: () => this.getRooms(),
+    });
   }
   getRooms(){
     this.showLoader = true;
-    this.roomService.get_rooms().then((d:any) => {
-      this.showLoader = false
-      this.rooms = d;
+    this.roomService.get_rooms().subscribe({
+      next: data => {
+        this.showLoader = false
+        this.rooms = data;
+      }
     })
-  }
-  onDeleteRoom(id:number){
-    this.roomService.delete_room(id);
-    this.getRooms();
   }
 }

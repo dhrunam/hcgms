@@ -40,8 +40,10 @@ export class CheckOutComponent {
     fd.append('rooms', JSON.stringify(this.send_data));
     fd.append('reservation', this.send_data[0]['reservation']);
     fd.append('property', this.property);
-    this.timeCardService.on_checkout(fd).then((d:any) => {
-      this.getBooking();
+    this.timeCardService.on_checkout(fd).subscribe({
+      next: () => {
+        this.getBooking();
+      }
     });;
   }
   selectAll(event: any){
@@ -88,9 +90,11 @@ export class CheckOutComponent {
     }
   }
   getBooking(){
-    this.timeCardService.get_checkout_reservations(this.todayDate).then((d:any) => {
-      this.showResv = d[0] ? true : false;
-      this.checkout_data = d;
+    this.timeCardService.get_checkout_reservations(this.todayDate).subscribe({
+      next: data => {
+        this.showResv =data[0] ? true : false;
+        this.checkout_data = data;
+      }
     });
   }
 }

@@ -1,0 +1,76 @@
+ul{
+    list-style: none;
+    margin-top: 30px;
+}
+.routerActive{
+    background-color: #7CB8EC;
+    color: #fff;
+    border-top-right-radius: 18px;
+    border-bottom-right-radius: 18px;
+}
+.i:hover{
+    background-color: #E8EAED;;
+    border-top-right-radius: 18px;
+    border-bottom-right-radius: 18px;
+    transition: all 0.3s ease-in-out;
+}
+.menu .menu-item,
+.menu .menu-item .sub-menu .sub-menu-item{
+    margin-left: -30px;
+    opacity: 1;
+    position: relative;
+    list-style: none;
+    cursor: pointer;
+}
+.menu .menu-item .icon-links{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.menu .menu-item label,
+.menu .menu-item .sub-menu .sub-menu-item label{
+    display:flex;
+    text-decoration: none;
+    align-items: center;
+    cursor: pointer;
+}
+.menu .menu-item label i,
+.menu .menu-item .sub-menu .sub-menu-item label i{
+    height: 50px;
+    min-width: 78px;
+    text-align: center;
+    line-height: 50px;
+    font-size: 18px;
+}
+.menu .menu-item .icon-links i{
+    transition: all 0.3s ease;
+}
+.menu .menu-item label span,
+.menu .menu-item .sub-menu .sub-menu-item label span{
+    font-size: 18px;
+    font-weight: 400;
+}
+.menu .menu-item .sub-menu{
+    margin-top: -3px;
+    max-height: 0;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    background-color: #E8EAED;
+    border-radius: 10px;
+}
+.menu .menu-item .sub-menu.active{
+    max-height: 200px;
+}
+.menu .menu-item .icon-links i.open{
+    rotate: 180deg;
+}
+.menu.close .menu-item .icon-links label span,
+.menu.close .menu-item .icon-links .arrow,
+.menu.close .menu-item label span{
+    opacity: 0;
+    pointer-events: none;
+}
+.menu .menu-item .icon-links i,
+.menu .menu-item label span{
+    opacity: 1;
+}

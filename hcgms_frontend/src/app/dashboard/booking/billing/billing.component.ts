@@ -26,17 +26,20 @@ export class BillingComponent {
     this.property_id = this.localStorageService.getPropertyId();
   }
   ngOnInit(): void{
-    this.billingService.get_rooms(this.property_id).then((d:any) => {
-      this.showResv = d[0] ? true : false;
-      this.rooms = d;
+    this.billingService.get_rooms(this.property_id).subscribe({
+      next: data => {
+        this.rooms = data;
+      }
     })
   }
   onGetReservations(event:any){
     let room_no:string = event.target.value;
-    this.billingService.get_reservations(room_no).then((d:any) => {
-      this.showData = true;
-      this.reservations = d;
-      console.log(d);
+    this.billingService.get_reservations(room_no).subscribe({
+      next: data => {
+        this.showResv = data[0] ? true : false;
+        this.showData = true;
+        this.reservations = data;
+      }
     })
   }
   getBase64ImageFromURL(url: string) {
