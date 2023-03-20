@@ -95,4 +95,12 @@ export class CheckInComponent {
       }
     });
   }
+  onNoShow(){
+    let fd = new FormData();
+    fd.append('id', this.resv_id);
+    fd.append('operation', 'noshow');
+    this.timeCardService.on_no_show(fd).subscribe({
+      next: () => { this.getBooking() },
+    })
+  }
 }
