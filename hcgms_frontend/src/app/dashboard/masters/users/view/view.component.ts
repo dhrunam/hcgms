@@ -9,15 +9,10 @@ declare var bootstrap: any;
 })
 export class ViewComponent {
   users: any = [];
+  showLoader: boolean = false;
   constructor(private userService: UserService, private router: Router, private route: ActivatedRoute){}
   ngOnInit(): void{
     this.getUser();
-  }
-  ngAfterViewInit(): void{
-    // setTimeout(() => {
-    //   const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-    //   const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
-    // }, 200)
   }
   onRouteAddUser(){
     this.router.navigate(['../new'], { relativeTo: this.route } );
@@ -30,7 +25,9 @@ export class ViewComponent {
     this.getUser();
   }
   getUser(){
+    this.showLoader = true;
     this.userService.get_users().then((d:any) => {
+      this.showLoader = false;
       this.users = d;
     })
   }

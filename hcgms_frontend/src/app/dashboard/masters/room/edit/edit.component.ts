@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
 import { RoomService } from '../room.service';
 @Component({
   selector: 'app-edit',
@@ -8,6 +7,7 @@ import { RoomService } from '../room.service';
   styleUrls: ['./edit.component.css']
 })
 export class EditComponent {
+  showLoader: boolean = false;
   properties: any = [];
   categories: any = [];
   editMode: boolean = false;
@@ -19,13 +19,14 @@ export class EditComponent {
   room_category_id: string = 'N/A';
   room_is_operational: boolean = false;
   showSuccess:string = '';
-  private subscription!: Subscription;
   constructor(private roomService: RoomService, private router: Router, private route: ActivatedRoute){}
   ngOnInit():void{
-    this.subscription = this.route.params.subscribe((data: Params) => {
+      this.route.params.subscribe((data: Params) => {
       this.editMode = data['id'] != null;
       if(this.editMode){
+        this.showLoader = true;
         this.roomService.get_room(data['id']).then((d:any) => {
+          this.showLoader = false;
           this.id = d.id;
           this.room_no = d.room_no;
           this.occupancy = d.occupancy;
@@ -58,6 +59,7 @@ export class EditComponent {
         }
       }
       else{
+        this.showLoader = true;
         let fd = new FormData();
         fd.append('room_no', this.room_no);
         fd.append('occupancy', this.occupancy);
@@ -66,6 +68,7 @@ export class EditComponent {
         fd.append('room_category', this.room_category_id);
         fd.append('is_operational', 'true');
         this.roomService.add_room(fd).then((d:any) => {
+          this.showLoader = false;
           this.showSuccess = d.error ? 'false' : 'true';
         });
       }
@@ -88,6 +91,7 @@ export class EditComponent {
         }
       }
       else{
+        this.showLoader = true;
         let fd = new FormData();
         fd.append('id', this.id.toString());
         fd.append('room_no', this.room_no);
@@ -97,12 +101,10 @@ export class EditComponent {
         fd.append('room_category', this.room_category_id);
         fd.append('is_operational', 'true');
         this.roomService.update_room(fd).then((d:any) => {
+          this.showLoader = false;
           this.showSuccess = d.error ? 'false' : 'true';
         });;
       }
     }
-  }
-  ngOnDestroy(){
-    this.subscription.unsubscribe();
   }
 }

@@ -9,15 +9,10 @@ declare var bootstrap: any;
 })
 export class ViewComponent {
   rooms: any = [];
+  showLoader: boolean = false;
   constructor(private roomService: RoomService, private router: Router, private route: ActivatedRoute){}
   ngOnInit():void{
     this.getRooms();
-  }
-  ngAfterViewInit(): void{
-    // setTimeout(() => {
-    //   const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-    //   const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
-    // }, 200)
   }
   onRouteAddRoom(){
     this.router.navigate(['../new'], { relativeTo: this.route } );
@@ -33,7 +28,9 @@ export class ViewComponent {
     this.getRooms();
   }
   getRooms(){
+    this.showLoader = true;
     this.roomService.get_rooms().then((d:any) => {
+      this.showLoader = false
       this.rooms = d;
     })
   }

@@ -8,8 +8,7 @@ const routes: Routes = [
   { path: '', redirectTo: '/dashboard/other-service/view', pathMatch: 'full'},
   { path: '', component: OtherServicesComponent, children: [
       { path: 'view', component: ViewComponent},
-      { path: 'new', component: EditComponent},
-      { path: ':id/edit', component: EditComponent}
+      { path: 'view/:id', component: EditComponent}
     ]
   }
 ];

@@ -1,15 +1,13 @@
 import { Injectable } from "@angular/core";
-import { Subscription } from "rxjs";
 import { HttpService } from "src/app/services/http-service/http.service";
 
 @Injectable({providedIn: 'root'})
 export class BillingService{
     rooms: any = [];
     reservations: any = [];
-    private subscription!: Subscription;
     constructor(private http: HttpService){}
     get_rooms(property_id:number){
-        this.subscription = this.http.get_property_room(property_id).subscribe({
+        this.http.get_property_room(property_id).subscribe({
             next: data => { this.rooms = data},
             error: err => console.log(err),
         });
@@ -22,8 +20,8 @@ export class BillingService{
         )
     }
     get_reservations(room_no:string){
-        this.subscription = this.http.on_get_billing_reservation(room_no).subscribe({
-            next: data => { this.reservations = data },
+        this.http.on_get_billing_reservation(room_no).subscribe({
+            next: data => { this.reservations = data; console.log(data) },
             error: err => console.log(err)
         })
         return new Promise(
@@ -33,8 +31,5 @@ export class BillingService{
                 }, 200);
             }
         )
-    }
-    ngOnDestroy(){
-        this.subscription.unsubscribe();
     }
 }

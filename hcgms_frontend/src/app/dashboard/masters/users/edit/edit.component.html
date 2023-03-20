@@ -1,4 +1,5 @@
-<div class="form px-5 py-2">
+<app-loader *ngIf="showLoader"></app-loader>
+<div class="form px-5 py-2" *ngIf="!showLoader">
     <h3 *ngIf="!editMode; else alt">Add User</h3>
     <ng-template #alt>
         <h3>Edit User</h3>
@@ -82,27 +83,29 @@
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form #passwd="ngForm" (ngSubmit)="onChangeUserPassword(passwd)">
-                <div class="modal-body">  
-                    <div class="row">
-                        <div class="col-md-12">
-                            <label class="form-label">Username</label>
-                            <input type="text" class="form-control" [ngModel]="username" name="u_name" disabled>
+                <div class="modal-body">
+                    <div class="form">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="form-label">Username</label>
+                                <input type="text" class="form-control" [ngModel]="username" name="u_name" disabled>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row mt-3">
-                        <div class="col-md-12">
-                            <label class="form-label">Password<span class="text-danger">*</span></label>
-                            <input type="password" class="form-control" [(ngModel)]="password" name="pswd" #pswd="ngModel" required>
-                            <small class="text-danger" *ngIf="pswd.invalid && pswd.touched">Please enter password</small>
+                        <div class="row mt-3">
+                            <div class="col-md-12">
+                                <label class="form-label">Password<span class="text-danger">*</span></label>
+                                <input type="password" class="form-control" [(ngModel)]="password" name="pswd" #pswd="ngModel" required>
+                                <small class="text-danger" *ngIf="pswd.invalid && pswd.touched">Please enter password</small>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row mt-3">
-                        <div class="col-md-12">
-                            <label class="form-label">Confirm Password<span class="text-danger">*</span></label>
-                            <input type="password" class="form-control" [(ngModel)]="password2" name="pswd2" #pswd2="ngModel" required>
-                            <div *ngIf="pswd2.touched">
-                                <small class="text-danger" *ngIf="pswd2.invalid">Please confirm password</small>
-                                <small class="text-danger" *ngIf="pswd.value !== pswd2.value">Password Mismatch</small>
+                        <div class="row mt-3">
+                            <div class="col-md-12">
+                                <label class="form-label">Confirm Password<span class="text-danger">*</span></label>
+                                <input type="password" class="form-control" [(ngModel)]="password2" name="pswd2" #pswd2="ngModel" required>
+                                <div *ngIf="pswd2.touched">
+                                    <small class="text-danger" *ngIf="pswd2.invalid">Please confirm password</small>
+                                    <small class="text-danger" *ngIf="pswd.value !== pswd2.value">Password Mismatch</small>
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -8,6 +8,7 @@ import { DetailsComponent } from './details/details.component';
 import { FormsModule } from '@angular/forms';
 import { HousesComponent } from './houses/houses.component';
 import { AcknowledgmentComponent } from './acknowledgment/acknowledgment.component';
+import { UtilitiesModule } from 'src/app/utilities/utilities.module';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { AcknowledgmentComponent } from './acknowledgment/acknowledgment.compone
   imports: [
     CommonModule,
     ReservationRoutingModule,
-    FormsModule
+    FormsModule,
+    UtilitiesModule
   ],
   providers: [DatePipe]
 })

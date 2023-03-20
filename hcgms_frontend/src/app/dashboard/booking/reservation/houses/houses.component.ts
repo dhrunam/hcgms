@@ -1,13 +1,21 @@
 import { ChangeDetectorRef, Component, EventEmitter, Output } from '@angular/core';
 import { ReservationService } from '../reservation.service';
-
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-houses',
   templateUrl: './houses.component.html',
-  styleUrls: ['./houses.component.css']
+  styles: [`
+    .na{
+      color: red;
+    }
+    .av{
+      color: green;
+    }
+  `]
 })
 export class HousesComponent {
   @Output('switchDetails') details = new EventEmitter<{status: boolean}>();
+  showLoader: boolean = false;
   results: any = [];
   rooms: any = [];
   checkin_date!: Date;
@@ -18,9 +26,11 @@ export class HousesComponent {
   listRooms: boolean = false;
   days:number = 0;
   roomDetails !: {property: number, checkin_date: Date, checkout_date: Date, rooms: Array<any>};
+  private subscription!: Subscription;
   constructor(private reservationService: ReservationService, private cdr: ChangeDetectorRef){}
   ngOnInit(): void{
-    this.reservationService.results.subscribe({
+    this.showLoader = true;
+    this.subscription = this.reservationService.results.subscribe({
       next: data => {
         setTimeout(() => {
           this.listRooms = data.data[0] ? true : false;
@@ -29,6 +39,7 @@ export class HousesComponent {
           this.checkout_date = data.checkout_date;
           this.property = data.property;
           this.days = data.days;
+          this.showLoader = false;
         },500);
       },
       error: err => console.log(err), 
@@ -60,5 +71,8 @@ export class HousesComponent {
       this.reservationService.roomDetails.next(this.roomDetails);
       this.details.emit({status: true});
     }
+  }
+  ngOnDestroy(){
+    this.subscription.unsubscribe();
   }
 }

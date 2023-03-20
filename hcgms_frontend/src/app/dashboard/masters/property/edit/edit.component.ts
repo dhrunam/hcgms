@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
 import { PropertyService } from '../property.service';
 
 @Component({
@@ -9,6 +8,7 @@ import { PropertyService } from '../property.service';
   styleUrls: ['./edit.component.css']
 })
 export class EditComponent {
+  showLoader: boolean = false;
   editMode: boolean = false;
   id:number = 0;
   prop_name: string = '';
@@ -17,13 +17,14 @@ export class EditComponent {
   prop_description: string = '';
   showSuccess: string = '';
   prop_code: string = '';
-  private routeSubscription!: Subscription;
   constructor(private router: Router, private route: ActivatedRoute, private propertyService: PropertyService) {}
   ngOnInit(): void{
-    this.routeSubscription = this.route.params.subscribe((param:Params) => {
+    this.route.params.subscribe((param:Params) => {
       this.editMode = param['id'] != null;
       if(this.editMode){
+        this.showLoader = true;
         this.propertyService.get_property(param['id']).then((d:any) => { 
+          this.showLoader = false;
           this.id = d.id;
           this.prop_name = d.name;
           this.prop_address = d.address;
@@ -40,6 +41,7 @@ export class EditComponent {
       data.control.markAllAsTouched();
     }
     else{
+      this.showLoader = true;
       let fd = new FormData();
       fd.append('name', this.prop_name);
       fd.append('description', this.prop_description);
@@ -48,6 +50,7 @@ export class EditComponent {
       fd.append('code', this.prop_code);
       fd.append('is_operational', 'true');
       this.propertyService.add_property(fd).then((d:any) => {
+        this.showLoader = false;
         this.showSuccess = d.error ? this.showSuccess = 'false' : this.showSuccess = 'true';
       });
     }
@@ -58,6 +61,7 @@ export class EditComponent {
       data.control.markAllAsTouched();
     }
     else{
+      this.showLoader = true;
       let fd = new FormData();
       fd.append('id', this.id.toString());
       fd.append('name', this.prop_name);
@@ -67,14 +71,12 @@ export class EditComponent {
       fd.append('code', this.prop_code);
       fd.append('is_operational', 'true');
       this.propertyService.update_property(fd).then((d:any) => {
+        this.showLoader = false;
         this.showSuccess = d.error ? this.showSuccess = 'false' : this.showSuccess = 'true';
       });
     }
   }
   onGoBack(){
     this.editMode ? this.router.navigate(['../../'], {relativeTo: this.route}) : this.router.navigate(['../'], {relativeTo: this.route});
-  }
-  ngOnDestroy(){
-    this.routeSubscription.unsubscribe();
   }
 }

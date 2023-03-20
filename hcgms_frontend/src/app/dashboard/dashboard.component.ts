@@ -6,4 +6,8 @@ import { Component, ViewEncapsulation } from '@angular/core';
   encapsulation: ViewEncapsulation.None,
 })
 export class DashboardComponent {
+  onSidebarToggle: boolean = false;
+  onToggle(status:boolean){
+    this.onSidebarToggle = status;
+  }
 }

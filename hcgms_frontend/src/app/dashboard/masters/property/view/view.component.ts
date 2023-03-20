@@ -10,6 +10,7 @@ declare var $:any;
 })
 export class ViewComponent{
   properties: any = [];
+  showLoader: boolean = false;
   constructor(private router: Router, private route: ActivatedRoute, private propertyService: PropertyService){}
   ngOnInit():void {
     this.getProperties();
@@ -25,10 +26,13 @@ export class ViewComponent{
     fd.append('id', id.toString());
     fd.append('is_operational', status.toString())
     this.propertyService.delete_property(fd);
+    this.getProperties();
   }
   getProperties(){
+    this.showLoader = true;
     this.propertyService.get_properties().then(d => {
       this.properties = d;
+      this.showLoader = false;
     })
   }
 }

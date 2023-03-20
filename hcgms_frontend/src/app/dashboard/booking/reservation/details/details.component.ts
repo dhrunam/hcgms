@@ -1,17 +1,23 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { ReservationService } from '../reservation.service';
-
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-details',
   templateUrl: './details.component.html',
   styleUrls: ['./details.component.css']
 })
 export class DetailsComponent {
+  showLoader: boolean = false;
+  private subscription!: Subscription;
   @Output('switchAck') ack = new EventEmitter<{status: boolean}>()
   roomDetails: any = [];
   constructor(private reservationService: ReservationService){}
   ngOnInit(): void {
-    this.reservationService.roomDetails.subscribe((d:any) => this.roomDetails = d);
+    this.showLoader = true;
+    this.subscription = this.reservationService.roomDetails.subscribe((d:any) => {
+      this.showLoader = false;
+      this.roomDetails = d
+    });
   }
   onConfirmReservation(data: any){
     if(!data.valid){
@@ -49,5 +55,8 @@ export class DetailsComponent {
         );
       });
     }
+  }
+  ngOnDestroy(){
+    this.subscription.unsubscribe();
   }
 }

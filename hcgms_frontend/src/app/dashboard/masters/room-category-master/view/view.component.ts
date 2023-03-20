@@ -9,15 +9,10 @@ declare var bootstrap:any;
 })
 export class ViewComponent {
   categories: any = [];
+  showLoader: boolean = false;
   constructor(private router: Router, private route: ActivatedRoute, private roomCategoryService: RoomCategoryService){}
   ngOnInit(): void{
     this.getCategories();
-  }
-  ngAfterViewInit(): void{
-    // setTimeout(() => {
-    //   const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-    //   const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
-    // }, 200)
   }
   onRouteAddRoomCategory(){
     this.router.navigate(['../new'], { relativeTo: this.route } );
@@ -30,6 +25,10 @@ export class ViewComponent {
     this.getCategories();
   }
   getCategories(){
-    this.roomCategoryService.get_room_categories().then(d => this.categories = d);
+    this.showLoader = true;
+    this.roomCategoryService.get_room_categories().then(d => {
+      this.showLoader = false;
+      this.categories = d;
+    });
   }
 }

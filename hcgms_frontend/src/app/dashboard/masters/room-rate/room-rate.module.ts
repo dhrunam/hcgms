@@ -6,6 +6,7 @@ import { RoomRateComponent } from './room-rate.component';
 import { EditComponent } from './edit/edit.component';
 import { ViewComponent } from './view/view.component';
 import { FormsModule } from '@angular/forms';
+import { UtilitiesModule } from 'src/app/utilities/utilities.module';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import { FormsModule } from '@angular/forms';
   imports: [
     CommonModule,
     RoomRateRoutingModule,
-    FormsModule
+    FormsModule,
+    UtilitiesModule
   ]
 })
 export class RoomRateModule { }

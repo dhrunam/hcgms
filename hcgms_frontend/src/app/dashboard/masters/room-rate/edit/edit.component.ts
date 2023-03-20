@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
 import { RoomRateService } from '../room-rate.service';
 
 @Component({
@@ -9,7 +8,7 @@ import { RoomRateService } from '../room-rate.service';
   styleUrls: ['./edit.component.css']
 })
 export class EditComponent {
-  private subscription!: Subscription;
+  showLoader: boolean = false;
   showSuccess: string = '';
   editMode: boolean = false;
   properties: any = [];
@@ -24,10 +23,12 @@ export class EditComponent {
   room: string = 'N/A';
   constructor(private roomRateService: RoomRateService, private router: Router, private route: ActivatedRoute){}
   ngOnInit():void {
-    this.subscription = this.route.params.subscribe((data: Params) => {
+    this.route.params.subscribe((data: Params) => {
       this.editMode = data['id'] != null;
       if(this.editMode){
+        this.showLoader = true;
         this.roomRateService.get_room_rate(data['id']).then((d:any) => {
+          this.showLoader = false;
           this.id = d.id;
           this.cost = d.cost;
           this.start_date = d.start_date;
@@ -66,6 +67,7 @@ export class EditComponent {
         }
       }
       else{
+        this.showLoader = true;
         let fd = new FormData();
         fd.append('cost', this.cost);
         fd.append('start_date', this.start_date);
@@ -73,6 +75,7 @@ export class EditComponent {
         fd.append('property', this.property);
         fd.append('room', this.room);
         this.roomRateService.add_room_rate(fd).then((d:any) => {
+          this.showLoader = false;
           this.showSuccess = d.error ? 'false' : 'true';
         });
       }
@@ -96,6 +99,7 @@ export class EditComponent {
         }
       }
       else{
+        this.showLoader = true;
         let fd = new FormData();
         fd.append('id', this.id.toString());
         fd.append('cost', this.cost);
@@ -104,6 +108,7 @@ export class EditComponent {
         fd.append('property', this.property);
         fd.append('room', this.room);
         this.roomRateService.update_room_rate(fd).then((d:any) => {
+          this.showLoader = false;
           this.showSuccess = d.error ? 'false' : 'true';
         });
       }
@@ -111,8 +116,5 @@ export class EditComponent {
   }
   onGoBack(){
     this.editMode ? this.router.navigate(['../../'], {relativeTo: this.route}) : this.router.navigate(['../'], {relativeTo: this.route});
-  }
-  ngOnDestroy(){
-    this.subscription.unsubscribe();
   }
 }

@@ -399,7 +399,7 @@ class ReservationDetailsListForReporting(generics.ListAPIView):
 
             queryset= queryset.filter(
             Q(checkin_date__gte=start_date,checkin_date__lte=end_date )
-            )
+            ).exclude(status='cancelled')
         else:
             return queryset.order_by('-id')
 

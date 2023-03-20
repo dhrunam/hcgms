@@ -10,7 +10,7 @@ from durin.auth import TokenAuthentication
 class PropertyList(generics.ListCreateAPIView):
     # authentication_classes = (TokenAuthentication,)
     # permission_classes = (IsAuthenticated,)
-    queryset = models.Property.objects.all()
+    queryset = models.Property.objects.all().order_by('id')
     serializer_class = serializers.PropertySerializer
     # pagination.PageNumberPagination.page_size = 100
 

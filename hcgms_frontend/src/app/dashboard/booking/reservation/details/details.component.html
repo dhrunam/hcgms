@@ -1,4 +1,5 @@
-<div class="container">
+<app-loader *ngIf="showLoader"></app-loader>
+<div class="px-5" *ngIf="!showLoader">
     <main class="mt-5">
         <h4>Add Details</h4>
         <hr>

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LocalStorageService } from 'src/app/services/local-storage-service/local-storage.service';
-import { TimeCardService } from 'src/app/services/timecard-service/timecard.service';
+import { TimeCardService } from 'src/app/dashboard/booking/time-card/timecard-service/timecard.service';
 
 @Component({
   selector: 'app-check-out',
@@ -24,8 +24,8 @@ export class CheckOutComponent {
     this.property = localStorageService.getPropertyId();
   }
   ngOnInit():void{
-     this.todayDate = `${this.date.getFullYear()}-${this.date.getMonth()< 10 ? '0':''}${this.date.getMonth()+1}-${this.date.getDate()< 10 ? '0':''}${this.date.getDate()}`;
-    // this.todayDate = `${this.date.getFullYear()}-${this.date.getMonth()< 10 ? '0':''}${this.date.getMonth()+1}-05`;
+    //  this.todayDate = `${this.date.getFullYear()}-${this.date.getMonth()< 10 ? '0':''}${this.date.getMonth()+1}-${this.date.getDate()< 10 ? '0':''}${this.date.getDate()}`;
+    this.todayDate = `${this.date.getFullYear()}-${this.date.getMonth()< 10 ? '0':''}${this.date.getMonth()+1}-14`;
     this.getBooking();
   }
   onGetRooms(r_id:string,booking_id:string, data: any){
@@ -33,11 +33,11 @@ export class CheckOutComponent {
     this.bookingId = booking_id;
     this.rooms = data;
   }
-  // onCheckout(room_id: number, id:number){
   onCheckout(){
     let fd = new FormData();
     fd.append('rooms', JSON.stringify(this.send_data));
     fd.append('reservation', this.send_data[0]['reservation']);
+    fd.append('property', this.property);
     this.timeCardService.on_checkout(fd).then((d:any) => {
       this.getBooking();
     });;
