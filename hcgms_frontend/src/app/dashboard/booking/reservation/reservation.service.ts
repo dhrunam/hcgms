@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Subject } from "rxjs";
+import { delay, Subject } from "rxjs";
 import { HttpService } from "src/app/services/http-service/http.service";
 
 @Injectable({providedIn: 'root'})
@@ -7,49 +7,15 @@ export class ReservationService{
     acknowledgement = new Subject<any>();
     roomDetails = new Subject<{property: number, checkin_date: Date, checkout_date: Date, rooms: any}>();
     results = new Subject<{data: any, checkin_date: Date, checkout_date: Date, property: number, days: number}>();
-    properties: any = [];
-    searchRooms: any;
     room_detail:any = [];
-    ack_details: any = [];
     constructor(private http: HttpService){}
     getProperties(){
-        this.http.get_properties().subscribe({
-            next: data => this.properties = data,
-            error: err => console.log(err),
-        });
-        return new Promise(
-            (resolve,reject) => {
-                setTimeout(() => {
-                    resolve(this.properties);
-                },200)
-            }
-        )
+        return this.http.get_properties()
     }
     search_rooms(checkin_date: Date, checkout_date: Date, property: number){
-        this.http.search_rooms(checkin_date, checkout_date, property)
-        .subscribe({
-            next: data => { this.searchRooms = data },
-            error: err => console.log(err)
-        });
-        return new Promise(
-            (resolve, reject) => {
-                setTimeout(() => {
-                    resolve(this.searchRooms);
-                }, 200);
-            }
-        )
+        return this.http.search_rooms(checkin_date, checkout_date, property).pipe(delay(300));
     }
     confirm_reservation(fd:any){
-        this.http.confirm_reservation(fd).subscribe({
-            next: data => { this.ack_details = data },
-            error: err => console.log(err)
-        })
-        return new Promise(
-            (resolve,reject) => {
-                setTimeout(() => {
-                    resolve(this.ack_details);
-                },200)
-            }
-        );
+        return this.http.confirm_reservation(fd)
     }
 }

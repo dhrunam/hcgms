@@ -57,27 +57,19 @@ export class EditComponent {
       data.control.markAllAsTouched();
     }
     else{
-      if(this.property === 'N/A' && this.role === 'N/A'){
-        alert('Please select a guest house and a role');
-      }
-      else if(this.property === 'N/A' || this.role === 'N/A'){
-        if(this.property === 'N/A'){
-          alert('Please select a guest house');
-        }
-        else{
-          alert('Please select a role');
-        }
+      let observable: Observable<any>
+      this.showLoader = true;
+      let fd = new FormData();
+      if(this.role === 'N/A'){
+        alert('Please select a role');
       }
       else{
-        let observable: Observable<any>
-        this.showLoader = true;
-        let fd = new FormData();
         fd.append('first_name', data.value.f_name);
         fd.append('last_name', data.value.l_name);
         fd.append('contact_number', data.value.c_no);
         fd.append('username', data.value.u_name);
-        fd.append('property', this.property);
         fd.append('group', this.role);
+        fd.append('property', this.property);
         if(this.editMode){
           fd.append('id', this.id.toString());
           observable = this.userService.update_user(fd);

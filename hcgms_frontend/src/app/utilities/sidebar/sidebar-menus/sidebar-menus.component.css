@@ -9,10 +9,15 @@ ul{
     border-bottom-right-radius: 18px;
 }
 .i:hover{
-    background-color: #E8EAED;;
+    background-color: #C3C3C3;
+    color: #fff;
     border-top-right-radius: 18px;
     border-bottom-right-radius: 18px;
     transition: all 0.3s ease-in-out;
+}
+.i.routerActive:hover{
+    background-color: #7CB8EC;
+    color: #fff;
 }
 .menu .menu-item,
 .menu .menu-item .sub-menu .sub-menu-item{

@@ -23,12 +23,9 @@ export class ViewComponent implements OnInit {
    // this.todayDate = `${this.date.getFullYear()}-${this.date.getMonth()< 10 ? '0':''}${this.date.getMonth()+1}-05`;
     this.otherServices.get_other_services_reservations().subscribe({
       next: data => {
-        this.showData = true;
+        this.showData = data[0] ? true : false;
         this.reservation_data = data;
        },
-       error: err => {
-        this.showData = false;
-       }
     });
  }
 }

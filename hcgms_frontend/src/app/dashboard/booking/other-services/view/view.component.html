@@ -1,11 +1,14 @@
 
-<section class="px-5 py-2 mt-5">
+<section class="mt-3">
     <div class="d-flex justify-content-between">
         <h5>List of Booking</h5>
         <h5>Date: {{ todayDate | date: 'dd-MM-YYYY' }}</h5>
     </div>
     <hr>
-    <div class="row">
+    <div *ngIf="!showData">
+        <h5>No Bookings Available</h5>
+    </div>
+    <div class="row" *ngIf="showData">
         <div class="col-md-3" *ngFor="let c of reservation_data">
             <div class="card" [routerLink]="['../view', c.id]">
                 <div class="card-body">
