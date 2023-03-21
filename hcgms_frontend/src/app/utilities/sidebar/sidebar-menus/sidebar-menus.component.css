@@ -3,21 +3,20 @@ ul{
     margin-top: 30px;
 }
 .routerActive{
-    background-color: #7CB8EC;
-    color: #fff;
+    background-color: #e8f0fe;
+    color: #403c91;
     border-top-right-radius: 18px;
     border-bottom-right-radius: 18px;
 }
 .i:hover{
-    background-color: #C3C3C3;
-    color: #fff;
+    background-color: #E9E9ED;
     border-top-right-radius: 18px;
     border-bottom-right-radius: 18px;
     transition: all 0.3s ease-in-out;
 }
 .i.routerActive:hover{
-    background-color: #7CB8EC;
-    color: #fff;
+    background-color: #e8f0fe;
+    color: #080766;
 }
 .menu .menu-item,
 .menu .menu-item .sub-menu .sub-menu-item{
