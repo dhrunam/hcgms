@@ -21,14 +21,18 @@ export class ViewComponent {
     this.router.navigate(['../',id,'edit'], { relativeTo: this.route } );
   }
   onDeleteUser(id:number){
-    this.userService.delete_user(id)
-    this.getUser();
+    this.userService.delete_user(id).subscribe({
+      next: data => this.getUser(),
+    })
+    
   }
   getUser(){
     this.showLoader = true;
-    this.userService.get_users().then((d:any) => {
-      this.showLoader = false;
-      this.users = d;
+    this.userService.get_users().subscribe({
+      next: data => {
+        this.showLoader = false;
+        this.users = data;
+      }
     })
   }
 }

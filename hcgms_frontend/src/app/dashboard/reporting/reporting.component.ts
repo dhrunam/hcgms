@@ -53,6 +53,17 @@ export class ReportingComponent {
           alignment: 'center',
         },
         {
+          text: 'HIGH COURT OF SIKKIM',
+          alignment: 'center',
+          bold: true,
+          margin: [0, 15, 0, 0]
+        },
+        {
+          text: 'GANGTOK',
+          alignment: 'center',
+          bold: true,
+        },
+        {
           columns: [
             {
               text: 'No. ',
@@ -128,11 +139,13 @@ export class ReportingComponent {
     var second_date = moment(date).add(15,'d').toDate();
     this.end_date = this.datePipe.transform(second_date, 'YYYY-MM-dd');
     this.showLoader = true;
-    this.reportingService.getDetails(this.start_date, this.end_date).then((d:any) => {
-      this.showLoader = false;
-      this.showReport = true;
-      this.data = d;
-      this.getTableData();
+    this.reportingService.getDetails(this.start_date, this.end_date).subscribe({
+      next: data => {
+        this.showLoader = false;
+        this.showReport = true;
+        this.data = data;
+        this.getTableData();
+      }
     })
   }
   getTableData(){

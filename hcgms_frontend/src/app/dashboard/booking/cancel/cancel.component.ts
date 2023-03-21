@@ -19,17 +19,23 @@ export class CancelComponent {
   showCheckIn: boolean = false;
   showData: string = '';
   constructor(private cancelService: CancelService, private timeCardService: TimeCardService){}
-  ngOnInit():void{}
   onCancel(r_id:number){
     let fd = new FormData();
     fd.append('id', r_id.toString());
     fd.append('operation', 'cancelled');
-    this.cancelService.on_cancellation(fd).then((d:any) => { this.getBooking() });
+    this.cancelService.on_cancellation(fd).subscribe({
+      next: data => this.getBooking(),
+    });
   }
   getBooking(){
-    this.timeCardService.get_checkin_reservations(this.date).then((d:any) => {
-      this.showData = d[0] ? 'true' : 'false';
-      this.checkin_data = d;
+    this.cancelService.get_checkin_reservations(this.date).subscribe({
+      next: data => {
+        this.showData = 'true';
+        this.checkin_data = data;
+      },
+      error: err => {
+        this.showData = 'false';
+      }
     });
   }
 }

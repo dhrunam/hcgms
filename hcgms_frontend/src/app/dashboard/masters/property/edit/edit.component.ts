@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
+import { Observable } from 'rxjs';
 import { PropertyService } from '../property.service';
 
 @Component({
@@ -20,22 +22,25 @@ export class EditComponent {
   constructor(private router: Router, private route: ActivatedRoute, private propertyService: PropertyService) {}
   ngOnInit(): void{
     this.route.params.subscribe((param:Params) => {
+      this.id = param['id'];
       this.editMode = param['id'] != null;
       if(this.editMode){
         this.showLoader = true;
-        this.propertyService.get_property(param['id']).then((d:any) => { 
-          this.showLoader = false;
-          this.id = d.id;
-          this.prop_name = d.name;
-          this.prop_address = d.address;
-          this.prop_short_name = d.short_name;
-          this.prop_description = d.description;
-          this.prop_code = d.code;
+        this.propertyService.get_property(param['id']).subscribe({
+          next: data => { 
+            this.showLoader = false;
+            this.prop_name = data.name;
+            this.prop_address = data.address;
+            this.prop_short_name = data.short_name;
+            this.prop_description = data.description;
+            this.prop_code = data.code;
+          }
         });
       }
     })
   }
-  onAddProperty(data:any){
+  onSubmit(data: NgForm){
+    let observable: Observable<any>;
     this.showSuccess = '';
     if(!data.valid){
       data.control.markAllAsTouched();
@@ -43,37 +48,29 @@ export class EditComponent {
     else{
       this.showLoader = true;
       let fd = new FormData();
-      fd.append('name', this.prop_name);
-      fd.append('description', this.prop_description);
-      fd.append('address', this.prop_address);
-      fd.append('short_name', this.prop_short_name.toUpperCase());
-      fd.append('code', this.prop_code);
-      fd.append('is_operational', 'true');
-      this.propertyService.add_property(fd).then((d:any) => {
-        this.showLoader = false;
-        this.showSuccess = d.error ? this.showSuccess = 'false' : this.showSuccess = 'true';
-      });
-    }
-  }
-  onUpdateProperty(data:any){
-    this.showSuccess = '';
-    if(!data.valid){
-      data.control.markAllAsTouched();
-    }
-    else{
-      this.showLoader = true;
-      let fd = new FormData();
-      fd.append('id', this.id.toString());
-      fd.append('name', this.prop_name);
-      fd.append('description', this.prop_description);
-      fd.append('address', this.prop_address);
-      fd.append('short_name', this.prop_short_name.toUpperCase());
-      fd.append('code', this.prop_code);
-      fd.append('is_operational', 'true');
-      this.propertyService.update_property(fd).then((d:any) => {
-        this.showLoader = false;
-        this.showSuccess = d.error ? this.showSuccess = 'false' : this.showSuccess = 'true';
-      });
+      fd.append('name', data.value.name);
+      fd.append('description', data.value.description);
+      fd.append('address', data.value.address);
+      fd.append('short_name', data.value.short_name.toUpperCase());
+      fd.append('code', data.value.code);
+      if(this.editMode){
+        fd.append('id', this.id.toString());
+        observable = this.propertyService.update_property(fd);
+      }
+      else{
+        fd.append('is_operational', 'true');
+        observable = this.propertyService.add_property(fd);
+      }
+      observable.subscribe({
+        next: data => {
+          this.showSuccess = 'true';
+          this.showLoader = false;
+        },
+        error: err => {
+          this.showSuccess = 'false';
+          this.showLoader = false;
+        },
+      })
     }
   }
   onGoBack(){

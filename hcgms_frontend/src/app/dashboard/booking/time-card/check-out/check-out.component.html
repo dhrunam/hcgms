@@ -1,14 +1,14 @@
-<div class="title text-center mt-5">
+<div class="title text-center">
     <h2>Check-Out</h2>
 </div>
-<section class="px-5 py-2 mt-5">
+<section class="mt-3">
     <div class="d-flex justify-content-between">
         <h5>Today's Booking</h5>
         <h5>Date: {{ todayDate | date: 'dd-MM-YYYY' }}</h5>
     </div>
     <hr>
     <div *ngIf="!showResv">
-        <h4>No Bookings Available</h4>
+        <h5>No Bookings Available</h5>
     </div>
     <div class="row" *ngIf="showResv">
         <div class="col-md-3" *ngFor="let c of checkout_data">

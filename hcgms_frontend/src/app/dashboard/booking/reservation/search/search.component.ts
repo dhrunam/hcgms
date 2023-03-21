@@ -16,7 +16,9 @@ export class SearchComponent {
     this.todayDate = this.datePipe.transform(new Date(), 'YYYY-MM-dd');
   }
   ngOnInit(): void{
-    this.reservationService.getProperties().then((d:any) => this.properties = d);
+    this.reservationService.getProperties().subscribe({
+      next: data => this.properties = data,
+    });
   }
   onSearchRooms(data: any){
     if(!data.valid){
@@ -31,13 +33,15 @@ export class SearchComponent {
       }
       else{
         let days:number = this.daysBetween(data.value.start_date, data.value.end_date)
-        this.reservationService.search_rooms(data.value.start_date, data.value.end_date, data.value.property_id).then((d:any) => {        
-          if(!d[0]){
-            this.houses.emit({status: false});
-          }
-          else{
-            this.reservationService.results.next({data: d, checkin_date: data.value.start_date, checkout_date: data.value.end_date, property: data.value.property_id, days: days});
-            this.houses.emit({status: true});
+        this.reservationService.search_rooms(data.value.start_date, data.value.end_date, data.value.property_id).subscribe({
+          next: d => {        
+            if(!d[0]){
+              this.houses.emit({status: false});
+            }
+            else{
+              this.reservationService.results.next({data: d, checkin_date: data.value.start_date, checkout_date: data.value.end_date, property: data.value.property_id, days: days});
+              this.houses.emit({status: true});
+            }
           }
         });
       } 

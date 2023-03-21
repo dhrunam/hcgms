@@ -1,108 +1,31 @@
 import { Injectable } from "@angular/core";
+import { delay } from "rxjs";
 import { HttpService } from "src/app/services/http-service/http.service";
 @Injectable({providedIn: 'root'})
 export class UserService{
-    status: any;
-    properties: any = [];
-    roles: any = [];
-    users: any = [];
-    user!: { id:number, first_name: string, last_name: string, username: string, contact:string, property: string , role: string}
     constructor(private http: HttpService){}
     get_roles(){
-        this.http.get_roles().subscribe({
-            next: data => { this.roles = data },
-            error: err => console.log(err)
-        });
-        return new Promise(
-            (resolve, reject) => {
-                setTimeout(() => {
-                    resolve(this.roles);
-                }, 200);
-            }
-        )
+        return this.http.get_roles()
     }
     get_properties(){
-        this.http.get_properties().subscribe({
-            next: data => { this.properties = data },
-            error: err => console.log(err),
-        });
-        return new Promise(
-            (resolve, reject) => {
-                setTimeout(() => {
-                    resolve(this.properties);
-                }, 200);
-            }
-        )
+        return this.http.get_properties()
     }
     get_users(){
-        this.http.get_users().subscribe({
-            next: data => { this.users = data; },
-            error: err => console.log(err),
-        });
-        return new Promise(
-            (resolve, reject) => {
-                setTimeout(() => {
-                    resolve(this.users);
-                }, 200);
-            }
-        )
+        return this.http.get_users().pipe(delay(300))
     }
     get_user(id: number){
-        this.http.get_user(id).subscribe({
-            next: data => { this.user = { id: data.id, first_name: data.first_name, last_name: data.last_name, username: data.username, contact: data.related_profile[0].contact_number, property: data.related_profile[0].related_property.id, role: data.related_groups[0].id} },
-            error: err => console.log(err)
-        });
-        return new Promise(
-            (resolve, reject) => {
-                setTimeout(() => {
-                    resolve(this.user);
-                }, 200);
-            }
-        )
+        return this.http.get_user(id).pipe(delay(300))
     }
-    add_user(data: any){
-        this.http.add_user(data).subscribe({
-            next: data => { this.status = data },
-            error: err => { this.status = err },
-        });
-        return new Promise(
-            (resolve,reject) => {
-                setTimeout(() => {
-                    resolve(this.status);
-                }, 200)
-            }
-        )
+    add_user(fd:FormData){
+        return this.http.add_user(fd).pipe(delay(300))
     }
-    update_user(data: any){
-        this.http.update_user(data).subscribe({
-            next: data => { this.status = data },
-            error: err => { this.status = err },
-        });
-        return new Promise(
-            (resolve,reject) => {
-                setTimeout(() => {
-                    resolve(this.status);
-                }, 200)
-            }
-        )
+    update_user(fd:FormData){
+        return this.http.update_user(fd).pipe(delay(300))
     }
     delete_user(id:number){
-        this.http.delete_user(id).subscribe({
-            next: data => { this.get_users() },
-            error: err => console.log(err),
-        });
+        return this.http.delete_user(id)
     }
-    change_user_password(data: any){
-        this.http.change_user_password(data).subscribe({
-            next: data => { this.status = data },
-            error: err => { this.status = err },
-        });
-        return new Promise(
-            (resolve,reject) => {
-                setTimeout(() => {
-                    resolve(this.status);
-                }, 200)
-            }
-        )
+    change_user_password(fd:FormData){
+        return this.http.change_user_password(fd)
     }
 }

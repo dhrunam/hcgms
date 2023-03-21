@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
+import { Observable } from 'rxjs';
 import { RoomRateService } from '../room-rate.service';
 
 @Component({
@@ -25,93 +27,84 @@ export class EditComponent {
   ngOnInit():void {
     this.route.params.subscribe((data: Params) => {
       this.editMode = data['id'] != null;
+      this.id = data['id'];
       if(this.editMode){
         this.showLoader = true;
-        this.roomRateService.get_room_rate(data['id']).then((d:any) => {
-          this.showLoader = false;
-          this.id = d.id;
-          this.cost = d.cost;
-          this.start_date = d.start_date;
-          this.end_date = d.end_date;
-          this.property = d.property;
-          this.room = d.room;
-          this.property_name = d.property_name;
-          this.room_no = d.room_no;
+        this.roomRateService.get_room_rate(data['id']).subscribe({
+          next: data => {
+            console.log(data);
+            this.showLoader = false;
+            this.cost = data.cost;
+            this.start_date = data.start_date;
+            this.end_date = data.end_date;
+            this.property = data.property;
+            this.room = data.room;
+            this.property_name = data.related_property.name;
+            this.room_no = data.related_room.room_no;
+          }
         })
       }
     })
-    this.roomRateService.get_properties().then((d:any) => {
-      this.properties = d;
+    this.roomRateService.get_properties().subscribe({
+      next: data => {
+        this.properties = data;
+      }
     })
   }
   onGetRooms(event:any){
     let property_id:number = parseInt(event.target.value);
-    this.roomRateService.get_rooms(property_id).then((d:any) => {
-      this.rooms = d;
+    this.roomRateService.get_rooms(property_id).subscribe({
+      next: data => {
+        this.rooms = data;
+      }
     })
   }
-  onAddRoomTariff(data:any){
+  onSubmit(data: NgForm){
+    this.showSuccess = '';
+    let observable: Observable<any>;
     if(!data.valid){
       data.control.markAllAsTouched();
     }
     else{
-      if(this.property === 'N/A' && this.room === 'N/A'){
-        alert('Please select a guest house and a room');
-      }
-      else if(this.property === 'N/A' || this.room === 'N/A'){
-        if(this.property === 'N/A'){
-          alert('Please select a guest house');
-        }
-        else{
-          alert('Please select a room');
-        }
-      }
-      else{
-        this.showLoader = true;
-        let fd = new FormData();
-        fd.append('cost', this.cost);
-        fd.append('start_date', this.start_date);
-        fd.append('end_date', this.end_date);
+      this.showLoader = true;
+      let fd = new FormData();
+      fd.append('cost', data.value.c);
+      fd.append('start_date', data.value.start);
+      fd.append('end_date', data.value.end);
+      if(this.editMode){
         fd.append('property', this.property);
         fd.append('room', this.room);
-        this.roomRateService.add_room_rate(fd).then((d:any) => {
-          this.showLoader = false;
-          this.showSuccess = d.error ? 'false' : 'true';
-        });
-      }
-    }
-    
-  }
-  onUpdateRoomTariff(data:any){
-    if(!data.valid){
-      data.control.markAllAsTouched();
-    }
-    else{
-      if(this.property === 'N/A' && this.room === 'N/A'){
-        alert('Please select a guest house and a room');
-      }
-      else if(this.property === 'N/A' || this.room === 'N/A'){
-        if(this.property === 'N/A'){
-          alert('Please select a guest house');
-        }
-        else{
-          alert('Please select a room');
-        }
-      }
-      else{
-        this.showLoader = true;
-        let fd = new FormData();
         fd.append('id', this.id.toString());
-        fd.append('cost', this.cost);
-        fd.append('start_date', this.start_date);
-        fd.append('end_date', this.end_date);
-        fd.append('property', this.property);
-        fd.append('room', this.room);
-        this.roomRateService.update_room_rate(fd).then((d:any) => {
-          this.showLoader = false;
-          this.showSuccess = d.error ? 'false' : 'true';
-        });
+        observable = this.roomRateService.update_room_rate(fd);
       }
+      else{
+        if(this.property === 'N/A' && this.room === 'N/A'){
+          alert('Please select a guest house and a room');
+        }
+        else if(this.property === 'N/A' || this.room === 'N/A'){
+          if(this.property === 'N/A'){
+            alert('Please select a guest house');
+          }
+          else{
+            alert('Please select a room');
+          }
+        }
+        else{
+          fd.append('property', this.property);
+          fd.append('room', this.room);
+        }
+        observable = this.roomRateService.add_room_rate(fd);
+      }
+      observable.subscribe({
+        next: data => {
+          this.showSuccess = 'true';
+          this.showLoader = false;
+        },
+        error: err => {
+          this.showSuccess = 'false';
+          this.showLoader = false;
+        }
+      })
     }
   }
   onGoBack(){

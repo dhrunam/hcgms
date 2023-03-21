@@ -92,15 +92,15 @@ export class AcknowledgmentComponent {
           alignment: 'center',
         },
         {
-          text: this.details.property,
+          text: 'HIGH COURT OF SIKKIM',
           alignment: 'center',
           bold: true,
-          margin: [0, 20, 0, 3]
-        }, 
+          margin: [0, 15, 0, 0]
+        },
         {
-          text: this.details.address,
+          text: 'GANGTOK',
           alignment: 'center',
-          margin: [0, 0, 0, 3]
+          bold: true,
         },
         {
           text: 'Acknowledgement Receipt',
@@ -116,7 +116,7 @@ export class AcknowledgmentComponent {
               [ `Bill No: ${this.details.booking_id}`, `Date: ${this.datePipe.transform(this.details.booking_date, 'dd-MM-YYYY')}`],
               [ `Guest Name: ${this.details.guest_name}`, `Address: ${this.details.address}`],
               [ `Check-In: ${this.datePipe.transform(this.details.checkin_date, 'dd-MM-YYYY')}`, `Check-Out : ${this.datePipe.transform(this.details.checkout_date, 'dd-MM-YYYY')}`],
-              [ `Contact: ${this.details.contact_no}`, ''],
+              [ `Contact: ${this.details.contact_no}`, `Guest House: ${this.details.property}`],
             ]
           },
           margin: [0, 0, 0, 20]

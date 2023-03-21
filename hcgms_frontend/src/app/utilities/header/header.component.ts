@@ -17,15 +17,6 @@ export class HeaderComponent {
   constructor(private authService: AuthService, private localStorageService: LocalStorageService){
     this.username = this.localStorageService.getUserName();
   }
-  @HostListener('window:resize', ['$event'])
-  onResize(event:any) {  
-    this.screenWidth = window.innerWidth;  
-    this.screenHeight = window.innerHeight;
-    if(this.screenWidth > 1136 || this.screenWidth < 1136){
-      this.toggleValue = false;
-    }
-    this.onToggle.emit(this.toggleValue);
-  }
   onInitToggle(){
     this.toggleValue = !this.toggleValue;
     this.onToggle.emit(this.toggleValue);

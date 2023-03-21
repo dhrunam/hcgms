@@ -21,20 +21,25 @@ export class BillingComponent {
   reservations: any = [];
   showResv: boolean = false;
   room_details:any = [];
+  fb_details: any = [];
   constructor(private billingService: BillingService, private localStorageService: LocalStorageService, private datePipe: DatePipe){
     this.property_id = this.localStorageService.getPropertyId();
   }
   ngOnInit(): void{
-    this.billingService.get_rooms(this.property_id).then((d:any) => {
-      this.showResv = d[0] ? true : false;
-      this.rooms = d;
+    this.billingService.get_rooms(this.property_id).subscribe({
+      next: data => {
+        this.rooms = data;
+      }
     })
   }
   onGetReservations(event:any){
     let room_no:string = event.target.value;
-    this.billingService.get_reservations(room_no).then((d:any) => {
-      this.showData = true;
-      this.reservations = d;
+    this.billingService.get_reservations(room_no).subscribe({
+      next: data => {
+        this.showResv = data[0] ? true : false;
+        this.showData = true;
+        this.reservations = data;
+      }
     })
   }
   getBase64ImageFromURL(url: string) {
@@ -78,7 +83,17 @@ export class BillingComponent {
     
     return this.room_details;
   }
+  serviceCostCalculator(data:any){
+    this.fb_details = [['Particular','Amount']]
+    let totalServiceCost: number = 0;
+    data.forEach((d: any) => {
+      this.fb_details.push([d.particular, `₹ ${d.cost}`]);
+      totalServiceCost += parseInt(d.cost);
+    })
+    return totalServiceCost;
+  }
   async printBill(data:any){
+    let service_cost = this.serviceCostCalculator(data.related_services);
     let docDefinition: any = {
       content: [
         {
@@ -87,15 +102,16 @@ export class BillingComponent {
           alignment: 'center',
         },
         {
-          text: data.related_property.name,
+          text: 'HIGH COURT OF SIKKIM',
           alignment: 'center',
           bold: true,
-          margin: [0, 20, 0, 3]
-        }, 
+          margin: [0, 15, 0, 0]
+        },
         {
-          text: data.related_property.address,
+          text: 'GANGTOK',
           alignment: 'center',
-          margin: [0, 0, 0, 3]
+          bold: true,
+          margin: [0, 0, 0, 10]
         },
         {
           text: 'Invoice Tax',
@@ -110,22 +126,42 @@ export class BillingComponent {
             body: [
               [ `Bill No: ${data.reservation_no}`, `Date: ${this.datePipe.transform(data.checkout_date, 'dd-MM-YYYY')}`],
               [ `Guest Name: ${data.lead_guest_name}`, `Address: ${data.address}`],
-              [ `Contact: ${data.contact_no}`, `No. of Persons: 2`],
+              [ `Contact: ${data.contact_no}`, `Guest House: ${data.related_property.name}`],
               [ `Check-In: ${this.datePipe.transform(data.checkin_date, 'dd-MM-YYYY')}`, `Check-Out : ${this.datePipe.transform(data.checkout_date, 'dd-MM-YYYY')}`],
             ]
           },
           margin: [0, 0, 0, 20]
         },
         {
+          text: 'Room(s)',
+          bold: true,
+          margin: [0, 0, 0, 0]
+        },
+        {canvas: [{ type: 'line', x1: 0, y1: 5, x2: 595-2*40, y2: 5, lineWidth: 1 }], margin: [0, 0, 0, 10]},
+        {
           table: {
             headerRows: 1,
             widths: [ '*', '*', '*', '*','*'],
             body: this.getRoomDetails(data),
           },
-          margin: [0, 0, 0, 20]
+          margin: [0, 0, 0, 20],
         },
         {
-          text: `Total: ₹ ${data.total_room_cost}`,
+          text: 'Miscellaneous',
+          bold: true,
+          margin: [0, 0, 0, 0]
+        },
+        {canvas: [{ type: 'line', x1: 0, y1: 5, x2: 595-2*40, y2: 5, lineWidth: 1 }], margin: [0, 0, 0, 10]},
+        {
+          table: {
+            headerRows: 1,
+            widths: [ '*', '*'],
+            body: this.fb_details,
+          },
+          margin: [0, 0, 0, 20],
+        },
+        {
+          text: `Total: ₹ ${parseInt(data.total_room_cost) + service_cost}`,
           bold: true,
           alignment: 'right',
           margin: [0, 0, 0, 50]

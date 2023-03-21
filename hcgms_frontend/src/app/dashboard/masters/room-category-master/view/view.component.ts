@@ -21,14 +21,17 @@ export class ViewComponent {
     this.router.navigate(['../',id,'edit'], { relativeTo: this.route } );
   }
   onDeleteRoomCategory(id:number){
-    this.roomCategoryService.delete_room_category(id);
-    this.getCategories();
+    this.roomCategoryService.delete_room_category(id).subscribe({
+      next: () => this.getCategories(),
+    });
   }
   getCategories(){
     this.showLoader = true;
-    this.roomCategoryService.get_room_categories().then(d => {
-      this.showLoader = false;
-      this.categories = d;
+    this.roomCategoryService.get_room_categories().subscribe({
+      next: data => {
+        this.showLoader = false;
+        this.categories = data;
+      }
     });
   }
 }

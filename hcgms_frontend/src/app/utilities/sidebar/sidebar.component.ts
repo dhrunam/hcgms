@@ -10,21 +10,8 @@ export class SidebarComponent {
   screenHeight:any;
   @Input() toggleValue: boolean = false;
   @Output() sendToggleValue = new EventEmitter<boolean>();
-  @HostListener('window:resize', ['$event'])  
-  onResize(event:any) {  
-    this.screenWidth = window.innerWidth;  
-    this.screenHeight = window.innerHeight;
-    if(this.screenWidth > 1136 || this.screenWidth < 1136){
-      this.toggleValue = false;
-    }
-    this.sendToggleValue.emit(this.toggleValue);
-  }
   onToggle(){
     this.toggleValue = !this.toggleValue;
-    this.sendToggleValue.emit(this.toggleValue);
-  }
-  onClose(){
-    this.toggleValue = false;
     this.sendToggleValue.emit(this.toggleValue);
   }
 }

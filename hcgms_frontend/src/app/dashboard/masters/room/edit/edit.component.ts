@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
+import { Observable } from 'rxjs';
 import { RoomService } from '../room.service';
 @Component({
   selector: 'app-edit',
@@ -22,27 +24,35 @@ export class EditComponent {
   constructor(private roomService: RoomService, private router: Router, private route: ActivatedRoute){}
   ngOnInit():void{
       this.route.params.subscribe((data: Params) => {
+      this.id = data['id'];
       this.editMode = data['id'] != null;
       if(this.editMode){
         this.showLoader = true;
-        this.roomService.get_room(data['id']).then((d:any) => {
-          this.showLoader = false;
-          this.id = d.id;
-          this.room_no = d.room_no;
-          this.occupancy = d.occupancy;
-          this.description = d.description;
-          this.property_id = d.property;
-          this.room_category_id = d.room_category;
+        this.roomService.get_room(data['id']).subscribe({
+          next: data => {
+            this.showLoader = false;
+            this.room_no = data.room_no;
+            this.occupancy = data.occupancy;
+            this.description = data.description;
+            this.property_id = data.property;
+            this.room_category_id = data.room_category;
+          }
         })
       }
     });
-    this.roomService.get_properties().then((d:any) => { this.properties = d } );
-    this.roomService.get_room_categories().then((d:any) => { this.categories = d } );
+    this.roomService.get_properties().subscribe({
+      next: data => this.properties = data,
+    });
+    this.roomService.get_room_categories().subscribe({
+      next: data => this.categories = data,
+    });
   }
   onGoBack(){
     this.editMode ? this.router.navigate(['../../'], {relativeTo: this.route}) : this.router.navigate(['../'], {relativeTo: this.route});
   }
-  onAddRoom(data:any){
+  onSubmit(data:NgForm){
+    this.showSuccess = '';
+    let observable: Observable<any>;
     if(!data.valid){
       data.control.markAllAsTouched();
     }
@@ -61,49 +71,29 @@ export class EditComponent {
       else{
         this.showLoader = true;
         let fd = new FormData();
-        fd.append('room_no', this.room_no);
-        fd.append('occupancy', this.occupancy);
-        fd.append('description', this.description);
+        fd.append('room_no', data.value.no);
+        fd.append('occupancy', data.value.occ);
+        fd.append('description', data.value.descp);
         fd.append('property', this.property_id);
         fd.append('room_category', this.room_category_id);
-        fd.append('is_operational', 'true');
-        this.roomService.add_room(fd).then((d:any) => {
-          this.showLoader = false;
-          this.showSuccess = d.error ? 'false' : 'true';
-        });
-      }
-    }
-  }
-  onUpdateRoom(data: any){
-    if(!data.valid){
-      data.control.markAllAsTouched();
-    }
-    else{
-      if(this.property_id === 'N/A' && this.room_category_id === 'N/A'){
-        alert('Please select a guest house and a room category');
-      }
-      else if(this.property_id === 'N/A' || this.room_category_id === 'N/A'){
-        if(this.property_id === 'N/A'){
-          alert('Please select a guest house');
+        if(this.editMode){
+          fd.append('id', this.id.toString());
+          observable = this.roomService.update_room(fd);
         }
         else{
-          alert('Please select a room category');
+          fd.append('is_operational', 'true');
+          observable = this.roomService.add_room(fd);
         }
-      }
-      else{
-        this.showLoader = true;
-        let fd = new FormData();
-        fd.append('id', this.id.toString());
-        fd.append('room_no', this.room_no);
-        fd.append('occupancy', this.occupancy);
-        fd.append('description', this.description);
-        fd.append('property', this.property_id);
-        fd.append('room_category', this.room_category_id);
-        fd.append('is_operational', 'true');
-        this.roomService.update_room(fd).then((d:any) => {
-          this.showLoader = false;
-          this.showSuccess = d.error ? 'false' : 'true';
-        });;
+        observable.subscribe({
+          next: data => {
+            this.showSuccess = 'true';
+            this.showLoader = false;
+          },
+          error: err => {
+            this.showSuccess = 'false';
+            this.showLoader = false;
+          }
+        })
       }
     }
   }

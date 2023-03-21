@@ -2,65 +2,20 @@ import { Injectable } from "@angular/core";
 import { HttpService } from "src/app/services/http-service/http.service";
 @Injectable({providedIn: 'root'})
 export class TimeCardService{
-    status: any;
-    checkin_list: any = [];
     constructor(private http: HttpService){}
     get_checkin_reservations(checkin_date:string){
-        this.http.get_checkin_reservations(checkin_date).subscribe({
-            next: data => { this.checkin_list = data },
-            error: err => console.log(err),
-        })
-        return new Promise(
-            (resolve, reject) => {
-                setTimeout(() => {
-                    resolve(this.checkin_list);
-                },200)
-            }
-        )
+        return this.http.get_checkin_reservations(checkin_date)
     }
     get_checkout_reservations(checkout_date:string){
-        this.http.get_checkout_reservations(checkout_date).subscribe({
-            next: data => { this.checkin_list = data },
-            error: err => console.log(err),
-        })
-        return new Promise(
-            (resolve, reject) => {
-                setTimeout(() => {
-                    resolve(this.checkin_list);
-                },200)
-            }
-        )
+        return this.http.get_checkout_reservations(checkout_date)
     }
-    on_checkin(fd:any){
-        this.http.on_checkin(fd).subscribe({
-            next: data => { this.status = data },
-            error: err => { this.status = err }
-        })
-        return new Promise(
-            (resolve, reject) => {
-                setTimeout(() => {
-                    resolve(this.status);
-                },200)
-            }
-        )
+    on_checkin(fd:FormData){
+        return this.http.on_checkin(fd)
     }
-    on_checkout(fd:any){
-        this.http.on_checkout(fd).subscribe({
-            next: data => { this.status = data },
-            error: err => { this.status = err}
-        });
-        return new Promise(
-            (resolve, reject) => {
-                setTimeout(() => {
-                    resolve(this.status);
-                },200)
-            }
-        )
+    on_checkout(fd:FormData){
+        return this.http.on_checkout(fd)
     }
-    // onGenerateBill(fd:any){
-    //     this.http.on_generate_bill(fd).subscribe({
-    //         next: data => { return true },
-    //         error: err => { return false }
-    //     })
-    // }
+    on_no_show(data:FormData){
+        return this.http.on_cancel_booking(data)
+    }
 }

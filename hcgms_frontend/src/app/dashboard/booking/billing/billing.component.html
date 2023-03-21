@@ -1,8 +1,8 @@
 <section>
-    <div class="text-center mt-5">
+    <div class="text-center">
         <h2>Generate Bill</h2>
     </div>
-    <div class="px-5 mt-4">
+    <div class="mt-4">
         <div class="d-flex justify-content-center">
             <div class="row">
                 <div class="col-md-12">
@@ -18,7 +18,7 @@
             <h4>Reservation(s)</h4>
             <hr>
             <div *ngIf="!showResv">
-                <h4>No bookings to show</h4>
+                <h5>No Bill Found</h5>
             </div>
             <div class="row" *ngIf="showResv">
                 <div class="col-md-3" *ngFor="let r of reservations">
