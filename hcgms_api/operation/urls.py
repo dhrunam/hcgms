@@ -33,12 +33,6 @@ urlpatterns = [
     path('api/reservation/report/ci_co', views.ReservationDetailsListForReportingCheckInCheckOut.as_view()),
 
 
-
-    # path('api/room', views.RoomList.as_view()),
-    # path('api/room/<int:pk>', views.RoomDetails.as_view()),
-
-    # path('api/room/rate', views.RoomRateList.as_view()),
-    # path('api/room/rate/<int:pk>', views.RoomRateDetails.as_view()),
 ]
 
 
