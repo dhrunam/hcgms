@@ -7,7 +7,13 @@ import { Component, ViewEncapsulation } from '@angular/core';
 })
 export class DashboardComponent {
   onSidebarToggle: boolean = false;
+  mobileActive: boolean = false;
+  backgroundActive: boolean = false;
   onToggle(status:boolean){
     this.onSidebarToggle = status;
+  }
+  onGetStatus(data: { mobileActive: boolean, backgroundActive: boolean}){
+    this.mobileActive = data.mobileActive;
+    this.backgroundActive = data.backgroundActive;
   }
 }

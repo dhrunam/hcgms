@@ -1,7 +1,7 @@
 <div class="d-flex">
-    <app-sidebar (sendToggleValue)="onToggle($event)" [toggleValue]="onSidebarToggle" resposive></app-sidebar>
+    <app-sidebar (sendToggleValue)="onToggle($event)" (sendStatus)="onGetStatus($event)" [mobileActive]="mobileActive" [backgroundActive]="backgroundActive" [toggleValue]="onSidebarToggle" responsive></app-sidebar>
     <div class="d-block w-100">
-        <app-header (onToggle)="onToggle($event)" [toggleValue]="this.onSidebarToggle" resposive></app-header>
+        <app-header (onToggle)="onToggle($event)" [toggleValue]="onSidebarToggle" responsive></app-header>
         <div class="mt-3 px-5">
             <router-outlet></router-outlet>
         </div>

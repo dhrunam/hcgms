@@ -1,4 +1,4 @@
-import { Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
+import { Component, EventEmitter,Input, Output } from '@angular/core';
 import { AuthService } from 'src/app/services/auth-service/auth-service';
 import { LocalStorageService } from 'src/app/services/local-storage-service/local-storage.service';
 
@@ -10,8 +10,6 @@ import { LocalStorageService } from 'src/app/services/local-storage-service/loca
 export class HeaderComponent {
   username:string = '';
   localStorage: any;
-  screenWidth:any;
-  screenHeight:any;
   @Output() onToggle = new EventEmitter<boolean>();
   @Input() toggleValue: boolean = false;
   constructor(private authService: AuthService, private localStorageService: LocalStorageService){
