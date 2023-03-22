@@ -18,7 +18,8 @@ const routes: Routes = [
       { path: 'bill', loadComponent: () => import('./booking/billing/billing.component').then(c => c.BillingComponent)},
       { path: 'other-service', loadChildren: () => import('./booking/other-services/other-services.module').then(m => m.OtherServicesModule)},
       { path: 'report', loadChildren: () => import('./reporting/reporting.module').then(m => m.ReportingModule) },
-      { path: 'cancel', loadComponent: () => import('./booking/cancel/cancel.component').then(c => c.CancelComponent) }
+      { path: 'cancel', loadComponent: () => import('./booking/cancel/cancel.component').then(c => c.CancelComponent) },
+      { path: 'inventory', loadChildren: () => import('./inventory/inventory.module').then(m => m.InventoryModule)},
     ]
   },
 ];

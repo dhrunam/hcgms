@@ -20,6 +20,7 @@ import { SidebarMenusComponent } from './sidebar/sidebar-menus/sidebar-menus.com
     RouterModule
   ],
   exports: [
+    CommonModule,
     SidebarComponent,
     HeaderComponent,
     LoaderComponent,

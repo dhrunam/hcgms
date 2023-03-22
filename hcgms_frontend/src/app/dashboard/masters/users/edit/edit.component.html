@@ -54,7 +54,7 @@
                 </div>
             </div>
         </div>
-        <div class="alert alert-success mt-3" [ngClass]="{'alert-danger': this.showSuccess === 'false', 'alert-success': this.showSuccess === 'true'}" *ngIf="showSuccess === 'true' || showSuccess === 'false'">
+        <div class="alert alert-success mt-3" [ngClass]="{'alert-danger': this.showSuccess === 'false', 'alert-success': this.showSuccess === 'true'}" *ngIf="showSuccess">
             <span>{{ this.showSuccess === 'true' ? ( editMode ? 'User Updated Successfully' : 'User Added Successfully' ) : 'Error'}}</span>
         </div>
         <div class="d-flex justify-content-center align-items-center mt-4">

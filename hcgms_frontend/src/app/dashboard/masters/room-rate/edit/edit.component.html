@@ -38,7 +38,7 @@
                 <small class="text-danger" *ngIf="end.touched && end.invalid">Please select end date</small>
             </div>
         </div>
-        <div class="alert alert-success mt-3" [ngClass]="{'alert-danger': showSuccess === 'false', 'alert-success': showSuccess === 'true'}" *ngIf="showSuccess === 'true' || showSuccess === 'false'">
+        <div class="alert alert-success mt-3" [ngClass]="{'alert-danger': showSuccess === 'false', 'alert-success': showSuccess === 'true'}" *ngIf="showSuccess">
             <span>{{ showSuccess === 'true' ? (editMode ? 'Room Tariff Updated Successfully' : 'Room Tariff Added Successfully') : 'Error'}}</span>
         </div>
         <div class="d-flex justify-content-center align-items-center">

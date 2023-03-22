@@ -35,7 +35,7 @@
                 <textarea class="form-control" rows="5" cols="10" [ngModel]="description" name="descp" #descp="ngModel"></textarea>
             </div>
         </div>
-        <div class="alert mt-3" [ngClass]="{'alert-danger': this.showSuccess === 'false', 'alert-success': this.showSuccess === 'true'}" *ngIf="showSuccess === 'true' || showSuccess === 'false'">
+        <div class="alert mt-3" [ngClass]="{'alert-danger': this.showSuccess === 'false', 'alert-success': this.showSuccess === 'true'}" *ngIf="showSuccess">
             <span>{{ this.showSuccess === 'true' ? (editMode ? 'Room Updated Successfully' : 'Room Added Successfully') : 'Error'}}</span>
         </div>
         <div class="d-flex justify-content-center align-items-center mt-4">

@@ -1,0 +1,18 @@
+<div class="form">
+    <form #item="ngForm" (ngSubmit)="onSubmit(item)">
+        <div class="row">
+            <div class="col-md-12">
+                <label class="form-label">Item Name<span class="text-danger">*</span></label>
+                <input type="text" class="form-control" [ngModel]="item_name" name="name" #name="ngModel" required>
+                <small class="text-danger" *ngIf="name.touched && name.invalid">Please enter item name</small>
+            </div>
+        </div>
+        <div class="alert mt-3" [ngClass]="{'alert-danger': showSuccess === 'false', 'alert-success': showSuccess === 'true'}" *ngIf="showSuccess">
+            {{ showSuccess === 'true' ? (editMode ? 'Item Update Successfully' : 'Item Added Successfully') : 'Error'}}
+        </div>
+        <div class="d-flex justify-content-center align-items-center mt-3 mb-3">
+            <button class="btn btn-primary" type="button" (click)="onGoBack()">Go Back</button>
+            <button class="btn btn-primary ms-3" type="submit">{{ editMode ? 'Update' : 'Add'}}</button>
+        </div>
+    </form>
+</div>
