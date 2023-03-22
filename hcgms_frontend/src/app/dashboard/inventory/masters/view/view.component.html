@@ -1,0 +1,26 @@
+<section>
+    <div class="text-end mb-3">
+        <button class="btn btn-primary" (click)="onRouteAddItems()">+ Add Items</button>
+    </div>
+    <div class="text-center" *ngIf="!showItems">
+        <h3>No Items</h3>
+    </div>
+    <div class="table-responsive" *ngIf="showItems">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th scope="col">S.No.</th>
+                    <th scope="col">Item Name</th>
+                    <th scope="col">Operations</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td width="7%">1</td>
+                    <td>Glass</td>
+                    <td width="6%">Edit</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
