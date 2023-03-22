@@ -8,8 +8,38 @@ from rest_framework import status
 from django.db import transaction, connection
 from hcgms_api.configuration import models as conf_models
 from hcgms_api.configuration.serializers import (
-    PropertySerializer
+    PropertySerializer, HelperPropertySerializer
 )
+
+
+class HelperUserProfileSerializer(serializers.ModelSerializer):
+    
+    related_property = HelperPropertySerializer(source='property', read_only=True)
+
+    class Meta:
+        model = acc_model.UserProfile
+
+    # user=models.ForeignKey(User,on_delete=models.CASCADE)
+    # designation=models.ForeignKey(Designation,on_delete=models.CASCADE)
+    # office=models.ForeignKey(Office,on_delete=models.CASCADE)
+    # first_name=models.CharField(max_length=128,blank=False)
+    # middle_name=models.CharField(max_length=128,blank=True, default='')
+    # last_name=models.CharField(max_length=128,blank=True, default='')
+    # contact_number=models.CharField(max_length=12)
+    # created_at=models.DateTimeField(auto_now_add=True)
+    # updated_at=models.DateTimeField(auto_now_add=True)
+
+        fields = [
+            'id',
+            'user',
+            'property',
+            'contact_number',
+            'created_at',
+            'updated_at',
+
+            'related_property',
+
+        ]
 
 
 class UserGroupSerializer(serializers.ModelSerializer):
@@ -229,7 +259,7 @@ class UpdateUserPasswordSerializer(serializers.ModelSerializer):
 
 
 class LeanUserSerializer(serializers.ModelSerializer):
-    related_profile = UserProfileSerializer(many=True, read_only=True)
+    related_profile = HelperUserProfileSerializer(many=True, read_only=True)
     related_groups = UserGroupSerializer(
         source='groups',  many=True, read_only=True)
 
