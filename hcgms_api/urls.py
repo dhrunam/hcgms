@@ -25,10 +25,12 @@ from django.conf.urls.static import static
 from hcgms_api.configuration import urls as conf_url
 from hcgms_api.account import urls as acc_url
 from hcgms_api.operation import urls as op_url
+from hcgms_api.inventory import urls as inv_url
 
 urlpatterns = [
     path("", include(op_url)),
     path("", include(acc_url)),
     path('', include(conf_url)),
+    path("", include(inv_url)),
     path('admin/', admin.site.urls),
 ]

@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'hcgms_api.account',
     'hcgms_api.configuration',
     'hcgms_api.operation',
+    'hcgms_api.inventory',
 
 ]
 
