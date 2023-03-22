@@ -4,6 +4,7 @@ import { ViewComponent } from './view/view.component';
 import { EditComponent } from './edit/edit.component';
 import { UtilitiesModule } from 'src/app/utilities/utilities.module';
 import { Route, RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 const routes: Route[] = [
   { path: '', redirectTo: '/dashboard/inventory/masters/view', pathMatch: 'full'},
@@ -22,6 +23,7 @@ const routes: Route[] = [
   ],
   imports: [
     UtilitiesModule,
+    FormsModule,
     RouterModule.forChild(routes),
   ]
 })

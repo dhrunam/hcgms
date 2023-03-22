@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { MastersService } from '../masters.service';
 
 @Component({
   selector: 'app-edit',
@@ -13,14 +14,18 @@ export class EditComponent {
   id: number = 0;
   item_name: string = '';
   showSuccess: string = '';
-  constructor(private route: ActivatedRoute, private router: Router){}
+  constructor(private route: ActivatedRoute, private router: Router, private mastersService: MastersService){}
   ngOnInit():void{
     this.route.params.subscribe({
       next: (param: Params) => {
         this.editMode = param['id'] != null;
         this.id = +param['id'];
         if(this.editMode){
-
+          this.mastersService.get_item(param['id']).subscribe({
+            next: data => {
+              this.item_name = data.name;
+            }
+          })
         }
       }
     })
@@ -36,15 +41,19 @@ export class EditComponent {
       fd.append('name', data.value.name);
       if(this.editMode){
         fd.append('id', this.id.toString());
+        observable = this.mastersService.update_item(fd);
       }
-      // observable.subscribe({
-      //   next: data => {
-      //     this.showSuccess = 'true';
-      //   },
-      //   error: err => {
-      //     this.showSuccess = 'false';
-      //   }
-      // })
+      else{
+        observable = this.mastersService.add_item(fd);
+      }
+      observable.subscribe({
+        next: data => {
+          this.showSuccess = 'true';
+        },
+        error: err => {
+          this.showSuccess = 'false';
+        }
+      })
     }
   }
   onGoBack(){

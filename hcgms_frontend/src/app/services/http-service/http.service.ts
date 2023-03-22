@@ -146,4 +146,16 @@ export class HttpService {
   get_checkin_checkout(date: string){
     return this.http.get<any>(`${URL}/api/reservation/report/ci_co?date_of_the_day=${date}`);
   }
+  get_inventory_items(){
+    return this.http.get<any>(`${URL}/api/inventory/item`);
+  }
+  get_inventory_item(id:number){
+    return this.http.get<any>(`${URL}/api/inventory/item/${id}`);
+  }
+  add_inventory_item(fd: FormData){
+    return this.http.post(`${URL}/api/inventory/item`,fd);
+  }
+  update_inventory_item(fd: FormData){
+    return this.http.patch(`${URL}/api/inventory/item/${fd.get('id')}`,fd)
+  }
 }

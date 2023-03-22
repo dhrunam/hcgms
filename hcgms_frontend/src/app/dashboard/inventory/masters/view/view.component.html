@@ -1,6 +1,6 @@
 <section>
     <div class="text-end mb-3">
-        <button class="btn btn-primary" (click)="onRouteAddItems()">+ Add Items</button>
+        <button class="btn btn-primary" (click)="onRouteAddItem()">+ Add Items</button>
     </div>
     <div class="text-center" *ngIf="!showItems">
         <h3>No Items</h3>
@@ -15,10 +15,10 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td width="7%">1</td>
-                    <td>Glass</td>
-                    <td width="6%">Edit</td>
+                <tr *ngFor="let it of items; let i=index">
+                    <td width="7%">{{i+1}}</td>
+                    <td>{{it.name}}</td>
+                    <td width="10%" class="text-center"><i class="bi bi-pencil-square" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit" (click)="onRouteEditItem(it.id)"></i></td>
                 </tr>
             </tbody>
         </table>

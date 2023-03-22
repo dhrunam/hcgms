@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MastersService } from '../masters.service';
 
 @Component({
   selector: 'app-view',
@@ -9,17 +10,23 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class ViewComponent {
   showItems: boolean = false;
   items:Array<{id:number, name: string}> = [];
-  constructor(private router: Router, private route: ActivatedRoute){}
+  constructor(private router: Router, private route: ActivatedRoute, private mastersService: MastersService){}
   ngOnInit():void{
     this.getItems();
   }
-  onRouteAddItems(){
+  onRouteAddItem(){
     this.router.navigate(['../add'], { relativeTo: this.route } );
   }
-  onRouteEditItems(id:number){
+  onRouteEditItem(id:number){
     this.router.navigate(['../edit', id], { relativeTo: this.route } );
   }
   getItems(){
-    this.showItems = this.items[0] ? true : false;
+    this.mastersService.get_items().subscribe({
+      next: data => {
+        this.showItems = data[0] ? true : false;
+        this.items = data;
+      },
+    })
+    
   }
 }
