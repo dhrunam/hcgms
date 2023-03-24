@@ -21,12 +21,16 @@ class PropertyItemList(generics.ListCreateAPIView):
         """
 
         # order_number = self.request.data['order_no']
-        search_text = self.request.query_params.get('item_id')
+        queryset=inv_models.ItemStockInProperty.objects.all()
+        property_id = self.request.query_params.get('property_id')
+        item_id = self.request.query_params.get('item_id')
 
-        if(search_text):
-            return inv_models.ItemStockInProperty.objects.filter(item=search_text)
+        if(property_id):
+            queryset = inv_models.ItemStockInProperty.objects.filter(property=property_id)
+        if(item_id):
+            queryset = inv_models.ItemStockInProperty.objects.filter(item=item_id)
 
-        return inv_models.ItemStockInProperty.objects.all()
+        return queryset
 
 class PropertyItemDetails(generics.RetrieveUpdateDestroyAPIView):
     # authentication_classes = (TokenAuthentication,)
