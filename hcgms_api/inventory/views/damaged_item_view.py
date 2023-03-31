@@ -38,7 +38,7 @@ class DamagedItemList(generics.ListCreateAPIView):
                 item_in_hotel = inv_model.ItemStockInProperty.objects.filter(hotel=element['property'], item=element['item'])
 
                 if item_in_hotel:
-                    item_in_hotel[0].damaged=item_in_hotel[0].returned + element['quantity_damaged']
+                    item_in_hotel[0].damaged=item_in_hotel[0].returned + int(element['quantity_damaged'])
                     item_in_hotel[0].save()
 
 
