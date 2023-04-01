@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Observable } from 'rxjs';
 import { PropertyService } from '../property.service';
 @Component({
   selector: 'app-view',
@@ -7,7 +8,7 @@ import { PropertyService } from '../property.service';
   styleUrls: ['./view.component.css']
 })
 export class ViewComponent{
-  properties: any = [];
+  properties: Array<any> = [];
   showLoader: boolean = false;
   constructor(private router: Router, private route: ActivatedRoute, private propertyService: PropertyService){}
   ngOnInit():void {

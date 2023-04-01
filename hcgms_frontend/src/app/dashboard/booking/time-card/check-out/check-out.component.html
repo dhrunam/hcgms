@@ -30,16 +30,12 @@
       <div class="modal-content">
         <div class="modal-header">
           <h1 class="modal-title fs-5" id="exampleModalLabel">Booking ID: {{ bookingId }}</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <button type="button" class="btn-close" #close data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-            <div>
-                <input type="checkbox" (click)="selectAll($event)" id="selectAll">&nbsp;&nbsp;Select All
-            </div>
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th width="5%" scope="col">Select</th>
                         <th width="5%" scope="col">S.No.</th>
                         <th scope="col">Room No</th>
                         <th scope="col">Room Category</th>
@@ -47,7 +43,6 @@
                 </thead>
                 <tbody>
                     <tr class="text-center" *ngFor="let r of rooms; let i=index">
-                        <td><input type="checkbox" name="chk" (change)="onChangeEvent($event, r.related_room.id)"></td>
                         <td>{{i+1}}</td>
                         <td>{{r.related_room.room_no}}</td>
                         <td>{{r.related_room.related_category.name}}</td>
@@ -57,7 +52,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="onCheckout()">Check-Out</button>
+          <button type="button" class="btn btn-primary" (click)="onCheckout()">Check-Out</button>
         </div>
       </div>
     </div>
