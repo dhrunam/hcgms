@@ -45,15 +45,13 @@
                 <thead>
                     <tr>
                         <th width="5%" scope="col">Select</th>
-                        <th width="5%" scope="col">S.No.</th>
                         <th scope="col">Room No</th>
                         <th scope="col">Room Category</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr class="text-center" *ngFor="let r of rooms; let i=index">
+                <tbody *ngFor="let r of rooms">
+                    <tr class="text-center" *ngIf="r.status !== 'checkin'">
                         <td><input type="checkbox" name="chk" (change)="onChangeEvent($event, r.related_room.id)"></td>
-                        <td>{{i+1}}</td>
                         <td>{{r.related_room.room_no}}</td>
                         <td>{{r.related_room.related_category.name}}</td>
                     </tr>

@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { HttpService } from "src/app/services/http-service/http.service";
+import { URL } from "src/environment/environment.prod";
 @Injectable({providedIn: 'root'})
 export class TimeCardService{
     constructor(private http: HttpService){}
@@ -16,6 +17,6 @@ export class TimeCardService{
         return this.http.on_checkout(fd)
     }
     on_no_show(data:FormData){
-        return this.http.on_cancel_booking(data)
+        return this.http.on_no_show(data);
     }
 }

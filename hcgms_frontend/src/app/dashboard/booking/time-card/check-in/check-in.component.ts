@@ -57,6 +57,7 @@ export class CheckInComponent {
       next: data => {
         this.getBooking();
         this.close.nativeElement.click();
+        this.send_data = [];
       }
     });
   }
@@ -113,12 +114,15 @@ export class CheckInComponent {
   }
   onNoShow(){
     let fd = new FormData();
-    fd.append('id', this.resv_id);
+    fd.append('reservation', this.resv_id);
     fd.append('operation', 'noshow');
+    fd.append('rooms', JSON.stringify(this.send_data));
+    console.log(this.send_data)
     this.timeCardService.on_no_show(fd).subscribe({
       next: () => { 
         this.getBooking();
         this.close.nativeElement.click();
+        this.send_data = [];
       },
     })
   }

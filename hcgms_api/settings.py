@@ -189,6 +189,7 @@ REST_DURIN = {
 BOOKING_STATUS={
     'booked':'booked',
     'checkin':'checkin', 
+    'partial_checkin': 'partial_checkin',
     'checkout':'checkout', 
     'cancelled':'cancelled',
     'noshow':'noshow'

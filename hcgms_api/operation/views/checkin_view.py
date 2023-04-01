@@ -211,8 +211,8 @@ class GuesNoShowDetailsList(generics.ListCreateAPIView):
     # @transaction.atomic
     def post(self, request, *args, **kwargs):
         rooms = json.loads(request.data['rooms'])
+        print(rooms)
         if(rooms):
-
             reservation= op_models.ReservationDetails.objects.get(pk=rooms[0]['reservation'])
             with transaction.atomic():
                 request.data._mutable = True
