@@ -2,7 +2,7 @@
     <app-sidebar (sendToggleValue)="onToggle($event)" (sendStatus)="onGetStatus($event)" [mobileActive]="mobileActive" [backgroundActive]="backgroundActive" [toggleValue]="onSidebarToggle" responsive></app-sidebar>
     <div class="d-block w-100">
         <app-header (onToggle)="onToggle($event)" [toggleValue]="onSidebarToggle" responsive></app-header>
-        <div class="mt-3 px-5" [@routerAnimation]="prepareOutlet(outlet)">
+        <div class="content mt-3 px-5" [@routerAnimation]="outlet.isActivated ? outlet.activatedRoute : ''">
             <router-outlet #outlet="outlet"></router-outlet>
         </div>
     </div>

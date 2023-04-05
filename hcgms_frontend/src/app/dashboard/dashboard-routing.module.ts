@@ -12,13 +12,13 @@ const routes: Routes = [
       { path: 'room-category', loadChildren: () => import('./masters/room-category-master/room-category-master.module').then(m => m.RoomCategoryMasterModule), canActivateChild: [AdminCheckGuard] },
       { path: 'room', loadChildren: () => import('./masters/room/room.module').then(m => m.RoomModule), canActivateChild: [AdminCheckGuard]},
       { path: 'room-rate', loadChildren: () => import('./masters/room-rate/room-rate.module').then(m => m.RoomRateModule), canActivateChild: [AdminCheckGuard] },
-      { path: 'reservation', loadChildren: () => import('./booking/reservation/reservation.module').then(m => m.ReservationModule), canActivateChild: [AdminCheckGuard] },
+      { path: 'reservation', loadChildren: () => import('./booking/reservation/reservation.module').then(m => m.ReservationModule), canActivateChild: [AdminCheckGuard]},
       { path: 'check-in', loadComponent: () => import('./booking/time-card/check-in/check-in.component').then(c => c.CheckInComponent ) },
       { path: 'check-out', loadComponent: () => import('./booking/time-card/check-out/check-out.component').then(c => c.CheckOutComponent ) },
       { path: 'bill', loadComponent: () => import('./booking/billing/billing.component').then(c => c.BillingComponent)},
       { path: 'other-service', loadChildren: () => import('./booking/other-services/other-services.module').then(m => m.OtherServicesModule)},
-      { path: 'report', loadChildren: () => import('./reporting/reporting.module').then(m => m.ReportingModule) },
-      { path: 'cancel', loadComponent: () => import('./booking/cancel/cancel.component').then(c => c.CancelComponent) },
+      { path: 'report', loadChildren: () => import('./reporting/reporting.module').then(m => m.ReportingModule)},
+      { path: 'cancel', loadComponent: () => import('./booking/cancel/cancel.component').then(c => c.CancelComponent)},
     ]
   },
 ];

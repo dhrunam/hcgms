@@ -2,10 +2,7 @@ import { animate, group, query, style, transition, trigger } from "@angular/anim
 
 export const slider = 
     trigger('routerAnimation', [
-        transition('* => isLeft', slideTo('left')),
-        transition('* => isRight', slideTo('right')),
-        transition('isRight => *', slideTo('left')),
-        transition('isLeft => *', slideTo('right')),
+        transition('* <=> *', slideTo('right')),
     ]);
 
 function slideTo(direction:string){
@@ -15,7 +12,7 @@ function slideTo(direction:string){
             style({
                 position: 'absolute',
                 [direction]: 0,
-                width: '100%'
+                width: '100%',
             })
         ], optional),
         query(':enter', [
@@ -25,10 +22,10 @@ function slideTo(direction:string){
         ]),
         group([
             query(':leave', [
-                animate('600ms ease', style({ [direction]: '-100%'}))    
-            ]),
+                animate('600ms ease', style({ [direction]: '100%'}))    
+            ], optional),
             query(':enter', [
-                animate('600ms ease', style({ [direction]: '0%'}))    
+                animate('600ms ease', style({ [direction]: 0}))    
             ])
         ])
         

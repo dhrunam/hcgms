@@ -7,6 +7,7 @@ import { ViewComponent } from './view/view.component';
 import { EditComponent } from './edit/edit.component';
 import { FormsModule } from '@angular/forms';
 import { UtilitiesModule } from 'src/app/utilities/utilities.module';
+import { DataTablesModule } from 'angular-datatables';
 
 
 @NgModule({
@@ -19,7 +20,8 @@ import { UtilitiesModule } from 'src/app/utilities/utilities.module';
     CommonModule,
     RoomCategoryMasterRoutingModule,
     FormsModule,
-    UtilitiesModule
+    UtilitiesModule,
+    DataTablesModule
   ]
 })
 export class RoomCategoryMasterModule { }

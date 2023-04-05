@@ -1,4 +1,4 @@
-<div class="background" [ngClass]="{'activated': backgroundActive, '': backgroundActive}" [ngClass]="{'activate': toggleValue, '': !toggleValue}">
+<div class="background" [ngClass]="{'activated': backgroundActive, '': !backgroundActive}" [ngClass]="{'activate': toggleValue, '': !toggleValue}">
     <div class="sidebar" [ngClass]="{'bigscreen': !mobileActive, 'smallscreen': mobileActive}" [class]="getClass(bar)" #bar>
         <div class="logo_content">
             <div class="logo text-center text-light">

@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs';
 import { PropertyService } from '../property.service';
 @Component({
   selector: 'app-view',
@@ -9,10 +8,17 @@ import { PropertyService } from '../property.service';
 })
 export class ViewComponent{
   properties: Array<any> = [];
+  propertySearch: string = '';
+  dtOptions: DataTables.Settings = {};
   showLoader: boolean = false;
   constructor(private router: Router, private route: ActivatedRoute, private propertyService: PropertyService){}
   ngOnInit():void {
     this.getProperties();
+    this.dtOptions = {
+      pagingType: 'full_numbers',
+      pageLength: 10,
+      processing: true
+    }
   }
   onRouteAddProperty(){
     this.router.navigate(['../new'], { relativeTo: this.route});

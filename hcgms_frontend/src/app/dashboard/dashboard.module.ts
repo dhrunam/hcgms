@@ -6,7 +6,6 @@ import { DashboardComponent } from './dashboard.component';
 import { UtilitiesModule } from '../utilities/utilities.module';
 import { ResponsiveDirective } from './responsive.directive';
 
-
 @NgModule({
   declarations: [
     DashboardComponent,
@@ -15,7 +14,7 @@ import { ResponsiveDirective } from './responsive.directive';
   imports: [
     CommonModule,
     DashboardRoutingModule,
-    UtilitiesModule
+    UtilitiesModule,
   ]
 })
 export class DashboardModule { }

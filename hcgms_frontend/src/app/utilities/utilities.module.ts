@@ -6,14 +6,12 @@ import { RouterModule } from '@angular/router';
 import { LoaderComponent } from './loader/loader.component';
 import { SidebarMenusComponent } from './sidebar/sidebar-menus/sidebar-menus.component';
 
-
-
 @NgModule({
   declarations: [
     SidebarComponent,
     HeaderComponent,
     LoaderComponent,
-    SidebarMenusComponent
+    SidebarMenusComponent,
   ],
   imports: [
     CommonModule,

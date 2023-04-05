@@ -7,7 +7,7 @@ import { EditComponent } from './edit/edit.component';
 import { ViewComponent } from './view/view.component';
 import { FormsModule } from '@angular/forms';
 import { UtilitiesModule } from 'src/app/utilities/utilities.module';
-
+import { DataTablesModule } from 'angular-datatables';
 
 @NgModule({
   declarations: [
@@ -19,7 +19,8 @@ import { UtilitiesModule } from 'src/app/utilities/utilities.module';
     CommonModule,
     RoomRoutingModule,
     FormsModule,
-    UtilitiesModule
+    UtilitiesModule,
+    DataTablesModule
   ]
 })
 export class RoomModule { }

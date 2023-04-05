@@ -8,3 +8,7 @@ i{
 .bi-trash3{
     color: red;
 }
+.content{
+    position: relative;
+    max-height: 100vh;
+}

@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../users.service';
-declare var bootstrap: any;
 @Component({
   selector: 'app-view',
   templateUrl: './view.component.html',
@@ -10,9 +9,15 @@ declare var bootstrap: any;
 export class ViewComponent {
   users: any = [];
   showLoader: boolean = false;
+  dtOptions: DataTables.Settings = {};
   constructor(private userService: UserService, private router: Router, private route: ActivatedRoute){}
   ngOnInit(): void{
     this.getUser();
+    this.dtOptions = {
+      pageLength: 10,
+      pagingType: 'full_numbers',
+      processing: true,
+    }
   }
   onRouteAddUser(){
     this.router.navigate(['../new'], { relativeTo: this.route } );

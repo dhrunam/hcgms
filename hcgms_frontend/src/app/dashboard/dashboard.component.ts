@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectorRef, Component, ViewEncapsulation } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { slider } from '../utilities/router-animation/router-animation';
 @Component({
@@ -14,6 +14,7 @@ export class DashboardComponent {
   onSidebarToggle: boolean = false;
   mobileActive: boolean = false;
   backgroundActive: boolean = false;
+  constructor(private cdr: ChangeDetectorRef){}
   onToggle(status:boolean){
     this.onSidebarToggle = status;
   }
@@ -22,6 +23,10 @@ export class DashboardComponent {
     this.backgroundActive = data.backgroundActive;
   }
   prepareOutlet(outlet: RouterOutlet){
+    console.log(outlet.activatedRouteData['animation']);
     return outlet && outlet.activatedRouteData && outlet.activatedRouteData['animation'];
+  }
+  ngAfterContentChecked(){
+    this.cdr.detectChanges();
   }
 }

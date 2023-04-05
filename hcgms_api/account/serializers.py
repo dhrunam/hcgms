@@ -267,7 +267,6 @@ class LeanUserSerializer(serializers.ModelSerializer):
         model = User
 
         fields = [
-
             'id',
             'username',
             'first_name',
@@ -275,5 +274,4 @@ class LeanUserSerializer(serializers.ModelSerializer):
             'related_profile',
             'is_staff',
             'related_groups'
-
         ]

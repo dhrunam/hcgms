@@ -10,9 +10,15 @@ declare var bootstrap:any;
 export class ViewComponent {
   categories: any = [];
   showLoader: boolean = false;
+  dtOptions: DataTables.Settings = {};
   constructor(private router: Router, private route: ActivatedRoute, private roomCategoryService: RoomCategoryService){}
   ngOnInit(): void{
     this.getCategories();
+    this.dtOptions = {
+      pageLength: 10,
+      pagingType: 'full_numbers',
+      processing: true,
+    }
   }
   onRouteAddRoomCategory(){
     this.router.navigate(['../new'], { relativeTo: this.route } );

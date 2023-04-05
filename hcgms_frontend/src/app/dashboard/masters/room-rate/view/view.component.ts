@@ -10,10 +10,16 @@ declare var bootstrap: any;
 export class ViewComponent {
   showLoader: boolean = false;
   room_rates: any = [];
+  dtOptions: DataTables.Settings = {};
   constructor(private roomRateService: RoomRateService, private router: Router, private route: ActivatedRoute){}
 
   ngOnInit():void{
     this.getRoomRates();
+    this.dtOptions = {
+      pageLength: 10,
+      pagingType: 'full_numbers',
+      processing: true,
+    }
   }
   onRouteAddRoomTariff(){
     this.router.navigate(['../new'], { relativeTo: this.route } );

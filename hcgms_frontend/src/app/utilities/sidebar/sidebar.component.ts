@@ -26,4 +26,9 @@ export class SidebarComponent {
     }
     return className
   }
+  closeSidebar(){
+    if(this.backgroundActive && (this.toggleValue || !this.toggleValue)){
+      this.toggleValue = !this.toggleValue;
+    }
+  }
 }
