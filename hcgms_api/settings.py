@@ -192,5 +192,5 @@ BOOKING_STATUS={
     'partial_checkin': 'partial_checkin',
     'checkout':'checkout', 
     'cancelled':'cancelled',
-    'noshow':'noshow'
+    'noshow':'noshow',
     }

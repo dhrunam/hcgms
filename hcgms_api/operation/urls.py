@@ -25,7 +25,9 @@ urlpatterns = [
     
     path('api/reservation/bill', views.ReservationBillList.as_view()),
     path('api/reservation/bill/<int:pk>', views.ReservationBillDetails.as_view()),
-    
+    path('api/reservation/bill/view', views.ReservationBillListForView.as_view()),
+  
+
     path('api/reservation/report', views.ReservationDetailsListForReporting.as_view()),
 
 

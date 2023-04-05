@@ -54,7 +54,7 @@ class GuestCheckInCheckOutDetailsList(generics.ListCreateAPIView):
     def post(self, request, *args, **kwargs):
         rooms = json.loads(request.data['rooms'])
         if(rooms):
-
+            checkin_rooms_count = len(rooms)
             reservation= op_models.ReservationDetails.objects.get(pk=rooms[0]['reservation'])
             with transaction.atomic():
                 request.data._mutable = True
@@ -93,7 +93,8 @@ class GuestCheckInCheckOutDetailsList(generics.ListCreateAPIView):
                 request.data._mutable = True
                 reservation_rooms = op_models.ReservationRoomDetails.objects.filter(
                 reservation=reservation.id, status=settings.BOOKING_STATUS['booked'])
-                    
+                reservation_rooms_count = len(op_models.ReservationRoomDetails.objects.filter(
+                reservation=reservation.id)) 
                 if(reservation_rooms):
 
                     if reservation:
@@ -101,8 +102,14 @@ class GuestCheckInCheckOutDetailsList(generics.ListCreateAPIView):
                         reservation.save()
                 else:
                     if reservation:
-                        reservation.status=settings.BOOKING_STATUS['checkin']
-                        reservation.save()
+
+                        if reservation_rooms_count == checkin_rooms_count:
+
+                            reservation.status=settings.BOOKING_STATUS['checkin']
+                            reservation.save()
+                        else:
+                            reservation.status=settings.BOOKING_STATUS['partial_checkin']
+                            reservation.save()
                     
                 request.data._mutable = False
             transaction.commit()
@@ -138,11 +145,11 @@ class GuestCheckOutDetailsList(generics.ListCreateAPIView):
     def post(self, request, *args, **kwargs):
         rooms = json.loads(request.data['rooms'])
         if(rooms):
-
+            
             reservation= op_models.ReservationDetails.objects.get(pk=rooms[0]['reservation'])
             with transaction.atomic():
                 request.data._mutable = True
-               
+                
                 for element in rooms:
 
                     guest_checkin_checkout_details =op_models.GuestCheckInCheckOutDetails.objects.filter(reservation= element['reservation'],
