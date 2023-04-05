@@ -166,12 +166,6 @@ export class BillingComponent {
           alignment: 'right',
           margin: [0, 0, 0, 50]
         },
-        {
-          text: 'Name & Signature',
-        },
-        {
-          text: 'Booking Officer',
-        },
       ],
       styles: {
         font_size: {

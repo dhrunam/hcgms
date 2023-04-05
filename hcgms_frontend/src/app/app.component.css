@@ -1,11 +1,11 @@
 .btn-primary,
 .btn-primary:disabled{
-    background-color: #579FDD;
-    border-color: #579FDD;
+    background-color: #93bcdf;
+    border-color: #93bcdf;
 }
 .btn-primary:hover{
-    background-color: #7CB8EC;
-    border-color: #7CB8EC;
+    background-color: #67a6db;
+    border-color: #67a6db;
 }
 input.ng-invalid.ng-touched,
 textarea.ng-invalid.ng-touched,
