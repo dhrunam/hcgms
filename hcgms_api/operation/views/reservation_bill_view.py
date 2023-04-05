@@ -126,6 +126,7 @@ class ReservationBillListForView(generics.ListCreateAPIView):
             request.data['total_room_cost'] =Calculator.calculate_total_room_cost(self,reservation_rooms, no_of_days )
         
         service_details=op_models.MiscellaneousServiceChargeDetails.objects.filter(reservation=request.data['reservation'])
+        request.data['total_service_cost']=0
         if(service_details):
             request.data['total_service_cost'] = Calculator.calculate_total_service_cost(self, service_details)
             
