@@ -20,7 +20,7 @@ class ReservationDetails(models.Model):
     
     is_bill_generated=models.BooleanField(default=False, null=False)
     is_payment_received=models.BooleanField(default=False, null=False)
-    status = models.CharField(max_length=10, default=settings.BOOKING_STATUS['booked'])
+    status = models.CharField(max_length=20, default=settings.BOOKING_STATUS['booked'])
     created_by=models.ForeignKey(
         User, on_delete=models.SET_NULL, null=True, related_name='reservation_by_user')
     created_at = models.DateTimeField(auto_now_add=True)
@@ -44,7 +44,7 @@ class ReservationRoomDetails(models.Model):
     
     checkin_date=models.DateField(auto_now=False, auto_now_add=False)
     checkout_date=models.DateField(auto_now=False, auto_now_add=False)
-    status = models.CharField(max_length=10, default=settings.BOOKING_STATUS['booked'])
+    status = models.CharField(max_length=20, default=settings.BOOKING_STATUS['booked'])
 
     def __str__(self) -> str:
         return super().__str__()
@@ -66,6 +66,10 @@ class GuestCheckInCheckOutDetails(models.Model):
         User, on_delete=models.SET_NULL, null=True, related_name='guest_checkin_check_out')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = [['reservation', 'room']]
+
     def __str__(self) -> str:
         return super().__str__()
 
