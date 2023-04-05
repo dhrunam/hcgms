@@ -143,12 +143,14 @@ class ReservationDetailsList(generics.ListCreateAPIView):
         if(room_number):
 
             today=datetime.datetime.today().date()
-            reservation=op_models.ReservationRoomDetails.objects.filter(checkin_date__lte=today,
-                         checkout_date__gte=today, room__room_no=room_number).last()
+            reservation_room_destails=op_models.ReservationRoomDetails.objects.filter(checkin_date__lte=today,
+                         checkout_date__gte=today, room__room_no=room_number,
+                         status = settings.BOOKING_STATUS['checkin'],
+                         ).last()
             # reservation=op_models.ReservationRoomDetails.objects.filter(room__room_no=room_number).last()
             
-            if(reservation):
-                queryset= queryset.filter(id=reservation.reservation.id)
+            if(reservation_room_destails):
+                queryset= queryset.filter(id=reservation_room_destails.reservation.id)
             else:
                 queryset= queryset.filter(id=0)
         
@@ -167,7 +169,10 @@ class ReservationDetailsList(generics.ListCreateAPIView):
                 queryset=queryset.filter(checkin_date__lte=today,
                          checkout_date__gte=today)
             if(operation=='other_service'):
-                queryset= queryset.filter(checkin_date__lte=today,checkout_date__gte=today,status = settings.BOOKING_STATUS['checkin'] )
+                queryset= queryset.filter(Q(checkin_date__lte=today) 
+                                          & Q(checkout_date__gte=today) 
+                                          & Q( Q(status = settings.BOOKING_STATUS['checkin']) 
+                                              | Q(status = settings.BOOKING_STATUS['partial_checkin']) ))
         
             
 
