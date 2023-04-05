@@ -6,9 +6,10 @@
                     <div class="text-center mb-3">
                         <img src="assets/images/hcs_logo.png" height="180px">
                     </div>
-                    <h3 class="login-heading text-center">Guest House Login</h3>
-                    <hr>
-                    <form (ngSubmit)="onLogin(loginForm)" #loginForm="ngForm">
+                    <div class="text-center">
+                        <h3>Guest House Login</h3>
+                    </div>
+                    <form (ngSubmit)="onLogin(loginForm)" #loginForm="ngForm" class="mt-4">
                         <div class="input-group mb-3">
                             <span class="input-group-text" id="basic-addon1"><i class="bi bi-person"></i></span>
                             <input type="text" class="form-control" placeholder="Username" name="username" ngModel #username="ngModel" required>
@@ -22,6 +23,10 @@
                             <button class="btn btn-lg btn-primary btn-login fw-bold mb-2" type="submit">Login</button>
                         </div>
                     </form>
+                    <hr>
+                    <div class="text-center">
+                        <small><b>Copyright @ High Court of Sikkim</b></small>
+                    </div>
                 </div>
             </div>
         </div>

@@ -31,7 +31,11 @@ export class CheckOutComponent {
   onGetRooms(r_id:string,booking_id:string, data: any){
     this.resv_id = r_id;
     this.bookingId = booking_id;
-    this.rooms = data;
+    data.forEach((d:any) => {
+      if(d.status === 'checkin'){
+        this.rooms.push(d);
+      }
+    })
   }
   onCheckout(){
     let fd = new FormData();

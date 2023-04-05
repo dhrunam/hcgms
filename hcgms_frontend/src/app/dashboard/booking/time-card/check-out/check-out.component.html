@@ -17,11 +17,6 @@
                     <h5 class="card-title">Booking ID: {{ c.reservation_no }}</h5>
                     <h6 class="card-subtitle mt-3 mb-2 text-muted">Guest Name: {{ c.lead_guest_name }}</h6>
                     <h6 class="card-subtitle mt-3 mb-2 text-muted">Contact Number: {{ c.contact_no }}</h6>
-                    <h6 class="card-subtitle mt-3 mb-2 text-muted">Room(s) Booked: 
-                        <label *ngFor="let r of c.reservation_room_details; let i=index;">
-                            <span>{{r.related_room.room_no}}{{i === c.reservation_room_details.length-1 ? '' : ',' }}</span>
-                        </label>
-                    </h6>
                 </div>
             </div>
         </div>

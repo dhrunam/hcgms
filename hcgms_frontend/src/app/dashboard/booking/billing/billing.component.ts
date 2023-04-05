@@ -22,6 +22,7 @@ export class BillingComponent {
   showResv: boolean = false;
   room_details:any = [];
   fb_details: any = [];
+  roomCost: number = 0;
   constructor(private billingService: BillingService, private localStorageService: LocalStorageService, private datePipe: DatePipe){
     this.property_id = this.localStorageService.getPropertyId();
   }
@@ -78,18 +79,25 @@ export class BillingComponent {
     let days:number = this.daysBetween(data.checkin_date, data.checkout_date);
     this.room_details = [['Room No.','Category','Rate','Days','Total']];
     data.reservation_room_details.forEach((d:any) => {
-      this.room_details.push([d.related_room.room_no,d.related_room.related_category.name,`₹ ${d.room_rate}`,days,`₹ ${d.room_rate*days}`]);
+      if(d.status === 'checkin' || d.status === 'checkout'){
+        this.room_details.push([d.related_room.room_no,d.related_room.related_category.name,`₹ ${d.room_rate}`,days,`₹ ${d.room_rate*days}`]);
+        this.roomCost += parseInt(d.room_rate);
+      }
     })
-    
     return this.room_details;
   }
   serviceCostCalculator(data:any){
-    this.fb_details = [['Particular','Amount']]
     let totalServiceCost: number = 0;
-    data.forEach((d: any) => {
-      this.fb_details.push([d.particular, `₹ ${d.cost}`]);
-      totalServiceCost += parseInt(d.cost);
-    })
+    if(data[0]){
+      this.fb_details = [['Particular','Amount']];
+      data.forEach((d: any) => {
+        this.fb_details.push([d.particular, `₹ ${d.cost}`]);
+        totalServiceCost += parseInt(d.cost);
+      })
+    }
+    else{
+      this.fb_details = [['N/A']];
+    }
     return totalServiceCost;
   }
   async printBill(data:any){
@@ -155,13 +163,14 @@ export class BillingComponent {
         {
           table: {
             headerRows: 1,
-            widths: [ '*', '*'],
+            widths: data.related_services[0] ? ['*','*'] : ['*'],
             body: this.fb_details,
           },
+          layout: data.related_services[0] ? '' : 'noBorders',
           margin: [0, 0, 0, 20],
         },
         {
-          text: `Total: ₹ ${parseInt(data.total_room_cost) + service_cost}`,
+          text: `Total: ₹ ${this.roomCost + service_cost}`,
           bold: true,
           alignment: 'right',
           margin: [0, 0, 0, 50]
