@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LocalStorageService } from 'src/app/services/local-storage-service/local-storage.service';
 import { TimeCardService } from 'src/app/dashboard/booking/time-card/timecard-service/timecard.service';
@@ -10,6 +10,7 @@ import { TimeCardService } from 'src/app/dashboard/booking/time-card/timecard-se
   styleUrls: ['./check-in.component.css']
 })
 export class CheckInComponent {
+  @ViewChild('close', { static: false} ) close!:ElementRef;
   todayDate: string = '';
   bookingId:string = '';
   resv_id: string = '';
@@ -20,12 +21,26 @@ export class CheckInComponent {
   send_data: any = [];
   showCheckIn: boolean = false;
   showData:boolean = false;
+  showNav: boolean = false;
   constructor(private localStorageService: LocalStorageService, private timeCardService: TimeCardService){
     this.property = localStorageService.getPropertyId();
   }
   ngOnInit():void{
     // this.todayDate = `${this.date.getFullYear()}-${this.date.getMonth()< 10 ? '0':''}${this.date.getMonth()+1}-${this.date.getDate()< 10 ? '0':''}${this.date.getDate()}`;
     this.todayDate = `${this.date.getFullYear()}-${this.date.getMonth()< 10 ? '0':''}${this.date.getMonth()+1}-${this.date.getDate() < 10 ? '0':''}${this.date.getDate()}`;
+    this.getBooking();
+  }
+  prevDate(){
+    let date = new Date()
+    const previous = new Date(date.getTime());
+    previous.setDate(date.getDate() - 1)
+    this.todayDate = `${previous.getFullYear()}-${previous.getMonth()< 10 ? '0':''}${previous.getMonth()+1}-${previous.getDate() < 10 ? '0':''}${previous.getDate()}`;
+    this.getBooking();
+    this.showNav = !this.showNav;
+  }
+  currentDate(){
+    this.todayDate = `${this.date.getFullYear()}-${this.date.getMonth()< 10 ? '0':''}${this.date.getMonth()+1}-${this.date.getDate() < 10 ? '0':''}${this.date.getDate()}`;
+    this.showNav = !this.showNav;
     this.getBooking();
   }
   onGetRooms(r_id:string,booking_id:string, data: any){
@@ -41,6 +56,8 @@ export class CheckInComponent {
     this.timeCardService.on_checkin(fd).subscribe({
       next: data => {
         this.getBooking();
+        this.close.nativeElement.click();
+        this.send_data = [];
       }
     });
   }
@@ -97,10 +114,16 @@ export class CheckInComponent {
   }
   onNoShow(){
     let fd = new FormData();
-    fd.append('id', this.resv_id);
+    fd.append('reservation', this.resv_id);
     fd.append('operation', 'noshow');
+    fd.append('rooms', JSON.stringify(this.send_data));
+    console.log(this.send_data)
     this.timeCardService.on_no_show(fd).subscribe({
-      next: () => { this.getBooking() },
+      next: () => { 
+        this.getBooking();
+        this.close.nativeElement.click();
+        this.send_data = [];
+      },
     })
   }
 }

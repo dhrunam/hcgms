@@ -9,13 +9,13 @@
         </div>
     </div>
 </div>
-<div class="text-center mt-5" *ngIf="showData === 'false'">
-    <h5>No Bookings Found</h5>
-</div>
 <section class="px-5 py-2 mt-5" *ngIf="showData === 'true'">
     <h5>Booking(s)</h5>
     <hr>
-    <div class="row" >
+    <div *ngIf="!checkin_data[0]">
+        <h5>No Bookings Found</h5>
+    </div>
+    <div class="row" *ngIf="checkin_data[0]">
         <div class="col-md-3" *ngFor="let c of checkin_data">
             <div class="card">
                 <div class="card-body">
@@ -26,10 +26,27 @@
                         <label *ngFor="let r of c.reservation_room_details">{{r.related_room.room_no}},</label>
                     </h6>
                     <div class="text-end">
-                        <a class="card-link" style="cursor: pointer; text-decoration: none; color: red;" (click)="onCancel(c.id)">Cancel</a>
+                        <a class="card-link" style="cursor: pointer; text-decoration: none; color: red;" data-bs-toggle="modal" (click)="getBookingDetails(c.id, c.reservation_no)" data-bs-target="#exampleModal">Cancel</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Cancel Booking</h1>
+                <button type="button" #close class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to cancel booking {{ booking_id }} ?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" (click)="onCancel()">Yes</button>
+            </div>
+        </div>
+    </div>
+</div>

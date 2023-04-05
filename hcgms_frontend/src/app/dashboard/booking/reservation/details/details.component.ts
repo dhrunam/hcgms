@@ -14,7 +14,6 @@ export class DetailsComponent {
   constructor(private reservationService: ReservationService){}
   ngOnInit(): void {
     this.subscription = this.reservationService.roomDetails.subscribe((d:any) => {
-      console.log(d);
       this.roomDetails = d
     });
   }

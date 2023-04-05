@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LocalStorageService } from 'src/app/services/local-storage-service/local-storage.service';
 import { TimeCardService } from 'src/app/dashboard/booking/time-card/timecard-service/timecard.service';
@@ -11,7 +11,7 @@ import { TimeCardService } from 'src/app/dashboard/booking/time-card/timecard-se
   styleUrls: ['./check-out.component.css']
 })
 export class CheckOutComponent {
-  send_data: any = [];
+  @ViewChild('close', { static: true } ) close!:ElementRef; 
   todayDate: string = '';
   bookingId:string = '';
   resv_id: string = '';
@@ -29,65 +29,21 @@ export class CheckOutComponent {
     this.getBooking();
   }
   onGetRooms(r_id:string,booking_id:string, data: any){
-    var ele:any = document.getElementById('selectAll');
-    ele.checked = false;
     this.resv_id = r_id;
     this.bookingId = booking_id;
     this.rooms = data;
   }
   onCheckout(){
     let fd = new FormData();
-    fd.append('rooms', JSON.stringify(this.send_data));
-    fd.append('reservation', this.send_data[0]['reservation']);
+    fd.append('rooms', JSON.stringify(this.rooms));
+    fd.append('reservation', this.rooms[0]['reservation']);
     fd.append('property', this.property);
     this.timeCardService.on_checkout(fd).subscribe({
       next: () => {
         this.getBooking();
+        this.close.nativeElement.click();
       }
     });;
-  }
-  selectAll(event: any){
-    this.send_data = [];
-    var ele:any = document.getElementsByName('chk');
-    if(event.target.checked){
-      for (var i = 0; i < ele.length; i++) {
-        if (ele[i].type == 'checkbox')
-            ele[i].checked = true;
-      }
-      this.rooms.forEach((data:any) => {
-        let details = {
-          'property': this.property,
-          'reservation': this.resv_id,
-          'room': data.related_room.id,
-          'checkout_date': this.todayDate,
-        }
-        this.send_data.push(details);
-      })
-    }
-    else{
-      for (var i = 0; i < ele.length; i++) {
-        if (ele[i].type == 'checkbox')
-            ele[i].checked = false;
-      }
-      this.send_data = [];
-    }
-  }
-  onChangeEvent(event:any, room_id:number){
-    var ele:any = document.getElementById('selectAll');
-    ele.checked = false;
-    if(event.target.checked){
-      let details = {
-        'property': this.property,
-        'reservation': this.resv_id,
-        'room': room_id,
-        'checkout_date': this.todayDate,
-      }
-      this.send_data.push(details);
-    }
-    else{
-      const index = this.send_data.findIndex((obj:any) => obj.room === room_id);
-      this.send_data.splice(index,1);
-    }
   }
   getBooking(){
     this.timeCardService.get_checkout_reservations(this.todayDate).subscribe({
