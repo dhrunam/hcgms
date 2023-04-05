@@ -5,6 +5,7 @@ import { HeaderComponent } from './header/header.component';
 import { RouterModule } from '@angular/router';
 import { LoaderComponent } from './loader/loader.component';
 import { SidebarMenusComponent } from './sidebar/sidebar-menus/sidebar-menus.component';
+import { UloaderComponent } from './uloader/uloader.component';
 
 @NgModule({
   declarations: [
@@ -12,6 +13,7 @@ import { SidebarMenusComponent } from './sidebar/sidebar-menus/sidebar-menus.com
     HeaderComponent,
     LoaderComponent,
     SidebarMenusComponent,
+    UloaderComponent,
   ],
   imports: [
     CommonModule,
@@ -22,6 +24,7 @@ import { SidebarMenusComponent } from './sidebar/sidebar-menus/sidebar-menus.com
     SidebarComponent,
     HeaderComponent,
     LoaderComponent,
+    UloaderComponent
   ]
 })
 export class UtilitiesModule { }

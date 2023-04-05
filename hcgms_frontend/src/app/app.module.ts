@@ -5,6 +5,9 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { tokenInterceptor } from './interceptors/token-interceptor/token.interceptor';
 import { ServicesModule } from './services/services.module';
+import { UtilitiesModule } from './utilities/utilities.module';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { LoaderInterceptor } from './interceptors/loader-interceptor/loader.interceptor';
 
 @NgModule({
   declarations: [
@@ -14,9 +17,10 @@ import { ServicesModule } from './services/services.module';
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
-    ServicesModule
+    ServicesModule,
+    UtilitiesModule
   ],
-  providers: [tokenInterceptor],
+  providers: [tokenInterceptor, {provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

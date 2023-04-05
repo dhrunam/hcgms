@@ -1,4 +1,5 @@
 import { Component, ViewEncapsulation } from '@angular/core';
+import { LoaderService } from './services/loader-service/loader.service';
 
 @Component({
   selector: 'app-root',
@@ -6,4 +7,7 @@ import { Component, ViewEncapsulation } from '@angular/core';
   styleUrls: ['./app.component.css'],
   encapsulation: ViewEncapsulation.None,
 })
-export class AppComponent {}
+export class AppComponent {
+  loader$ = this.loadingService.loading$;
+  constructor(private loadingService: LoaderService){}
+}
