@@ -78,7 +78,7 @@ class GuestCheckInCheckOutDetailsList(generics.ListCreateAPIView):
                     request.data['reservation'] = element['reservation']
                     request.data['property'] = element['property']
                     request.data['room'] = element['room']
-                    reservation_details = self.create(request, *args, **kwargs)
+                    guest_checkin_checkout_details = self.create(request, *args, **kwargs)
                     reservation_room = op_models.ReservationRoomDetails.objects.filter(
                     reservation=element['reservation'], property=element['property'], room=element['room']).last()
                     if(reservation_room):
@@ -95,9 +95,9 @@ class GuestCheckInCheckOutDetailsList(generics.ListCreateAPIView):
                 reservation=reservation.id, status=settings.BOOKING_STATUS['booked'])
                 reservation_rooms_count = len(op_models.ReservationRoomDetails.objects.filter(
                 reservation=reservation.id)) 
+                print('reservation_room_count:',reservation_rooms_count,'checkin_room_count',checkin_rooms_count)
                 if(reservation_rooms):
-
-                    pass 
+                    pass
 
                 else:
                     if reservation:
@@ -240,9 +240,8 @@ class GuesNoShowDetailsList(generics.ListCreateAPIView):
                 reservation_rooms = op_models.ReservationRoomDetails.objects.filter(
                 reservation=reservation.id)
                 reservation_rooms_count=len(reservation_rooms)
-
-                reservation_rooms=reservation_rooms.filter(Q(status=settings.BOOKING_STATUS['booked']) 
-                | Q(status=settings.BOOKING_STATUS['noshow']))
+                print('reservation_room_count:',reservation_rooms_count,'nowshow_room_count',noshow_rooms_count)
+                reservation_rooms=reservation_rooms.filter(status=settings.BOOKING_STATUS['booked'])
                     
                 if(reservation_rooms):
 
