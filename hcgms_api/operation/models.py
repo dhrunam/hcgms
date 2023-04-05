@@ -104,7 +104,7 @@ class ReservationBillDetails(models.Model):
     cgst_rate=models.DecimalField(max_digits=8, decimal_places=2, default=0)
     sgst_rate=models.DecimalField(max_digits=8, decimal_places=2, default=0)
     other_cess_rate=models.DecimalField(max_digits=8, decimal_places=2, default=0)
-    
+    is_amount_paid=models.BooleanField(default=False)
     remarks=models.CharField(max_length=2048, null=True, blank=True)
     created_by=models.ForeignKey(
         User, on_delete=models.SET_NULL, null=True, related_name='reservation_bill_details')
