@@ -107,6 +107,37 @@ class ReservationBillList(generics.ListCreateAPIView):
         return op_models.ReservationBillDetails.objects.all()
 
 
+class ReservationBillListForView(generics.ListCreateAPIView):
+    # authentication_classes = (TokenAuthentication,)
+    # permission_classes = (IsAuthenticated,)
+    queryset = op_models.ReservationBillDetails.objects.all()
+    serializer_class = serializers.ReservationBillSerializer
+    # pagination.PageNumberPagination.page_size = 100
+    @transaction.atomic
+    def post(self, request, *args, **kwargs):
+
+
+        request.data._mutable = True
+        reservation= op_models.ReservationDetails.objects.get(pk=request.data['reservation'])
+
+        reservation_rooms=op_models.ReservationRoomDetails.objects.filter(reservation=request.data['reservation'])
+        if(reservation_rooms) and reservation:
+            no_of_days = Calculator.get_number_of_days(reservation.checkin_date.strftime('%Y-%m-%d'), reservation.checkout_date.strftime('%Y-%m-%d'))
+            request.data['total_room_cost'] =Calculator.calculate_total_room_cost(self,reservation_rooms, no_of_days )
+        
+        service_details=op_models.MiscellaneousServiceChargeDetails.objects.filter(reservation=request.data['reservation'])
+        if(service_details):
+            request.data['total_service_cost'] = Calculator.calculate_total_service_cost(self, service_details)
+            
+        # request.data['bill_no'] = generate_bill_no(self,request.data)
+        
+        request.data['created_by'] = request.user.id
+        
+
+        request.data._mutable = False
+        return Response(request.data, status=200)
+
+
 
 class ReservationBillDetails(generics.RetrieveUpdateDestroyAPIView):
     # authentication_classes = (TokenAuthentication,)
