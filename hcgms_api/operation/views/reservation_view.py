@@ -130,7 +130,7 @@ class ReservationDetailsList(generics.ListCreateAPIView):
             queryset= queryset.filter( Q(checkin_date__lte=checkin_date) 
                                       & Q(checkout_date__gte=checkin_date)
                                       & Q( Q(status = settings.BOOKING_STATUS['booked'])
-                                        |  Q(status = settings.BOOKING_STATUS['paratial_checkin'])) )
+                                        |  Q(status = settings.BOOKING_STATUS['partial_checkin'])) )
         
         if(checkout_date):
 
