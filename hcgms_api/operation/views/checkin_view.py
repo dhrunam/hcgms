@@ -97,9 +97,8 @@ class GuestCheckInCheckOutDetailsList(generics.ListCreateAPIView):
                 reservation=reservation.id)) 
                 if(reservation_rooms):
 
-                    if reservation:
-                        reservation.status=settings.BOOKING_STATUS['booked']
-                        reservation.save()
+                    pass 
+
                 else:
                     if reservation:
 
@@ -220,6 +219,7 @@ class GuesNoShowDetailsList(generics.ListCreateAPIView):
         rooms = json.loads(request.data['rooms'])
         print(rooms)
         if(rooms):
+            noshow_rooms_count=len(rooms)
             reservation= op_models.ReservationDetails.objects.get(pk=rooms[0]['reservation'])
             with transaction.atomic():
                 request.data._mutable = True
@@ -238,8 +238,11 @@ class GuesNoShowDetailsList(generics.ListCreateAPIView):
 
             with transaction.atomic():
                 reservation_rooms = op_models.ReservationRoomDetails.objects.filter(
-                reservation=reservation.id).filter(Q(status=settings.BOOKING_STATUS['checkin']) 
-                | Q(status=settings.BOOKING_STATUS['checkout']))
+                reservation=reservation.id)
+                reservation_rooms_count=len(reservation_rooms)
+
+                reservation_rooms=reservation_rooms.filter(Q(status=settings.BOOKING_STATUS['booked']) 
+                | Q(status=settings.BOOKING_STATUS['noshow']))
                     
                 if(reservation_rooms):
 
@@ -247,8 +250,12 @@ class GuesNoShowDetailsList(generics.ListCreateAPIView):
                             pass
                 else:
                     if reservation:
-                        reservation.status=settings.BOOKING_STATUS['noshow']
-                        reservation.save()
+                        if noshow_rooms_count==reservation_rooms_count:
+                            reservation.status=settings.BOOKING_STATUS['noshow']
+                            reservation.save()
+                        else:
+                            reservation.status=settings.BOOKING_STATUS['partial_checkin']
+                            reservation.save()
                     
             
             transaction.commit()
