@@ -30,6 +30,7 @@ export class CheckOutComponent {
     this.getBooking();
   }
   onGetRooms(r_id:string,booking_id:string, data: any){
+    this.rooms=[];
     this.resv_id = r_id;
     this.bookingId = booking_id;
     data.forEach((d:any) => {

@@ -13,6 +13,7 @@ from hcgms_api.operation.utility.calculator import Calculator
 from hcgms_api.operation import serializers
 from durin.auth import TokenAuthentication
 import datetime
+
 import json
 
 
@@ -121,6 +122,7 @@ class ReservationDetailsList(generics.ListCreateAPIView):
         room_number = self.request.query_params.get('room_no')
         search_text = self.request.query_params.get('search_text')
         operation = self.request.query_params.get('operation')
+        status = self.request.query_params.get('status')
         if(reservation_no):
             queryset= queryset.filter(reservation_no=reservation_no)
         if(reservation_for):
@@ -176,9 +178,15 @@ class ReservationDetailsList(generics.ListCreateAPIView):
                                           & Q( Q(status = settings.BOOKING_STATUS['checkin']) 
                                               | Q(status = settings.BOOKING_STATUS['partial_checkin']) ))
         
-            
+            if(operation=='bills'):
+                queryset=queryset.filter(checkin_date__lte=today,
+                         checkout_date__gte=today - datetime.timedelta(days=7))
 
 
+        if(status):
+            query_status = settings.BOOKING_STATUS['checkin'] if status=='active' else settings.BOOKING_STATUS['checkout']
+            queryset=queryset.filter(checkin_date__lte=today,
+            checkout_date__gte=today - datetime.timedelta(days=7), status=query_status)
         else:
             return queryset.order_by('-id')
 

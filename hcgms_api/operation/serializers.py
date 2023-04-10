@@ -27,6 +27,36 @@ class HelperRoomSearchSerializer(serializers.ModelSerializer):
 
                 ]
 
+class HelperReservationBillSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model= models.ReservationBillDetails
+        fields=[
+            'bill_no',
+            'reservation',
+            'property',
+            'total_room_cost',
+            'total_service_cost',
+            'discount',
+            'refund',
+            'cgst_rate',
+            'sgst_rate',
+            'other_cess_rate',
+            'remarks'
+
+
+        ]
+    
+    def validate(self, attrs):
+
+        reservation = models.ReservationDetails.objects.get(pk=attrs['reservation'].id)
+
+        if reservation.is_bill_generated:
+            raise serializers.ValidationError(
+                {"reservation": "Bill already generated for this reservation."})
+
+        return attrs
+
 class MiscellaneousServiceChargeDetailsSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -100,7 +130,7 @@ class ReservationDetailsSerializer(serializers.ModelSerializer):
     # model2s = Model2Serializer(source='model3s.all.model2', many=True)
     related_services = MiscellaneousServiceChargeDetailsSerializer(source='miscellaneous_service_charge.all', many=True,read_only=True)
     related_checkin_rooms=HelperCheckInCheckOutSerializer(source='guest_checkin_check_out.all', many=True,read_only=True)
-    
+    related_bills = HelperReservationBillSerializer(source='reservation_bill_details.first', read_only=True)
     class Meta:
         model = models.ReservationDetails
         fields = [
@@ -124,7 +154,8 @@ class ReservationDetailsSerializer(serializers.ModelSerializer):
                     'reservation_room_details',
                     'related_property',
                     'related_services',
-                    'related_checkin_rooms'
+                    'related_checkin_rooms',
+                    'related_bills'
 
                 ]
         

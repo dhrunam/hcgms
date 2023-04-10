@@ -94,9 +94,10 @@ class MiscellaneousServiceChargeDetails(models.Model):
         return super().__str__()
 
 class ReservationBillDetails(models.Model): 
-    bill_no=models.CharField(max_length=20, null=False)
+
     reservation=models.ForeignKey(ReservationDetails, null=True, on_delete=models.SET_NULL, related_name='reservation_bill_details')
     property=models.ForeignKey(conf_models.Property, null=True, on_delete=models.SET_NULL, related_name='reservation_bill_details')
+    bill_no=models.CharField(max_length=20, null=False)
     total_room_cost=models.DecimalField(max_digits=8, decimal_places=2)
     total_service_cost=models.DecimalField(max_digits=8, decimal_places=2, default=0)
     discount= models.DecimalField(max_digits=8, decimal_places=2, default=0)
