@@ -38,6 +38,7 @@ def generate_bill(self, request):
         total_room_cost = request.data.get('total_room_cost',0),
         discount = request.data.get('discount',0),
         refund=request.data.get('refund',0),
+        is_amount_paid = True if  request.data.get('is_amount_paid',False)=='true' else False,
         created_by= request.user
     )
     if(reservation):
@@ -148,7 +149,7 @@ class GuestCheckOutDetailsList(generics.ListCreateAPIView):
             reservation= op_models.ReservationDetails.objects.get(pk=rooms[0]['reservation'])
             with transaction.atomic():
                 request.data._mutable = True
-                
+            
                 for element in rooms:
 
                     guest_checkin_checkout_details =op_models.GuestCheckInCheckOutDetails.objects.filter(reservation= element['reservation'],
@@ -164,28 +165,31 @@ class GuestCheckOutDetailsList(generics.ListCreateAPIView):
                         reservation_room.checkout_date = element['checkout_date']
                         reservation_room.status= status=settings.BOOKING_STATUS['checkout']
                         reservation_room.save()
+                    
+
+                with transaction.atomic():
+                    request.data._mutable = True
+                    reservation_rooms = op_models.ReservationRoomDetails.objects.filter(
+                    reservation=reservation.id, status=settings.BOOKING_STATUS['checkin'])
+                        
+                    if(reservation_rooms):
+
+                        if reservation:
+                                pass
+                    else:
+                        if reservation:
+                            reservation.status=settings.BOOKING_STATUS['checkout']
+                            reservation.save()
+
+                    generate_bill(self,request)
+                        
+                    request.data._mutable = False
+                transaction.commit()
 
                 request.data._mutable = False
             transaction.commit()
 
-            with transaction.atomic():
-                request.data._mutable = True
-                reservation_rooms = op_models.ReservationRoomDetails.objects.filter(
-                reservation=reservation.id, status=settings.BOOKING_STATUS['checkin'])
-                    
-                if(reservation_rooms):
 
-                    if reservation:
-                            pass
-                else:
-                    if reservation:
-                        reservation.status=settings.BOOKING_STATUS['checkout']
-                        reservation.save()
-
-                generate_bill(self,request)
-                    
-                request.data._mutable = False
-            transaction.commit()
         return self.get(request, *args, **kwargs)
     
     def get_queryset(self):

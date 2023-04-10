@@ -20,6 +20,7 @@ export class CheckOutComponent {
   rooms:any = [];
   property: string = '';
   showResv: boolean = false;
+  is_amount_paid: boolean = false;
   constructor(private localStorageService: LocalStorageService, private timeCardService: TimeCardService){
     this.property = localStorageService.getPropertyId();
   }
@@ -42,6 +43,7 @@ export class CheckOutComponent {
     fd.append('rooms', JSON.stringify(this.rooms));
     fd.append('reservation', this.rooms[0]['reservation']);
     fd.append('property', this.property);
+    fd.append('is_amount_paid',  this.is_amount_paid.toString());
     this.timeCardService.on_checkout(fd).subscribe({
       next: () => {
         this.getBooking();
@@ -56,5 +58,16 @@ export class CheckOutComponent {
         this.checkout_data = data;
       }
     });
+  }
+  onChangeEvent(event:any){
+    if(event.target.checked){
+      this.is_amount_paid=true;
+      console.log('checked...!');
+    }
+    else{
+      this.is_amount_paid=false;
+      console.log('un_checked...!');
+
+    }
   }
 }
