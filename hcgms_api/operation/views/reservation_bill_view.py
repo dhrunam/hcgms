@@ -1,3 +1,4 @@
+from django.conf import settings
 from rest_framework import generics, pagination
 from rest_framework.permissions import IsAuthenticated
 from django.db import transaction, connection
@@ -115,28 +116,38 @@ class ReservationBillListForView(generics.ListCreateAPIView):
     # pagination.PageNumberPagination.page_size = 100
     @transaction.atomic
     def post(self, request, *args, **kwargs):
-
-
         request.data._mutable = True
-        reservation= op_models.ReservationDetails.objects.get(pk=request.data['reservation'])
 
-        reservation_rooms=op_models.ReservationRoomDetails.objects.filter(reservation=request.data['reservation'])
-        if(reservation_rooms) and reservation:
-            no_of_days = Calculator.get_number_of_days(reservation.checkin_date.strftime('%Y-%m-%d'), reservation.checkout_date.strftime('%Y-%m-%d'))
-            request.data['total_room_cost'] =Calculator.calculate_total_room_cost(self,reservation_rooms, no_of_days )
-        
-        service_details=op_models.MiscellaneousServiceChargeDetails.objects.filter(reservation=request.data['reservation'])
-        request.data['total_service_cost']=0
-        if(service_details):
-            request.data['total_service_cost'] = Calculator.calculate_total_service_cost(self, service_details)
+        try:
+            request.data['total_room_cost']=0
+            request.data['total_service_cost']=0
+            reservation= op_models.ReservationDetails.objects.get(id=request.data['reservation'])
+
+            reservation_rooms=op_models.ReservationRoomDetails.objects.filter(reservation=request.data['reservation'],
+                                                                               status= settings.BOOKING_STATUS['checkin'])
+            if(reservation_rooms) and reservation:
+                no_of_days = Calculator.get_number_of_days(reservation.checkin_date.strftime('%Y-%m-%d'), reservation.checkout_date.strftime('%Y-%m-%d'))
+                request.data['total_room_cost'] =Calculator.calculate_total_room_cost(self,reservation_rooms, no_of_days )
             
-        # request.data['bill_no'] = generate_bill_no(self,request.data)
-        
-        request.data['created_by'] = request.user.id
-        
 
-        request.data._mutable = False
-        return Response(request.data, status=200)
+            service_details=op_models.MiscellaneousServiceChargeDetails.objects.filter(reservation=request.data['reservation'])
+
+            if(service_details):
+                request.data['total_service_cost'] = Calculator.calculate_total_service_cost(self, service_details)
+                
+            # request.data['bill_no'] = generate_bill_no(self,request.data)
+
+            request.data['created_by'] = request.user.id
+            
+
+            request.data._mutable = False
+            return Response(request.data, status=200)
+        except Exception as e:
+            request.data._mutable = False
+            return Response({}, status=200)
+            
+            
+            
 
 
 
