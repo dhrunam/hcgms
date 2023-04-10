@@ -165,9 +165,11 @@ class GuestCheckOutDetailsList(generics.ListCreateAPIView):
                         reservation_room.checkout_date = element['checkout_date']
                         reservation_room.status= status=settings.BOOKING_STATUS['checkout']
                         reservation_room.save()
-                    
 
-                with transaction.atomic():
+                request.data._mutable = False
+            transaction.commit()
+            
+            with transaction.atomic():
                     request.data._mutable = True
                     reservation_rooms = op_models.ReservationRoomDetails.objects.filter(
                     reservation=reservation.id, status=settings.BOOKING_STATUS['checkin'])
@@ -184,11 +186,7 @@ class GuestCheckOutDetailsList(generics.ListCreateAPIView):
                     generate_bill(self,request)
                         
                     request.data._mutable = False
-                transaction.commit()
-
-                request.data._mutable = False
             transaction.commit()
-
 
         return self.get(request, *args, **kwargs)
     
