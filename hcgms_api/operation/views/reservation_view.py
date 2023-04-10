@@ -184,9 +184,13 @@ class ReservationDetailsList(generics.ListCreateAPIView):
 
 
         if(status):
-            query_status = settings.BOOKING_STATUS['checkin'] if status=='active' else settings.BOOKING_STATUS['checkout']
-            queryset=queryset.filter(checkin_date__lte=today,
-            checkout_date__gte=today - datetime.timedelta(days=7), status=query_status)
+            if status == 'active':
+                queryset=queryset.filter(Q(checkin_date__lte=today)
+                    & Q(checkout_date__gte=today - datetime.timedelta(days=7))
+                    & Q(status=settings.BOOKING_STATUS['checkin']) | Q(status=settings.BOOKING_STATUS['partial_checkin']))
+            else:
+                queryset=queryset.filter(checkin_date__lte=today,
+                    checkout_date__gte=today - datetime.timedelta(days=7), status=settings.BOOKING_STATUS['checkout'])
         else:
             return queryset.order_by('-id')
 
